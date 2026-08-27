@@ -1,29 +1,78 @@
 @import "tailwindcss";
 
 :root {
-  --museum-primary: #afa99c;
-  --museum-accent: #54333f;
-  --museum-accent-hover: #3b242c;
-  --museum-bg: #f9f8f5;
-  --museum-bg-secondary: #f3f2f0;
-  --museum-heading: #282421;
-  --museum-body: #514c47;
-  --museum-muted: #817b74;
-  --museum-border: #d7d4ce;
-  --museum-gold: #a68a5b;
+  /* Raw Palette Swatches from Design Swatch */
+  --palette-sand: #D6C9B3;
+  --palette-rose: #D3A7A8;
+  --palette-sage: #AFA990; /* Official Museum Base Color */
+  --palette-moss: #8F917B;
+  --palette-amber: #D28541; /* Silk Road Amber / Terracotta */
+  --palette-lapis: #35638E; /* Samarkand Lapis Blue */
+  --palette-wine: #54333B; /* Official Museum Button Color */
+
+  /* Button Tokens */
+  --museum-btn-bg: var(--palette-wine);
+  --museum-btn-hover: #3d2229;
+  --museum-btn-text: #ffffff;
+  --museum-btn-secondary-bg: var(--palette-amber);
+  --museum-btn-secondary-hover: #ba7130;
+  --museum-btn-outline-border: var(--palette-wine);
+
+  /* Primary Brand & Theme Semantics */
+  --museum-base: var(--palette-sage);
+  --museum-primary: var(--palette-sage);
+  --museum-accent: var(--palette-wine);
+  --museum-accent-hover: #3d2229;
+  --museum-gold: var(--palette-amber);
+  --museum-lapis: var(--palette-lapis);
+  --museum-rose: var(--palette-rose);
+  --museum-moss: var(--palette-moss);
+  --museum-sand: var(--palette-sand);
+
+  /* Backgrounds & Surfaces */
+  --museum-bg: #FAF8F5;
+  --museum-bg-secondary: #F3EFE8;
+  --museum-surface: #FFFFFF;
+  --museum-surface-dark: #241F1E;
+  --museum-surface-overlay: rgba(36, 31, 30, 0.68);
+
+  /* Typography Colors */
+  --museum-heading: #24201D;
+  --museum-body: #4E4841;
+  --museum-muted: #7E776F;
+  --museum-light-text: #F7F5F0;
+
+  /* Borders & Lines */
+  --museum-border: rgba(175, 169, 144, 0.38);
+  --museum-border-subtle: rgba(214, 201, 179, 0.45);
+  --museum-border-strong: rgba(84, 51, 59, 0.28);
 }
 
 @theme inline {
+  --color-palette-sand: var(--palette-sand);
+  --color-palette-rose: var(--palette-rose);
+  --color-palette-sage: var(--palette-sage);
+  --color-palette-moss: var(--palette-moss);
+  --color-palette-amber: var(--palette-amber);
+  --color-palette-lapis: var(--palette-lapis);
+  --color-palette-wine: var(--palette-wine);
+
   --color-primary: var(--museum-primary);
   --color-accent: var(--museum-accent);
   --color-accent-hover: var(--museum-accent-hover);
   --color-bg: var(--museum-bg);
   --color-bg-secondary: var(--museum-bg-secondary);
+  --color-surface: var(--museum-surface);
+  --color-surface-dark: var(--museum-surface-dark);
   --color-heading: var(--museum-heading);
   --color-body: var(--museum-body);
   --color-muted: var(--museum-muted);
+  --color-light-text: var(--museum-light-text);
   --color-border: var(--museum-border);
+  --color-border-subtle: var(--museum-border-subtle);
   --color-gold: var(--museum-gold);
+  --color-lapis: var(--museum-lapis);
+  --color-btn-bg: var(--museum-btn-bg);
 
   --font-heading: var(--font-cormorant);
   --font-sans: var(--font-manrope);
