@@ -1,26 +1,65 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --museum-primary: #afa99c;
+  --museum-accent: #54333f;
+  --museum-accent-hover: #3b242c;
+  --museum-bg: #f9f8f5;
+  --museum-bg-secondary: #f3f2f0;
+  --museum-heading: #282421;
+  --museum-body: #514c47;
+  --museum-muted: #817b74;
+  --museum-border: #d7d4ce;
+  --museum-gold: #a68a5b;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-primary: var(--museum-primary);
+  --color-accent: var(--museum-accent);
+  --color-accent-hover: var(--museum-accent-hover);
+  --color-bg: var(--museum-bg);
+  --color-bg-secondary: var(--museum-bg-secondary);
+  --color-heading: var(--museum-heading);
+  --color-body: var(--museum-body);
+  --color-muted: var(--museum-muted);
+  --color-border: var(--museum-border);
+  --color-gold: var(--museum-gold);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-heading: var(--font-cormorant);
+  --font-sans: var(--font-manrope);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--museum-bg);
+  color: var(--museum-body);
+  font-family: var(--font-manrope), system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-cormorant), Georgia, serif;
+}
+
+@keyframes heroFade {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes heroImage {
+  from {
+    transform: scale(1.06);
+  }
+  to {
+    transform: scale(1);
+  }
 }
