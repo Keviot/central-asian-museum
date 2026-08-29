@@ -24,31 +24,67 @@ export function ContactForm() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [message, setMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const subject = selectedSubject ?? defaultSubject;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setError(null);
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          phone,
+          subject,
+          message,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to transmit inquiry");
+      }
+
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err.message || "An unexpected transmission error occurred.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="w-full bg-transparent">
       {rawIntent && intentSubjectMap[rawIntent] && (
-        <div className="mb-8 flex items-center gap-3 border-b border-palette-amber/40 pb-4 text-[13.5px] text-heading">
+        <div className="mb-8 flex items-center gap-3 border-b border-palette-sand/70 pb-4 text-[13.5px] text-heading">
           <Icon name="sparkles" size={18} className="text-palette-amber shrink-0" />
           <p>
             Inquiry Intent Pre-selected:{" "}
-            <strong className="text-palette-amber font-medium">
+            <strong className="text-palette-amber font-bold">
               {intentSubjectMap[rawIntent]}
             </strong>
           </p>
         </div>
       )}
 
+      {error && (
+        <div className="mb-6 p-4 rounded-xs border border-palette-wine/50 bg-palette-wine/10 text-[13.5px] text-palette-wine">
+          {error}
+        </div>
+      )}
+
       {submitted ? (
-        <div className="py-12 border-b border-border-subtle">
+        <div className="py-12 border-b border-palette-sand/70">
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-palette-sage/20 text-palette-sage border border-palette-sage/40">
             <Icon name="check" size={24} />
           </div>
@@ -57,7 +93,7 @@ export function ContactForm() {
           </h3>
           <p className="mt-2 text-[15px] leading-relaxed text-body max-w-md">
             Thank you, <strong className="text-heading">{name}</strong>. Your inquiry regarding{" "}
-            <strong className="text-palette-amber">{subject}</strong> has been transmitted to our curatorial office. We will reply within 24 business hours.
+            <strong className="text-palette-amber">{subject}</strong> has been transmitted to our curatorial office and stored in our database. We will reply within 24 business hours.
           </p>
           <div className="mt-8">
             <Button
@@ -74,12 +110,12 @@ export function ContactForm() {
           </div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-10">
-          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2">
-            {/* Full Name Field (Line Based) */}
-            <div className="group relative">
-              <label htmlFor="contact-name" className="block font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-palette-amber mb-1">
-                Full Name <span className="text-palette-amber">*</span>
+        <form onSubmit={handleSubmit} className="flex flex-col">
+          {/* Row 1: Full Name & Email */}
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-0 mb-8">
+            <div className="sm:pr-8 sm:border-r sm:border-palette-sand/70">
+              <label htmlFor="contact-name" className="block font-mono text-[12px] font-bold uppercase tracking-[0.16em] text-palette-amber mb-2">
+                Full Name <span className="text-palette-amber font-extrabold">*</span>
               </label>
               <input
                 id="contact-name"
@@ -88,14 +124,13 @@ export function ContactForm() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Eleanor Vance"
-                className="w-full bg-transparent border-b border-border-subtle pb-3 pt-1 text-[15px] text-heading placeholder:text-muted/50 focus:border-palette-amber focus:outline-none transition-colors"
+                className="w-full bg-transparent border-b border-palette-sand/70 pb-3 pt-1 text-[15px] text-heading placeholder:text-muted/60 focus:border-palette-amber focus:outline-none transition-colors"
               />
             </div>
 
-            {/* Email Address Field (Line Based) */}
-            <div className="group relative">
-              <label htmlFor="contact-email" className="block font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-palette-amber mb-1">
-                Email Address <span className="text-palette-amber">*</span>
+            <div className="sm:pl-8">
+              <label htmlFor="contact-email" className="block font-mono text-[12px] font-bold uppercase tracking-[0.16em] text-palette-amber mb-2">
+                Email Address <span className="text-palette-amber font-extrabold">*</span>
               </label>
               <input
                 id="contact-email"
@@ -104,15 +139,15 @@ export function ContactForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="eleanor@example.com"
-                className="w-full bg-transparent border-b border-border-subtle pb-3 pt-1 text-[15px] text-heading placeholder:text-muted/50 focus:border-palette-amber focus:outline-none transition-colors"
+                className="w-full bg-transparent border-b border-palette-sand/70 pb-3 pt-1 text-[15px] text-heading placeholder:text-muted/60 focus:border-palette-amber focus:outline-none transition-colors"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-10 sm:grid-cols-2">
-            {/* Phone Number Field (Line Based) */}
-            <div className="group relative">
-              <label htmlFor="contact-phone" className="block font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-palette-amber mb-1">
+          {/* Row 2: Phone & Inquiry Subject */}
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-0 mb-8">
+            <div className="sm:pr-8 sm:border-r sm:border-palette-sand/70">
+              <label htmlFor="contact-phone" className="block font-mono text-[12px] font-bold uppercase tracking-[0.16em] text-palette-amber mb-2">
                 Phone Number (Optional)
               </label>
               <input
@@ -121,37 +156,36 @@ export function ContactForm() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+1 (555) 000-0000"
-                className="w-full bg-transparent border-b border-border-subtle pb-3 pt-1 text-[15px] text-heading placeholder:text-muted/50 focus:border-palette-amber focus:outline-none transition-colors"
+                className="w-full bg-transparent border-b border-palette-sand/70 pb-3 pt-1 text-[15px] text-heading placeholder:text-muted/60 focus:border-palette-amber focus:outline-none transition-colors"
               />
             </div>
 
-            {/* Inquiry Subject (Intent Dropdown - Line Based) */}
-            <div className="group relative">
-              <label htmlFor="contact-subject" className="block font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-palette-amber mb-1">
-                Inquiry Subject <span className="text-palette-amber">*</span>
+            <div className="sm:pl-8">
+              <label htmlFor="contact-subject" className="block font-mono text-[12px] font-bold uppercase tracking-[0.16em] text-palette-amber mb-2">
+                Inquiry Subject <span className="text-palette-amber font-extrabold">*</span>
               </label>
               <select
                 id="contact-subject"
                 required
                 value={subject}
                 onChange={(e) => setSelectedSubject(e.target.value)}
-                className="w-full bg-transparent border-b border-border-subtle pb-3 pt-1 text-[15px] text-heading focus:border-palette-amber focus:outline-none transition-colors cursor-pointer"
+                className="w-full bg-transparent border-b border-palette-sand/70 pb-3 pt-1 text-[15px] text-heading focus:border-palette-amber focus:outline-none transition-colors cursor-pointer"
               >
-                <option value="General Museum Inquiry" className="bg-surface text-heading">General Museum Inquiry</option>
-                <option value="Museum Membership & Patronage" className="bg-surface text-heading">Museum Membership & Patronage</option>
-                <option value="Philanthropy & Relic Conservation" className="bg-surface text-heading">Philanthropy & Relic Conservation</option>
-                <option value="Group, School & Guided Visits" className="bg-surface text-heading">Group, School & Guided Visits</option>
-                <option value="Research & Archival Access" className="bg-surface text-heading">Research & Archival Access</option>
-                <option value="Cultural Partnerships & CSR" className="bg-surface text-heading">Cultural Partnerships & CSR</option>
-                <option value="Artifact & Gallery Sponsorship" className="bg-surface text-heading">Artifact & Gallery Sponsorship</option>
+                <option value="General Museum Inquiry" className="bg-bg-secondary text-heading">General Museum Inquiry</option>
+                <option value="Museum Membership & Patronage" className="bg-bg-secondary text-heading">Museum Membership & Patronage</option>
+                <option value="Philanthropy & Relic Conservation" className="bg-bg-secondary text-heading">Philanthropy & Relic Conservation</option>
+                <option value="Group, School & Guided Visits" className="bg-bg-secondary text-heading">Group, School & Guided Visits</option>
+                <option value="Research & Archival Access" className="bg-bg-secondary text-heading">Research & Archival Access</option>
+                <option value="Cultural Partnerships & CSR" className="bg-bg-secondary text-heading">Cultural Partnerships & CSR</option>
+                <option value="Artifact & Gallery Sponsorship" className="bg-bg-secondary text-heading">Artifact & Gallery Sponsorship</option>
               </select>
             </div>
           </div>
 
-          {/* Message Details (Line Based Textarea) */}
-          <div className="group relative">
-            <label htmlFor="contact-message" className="block font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-palette-amber mb-1">
-              Message & Inquiry Details <span className="text-palette-amber">*</span>
+          {/* Row 3: Message Textarea */}
+          <div className="mb-8">
+            <label htmlFor="contact-message" className="block font-mono text-[12px] font-bold uppercase tracking-[0.16em] text-palette-amber mb-2">
+              Message & Inquiry Details <span className="text-palette-amber font-extrabold">*</span>
             </label>
             <textarea
               id="contact-message"
@@ -160,14 +194,14 @@ export function ContactForm() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Please describe your support inquiry, date preferences, or research interests..."
-              className="w-full bg-transparent border-b border-border-subtle pb-3 pt-1 text-[15px] text-heading placeholder:text-muted/50 focus:border-palette-amber focus:outline-none transition-colors resize-y"
+              className="w-full bg-transparent border-b border-palette-sand/70 pb-3 pt-1 text-[15px] text-heading placeholder:text-muted/60 focus:border-palette-amber focus:outline-none transition-colors resize-y"
             />
           </div>
 
           {/* Submit Action */}
-          <div className="pt-2">
-            <Button type="submit" variant="primary" size="lg" icon="arrow-right" className="w-full sm:w-auto">
-              Submit Inquiry
+          <div>
+            <Button type="submit" variant="primary" size="lg" icon="arrow-right" disabled={isSubmitting} className="w-full sm:w-auto">
+              {isSubmitting ? "Transmitting..." : "Submit Inquiry"}
             </Button>
           </div>
         </form>

@@ -64,7 +64,7 @@ export function ExhibitionsSection({
             <ExhibitionCard
               key={exhibition.id}
               exhibition={exhibition}
-              href="/exhibitions"
+              href={`/exhibitions/${exhibition.slug}`}
             />
           ))}
         </div>

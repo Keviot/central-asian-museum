@@ -1,0 +1,98 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum ExhibitionStatus {
+  Current
+  Upcoming
+  Special
+  Permanent
+}
+
+enum InquiryStatus {
+  UNREAD
+  READ
+  RESPONDED
+  ARCHIVED
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  name         String
+  role         String   @default("ADMIN")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Exhibition {
+  id              String              @id @default(cuid())
+  slug            String              @unique
+  title           String
+  subtitle        String
+  category        String
+  dateRange       String
+  location        String
+  imageSrc        String
+  imageAlt        String
+  description     String              @db.Text
+  curatorialEssay String              @db.Text
+  curator         String
+  status          ExhibitionStatus    @default(Current)
+  badgeLabel      String
+  featuredOnHome  Boolean             @default(false)
+  seoKeywords     String[]
+  highlights      ArtifactHighlight[]
+  createdAt       DateTime            @default(now())
+  updatedAt       DateTime            @updatedAt
+}
+
+model ArtifactHighlight {
+  id              String     @id @default(cuid())
+  exhibitionId    String
+  exhibition      Exhibition @relation(fields: [exhibitionId], references: [id], onDelete: Cascade)
+  title           String
+  provenance      String
+  date            String
+  material        String?
+  dimensions      String?
+  accessionNumber String?
+  description     String     @db.Text
+  imageSrc        String
+  imageAlt        String
+}
+
+model NewsEvent {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  title       String
+  category    String
+  date        String
+  readTime    String
+  location    String
+  imageSrc    String
+  imageAlt    String
+  summary     String   @db.Text
+  content     String   @db.Text
+  status      String   @default("Published")
+  seoKeywords String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model ContactInquiry {
+  id        String        @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  message   String        @db.Text
+  status    InquiryStatus @default(UNREAD)
+  createdAt DateTime      @default(now())
+}

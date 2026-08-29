@@ -1,22 +1,47 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import { ExhibitionCard } from "./ExhibitionCard";
 import {
-  exhibitionCategories,
   exhibitionsData,
-  type ExhibitionCategory,
+  type ExhibitionItem,
 } from "@/lib/exhibitions";
 
 export function ExhibitionsExplorer() {
-  const [selectedCategory, setSelectedCategory] =
-    useState<ExhibitionCategory>("All");
+  const [items, setItems] = useState<ExhibitionItem[]>(exhibitionsData);
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
 
+  useEffect(() => {
+    async function loadLiveExhibitions() {
+      try {
+        const res = await fetch("/api/admin/exhibitions");
+        const data = await res.json();
+        if (res.ok && data.exhibitions?.length > 0) {
+          setItems(data.exhibitions);
+        }
+      } catch (e) {
+        // Fallback to static data
+      }
+    }
+    loadLiveExhibitions();
+  }, []);
+
+  // Dynamically compute ONLY categories that have available exhibitions
+  const availableCategories = useMemo(() => {
+    const categoriesSet = new Set<string>();
+    items.forEach((item) => {
+      if (item.category) categoriesSet.add(item.category);
+    });
+
+    const categories = Array.from(categoriesSet);
+    return ["All", "Current", "Upcoming", ...categories];
+  }, [items]);
+
   const filteredItems = useMemo(() => {
-    return exhibitionsData.filter((item) => {
+    return items.filter((item) => {
       const matchesCategory =
         selectedCategory === "All"
           ? true
@@ -37,15 +62,15 @@ export function ExhibitionsExplorer() {
 
       return matchesCategory && matchesSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [items, selectedCategory, searchQuery]);
 
   return (
     <div className="w-full">
       {/* Filter Bar: Category/Status Pills & Live Search Input */}
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between border-b border-border-subtle pb-8">
-        {/* Category & Status Tabs */}
+        {/* Category & Status Tabs - ONLY SHOW AVAILABLE OPTIONS */}
         <div className="flex flex-wrap items-center gap-2">
-          {exhibitionCategories.map((category) => {
+          {availableCategories.map((category) => {
             const isActive = selectedCategory === category;
             return (
               <button
@@ -54,7 +79,7 @@ export function ExhibitionsExplorer() {
                 onClick={() => setSelectedCategory(category)}
                 className={`px-4 py-2 text-[12px] font-medium uppercase tracking-widest rounded-[3px] transition-all duration-300 select-none ${
                   isActive
-                    ? "bg-btn-bg text-white shadow-sm"
+                    ? "bg-btn-bg text-white shadow-sm font-bold"
                     : "bg-surface text-body border border-border hover:border-btn-bg hover:text-btn-bg"
                 }`}
               >
@@ -120,7 +145,6 @@ export function ExhibitionsExplorer() {
             <ExhibitionCard
               key={exhibition.id}
               exhibition={exhibition}
-              href="/exhibitions"
             />
           ))}
         </div>

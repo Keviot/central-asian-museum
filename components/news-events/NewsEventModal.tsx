@@ -83,8 +83,8 @@ export function NewsEventModal({ item, onClose }: NewsEventModalProps) {
           </div>
 
           {/* Right Side: Detailed Curatorial Text & Action */}
-          <div className="flex flex-col justify-between p-6 sm:p-8 md:col-span-7">
-            <div>
+          <div className="flex flex-col justify-between p-6 sm:p-8 md:col-span-7 max-h-[85vh] md:max-h-[580px]">
+            <div className="overflow-y-auto max-h-[320px] sm:max-h-[380px] pr-2 space-y-3">
               {/* Category Kicker */}
               <div className="flex items-center gap-2">
                 <span className="h-px w-6 bg-palette-amber" aria-hidden="true" />
@@ -131,9 +131,11 @@ export function NewsEventModal({ item, onClose }: NewsEventModalProps) {
               </p>
 
               {/* Full Article Content */}
-              <p className="mt-3 text-[14px] leading-relaxed text-body">
-                {item.fullContent}
-              </p>
+              {item.fullContent && (
+                <div className="mt-3 text-[14px] leading-relaxed text-body whitespace-pre-wrap">
+                  {item.fullContent}
+                </div>
+              )}
             </div>
 
             {/* Action Footer */}

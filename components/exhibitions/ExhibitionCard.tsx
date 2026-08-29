@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import type { ExhibitionItem } from "@/lib/exhibitions";
@@ -12,14 +13,19 @@ type ExhibitionCardProps = {
 export function ExhibitionCard({
   exhibition,
   className = "",
-  href = "/exhibitions",
+  href,
 }: ExhibitionCardProps) {
+  const targetHref = href || `/exhibitions/${exhibition.slug}`;
+
   return (
     <article
       className={`group flex flex-col gap-6 sm:flex-row sm:items-start transition-all duration-300 ${className}`}
     >
       {/* Left Side: Clean Frameless Exhibition Image */}
-      <div className="relative aspect-4/3 sm:aspect-square w-full sm:w-48 md:w-56 lg:w-60 shrink-0 overflow-hidden rounded-xs bg-bg-secondary">
+      <Link
+        href={targetHref}
+        className="relative aspect-4/3 sm:aspect-square w-full sm:w-48 md:w-56 lg:w-60 shrink-0 overflow-hidden rounded-xs bg-bg-secondary block cursor-pointer"
+      >
         <Image
           src={exhibition.imageSrc}
           alt={exhibition.imageAlt}
@@ -35,9 +41,9 @@ export function ExhibitionCard({
             <span>{exhibition.status}</span>
           </span>
         </div>
-      </div>
+      </Link>
 
-      {/* Right Side: Clean Curatorial Typography (No box, no background, no outer border) */}
+      {/* Right Side: Clean Curatorial Typography */}
       <div className="flex flex-1 flex-col justify-between pt-1">
         <div>
           {/* Category Kicker */}
@@ -50,7 +56,9 @@ export function ExhibitionCard({
 
           {/* Exhibition Title */}
           <h3 className="mt-2 font-heading text-[22px] font-medium leading-[1.18] tracking-[-0.01em] text-heading sm:text-[25px] md:text-[28px] group-hover:text-palette-amber transition-colors">
-            {exhibition.title}
+            <Link href={targetHref} className="hover:underline">
+              {exhibition.title}
+            </Link>
           </h3>
 
           {/* Dates & Location */}
@@ -69,12 +77,12 @@ export function ExhibitionCard({
         {/* Learn More Button */}
         <div className="mt-4">
           <Button
-            href={href}
+            href={targetHref}
             variant="primary"
             size="sm"
             icon="arrow-right"
           >
-            Learn More
+            Explore Exhibition
           </Button>
         </div>
       </div>

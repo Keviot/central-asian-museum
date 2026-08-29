@@ -4,6 +4,8 @@ export type IconName =
   | "arrow-right"
   | "arrow-up-right"
   | "chevron-right"
+  | "chevron-up"
+  | "chevron-down"
   | "landmark"
   | "compass"
   | "sparkles"
@@ -14,7 +16,9 @@ export type IconName =
   | "menu"
   | "close"
   | "book-open"
-  | "search";
+  | "search"
+  | "trash"
+  | "upload";
 
 export type IconProps = ComponentProps<"svg"> & {
   name: IconName;
@@ -58,6 +62,8 @@ export function Icon({
         </>
       )}
       {name === "chevron-right" && <path d="m9 18 6-6-6-6" />}
+      {name === "chevron-up" && <path d="m18 15-6-6-6 6" />}
+      {name === "chevron-down" && <path d="m6 9 6 6 6-6" />}
       {name === "landmark" && (
         <>
           <line x1="3" x2="21" y1="22" y2="22" />
@@ -123,6 +129,22 @@ export function Icon({
         <>
           <circle cx="11" cy="11" r="8" />
           <line x1="21" x2="16.65" y1="21" y2="16.65" />
+        </>
+      )}
+      {name === "trash" && (
+        <>
+          <path d="M3 6h18" />
+          <path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" />
+          <path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+          <line x1="10" x2="10" y1="11" y2="17" />
+          <line x1="14" x2="14" y1="11" y2="17" />
+        </>
+      )}
+      {name === "upload" && (
+        <>
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="17 8 12 3 7 8" />
+          <line x1="12" x2="12" y1="3" y2="15" />
         </>
       )}
     </svg>

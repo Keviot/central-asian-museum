@@ -15,18 +15,18 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-bg">
+    <div className="flex min-h-screen flex-col bg-bg-secondary text-body">
       <Header variant="solid" />
 
-      <main className="flex-1">
-        {/* Contact Hero Section */}
-        <section className="relative overflow-hidden border-b border-border-subtle bg-bg-secondary py-16 md:py-24">
+      <main className="flex-1 bg-bg-secondary">
+        {/* Contact Hero Banner - Full Page Warm Stone Canvas bg-bg-secondary */}
+        <section className="relative overflow-hidden border-b border-palette-sand/70 bg-bg-secondary py-16 md:py-24">
           <div
-            className="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-palette-amber/15 blur-3xl"
+            className="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-palette-amber/10 blur-3xl"
             aria-hidden="true"
           />
           <div
-            className="pointer-events-none absolute -left-32 bottom-0 h-96 w-96 rounded-full bg-palette-sand/40 blur-3xl"
+            className="pointer-events-none absolute -left-32 bottom-0 h-96 w-96 rounded-full bg-palette-sand/30 blur-3xl"
             aria-hidden="true"
           />
 
@@ -62,71 +62,72 @@ export default function ContactPage() {
           </Container>
         </section>
 
-        {/* Main Form & Info Section */}
-        <section className="py-16 md:py-24">
+        {/* Main Section - Architectural Line Framework on bg-bg-secondary */}
+        <section className="py-16 md:py-24 bg-bg-secondary">
           <Container>
-            <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
-              {/* Left Column: Line-Based Contact Form */}
-              <div className="lg:col-span-8">
-                <Suspense fallback={<div className="p-8 text-center text-muted">Loading Inquiry Form...</div>}>
-                  <ContactForm />
-                </Suspense>
-              </div>
-
-              {/* Right Column: Line-Based Museum Info Sidebar */}
-              <div className="lg:col-span-4 flex flex-col gap-10">
-                {/* Museum Location Line Block */}
-                <div className="pt-5 border-t border-palette-sand/60">
-                  <div className="flex items-center gap-3 text-palette-amber mb-3">
-                    <Icon name="map-pin" size={18} />
-                    <h3 className="font-heading text-[20px] font-medium text-heading">
-                      Museum Location
-                    </h3>
-                  </div>
-                  <p className="text-[14px] leading-relaxed text-body pl-0.5">
-                    Sheynam, Main Market Road<br />
-                    Leh, Ladakh 194101<br />
-                    India
-                  </p>
+            {/* Outer Enclosed Architectural Line Frame Box */}
+            <div className="border border-palette-sand/70 rounded-xs bg-bg-secondary p-8 sm:p-10 md:p-12 shadow-xs">
+              <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-0">
+                {/* Left Column: Form with Vertical Right Line */}
+                <div className="lg:col-span-8 lg:pr-12 lg:border-r lg:border-palette-sand/70">
+                  <Suspense fallback={<div className="p-8 text-center text-muted">Loading Inquiry Form...</div>}>
+                    <ContactForm />
+                  </Suspense>
                 </div>
 
-                {/* Museum Hours Line Block */}
-                <div className="pt-5 border-t border-palette-sand/60">
-                  <div className="flex items-center gap-3 text-palette-amber mb-3">
-                    <Icon name="clock" size={18} />
-                    <h3 className="font-heading text-[20px] font-medium text-heading">
-                      Gallery Hours
-                    </h3>
-                  </div>
-                  <div className="text-[14px] leading-relaxed text-body space-y-2 pl-0.5">
-                    <p className="flex justify-between">
-                      <span className="text-muted">Monday – Saturday:</span>
-                      <span className="font-medium text-heading">9:30 AM – 6:00 PM</span>
-                    </p>
-                    <p className="flex justify-between">
-                      <span className="text-muted">Sunday:</span>
-                      <span className="font-medium text-heading">10:00 AM – 4:00 PM</span>
+                {/* Right Column: Natural Comfortable Spacing */}
+                <div className="lg:col-span-4 lg:pl-12 flex flex-col justify-start gap-9">
+                  {/* Museum Location Block */}
+                  <div className="pb-7 border-b border-palette-sand/70">
+                    <div className="flex items-center gap-3 text-palette-amber mb-3">
+                      <Icon name="map-pin" size={18} />
+                      <h3 className="font-heading text-[20px] font-medium text-heading">
+                        Museum Location
+                      </h3>
+                    </div>
+                    <p className="text-[14px] leading-relaxed text-body">
+                      Sheynam, Main Market Road, Leh, Ladakh 194101, India
                     </p>
                   </div>
-                </div>
 
-                {/* Direct Contact Line Block */}
-                <div className="pt-5 border-t border-palette-sand/60">
-                  <div className="flex items-center gap-3 text-palette-amber mb-3">
-                    <Icon name="landmark" size={18} />
-                    <h3 className="font-heading text-[20px] font-medium text-heading">
-                      Direct Inquiries
-                    </h3>
+                  {/* Museum Hours Block */}
+                  <div className="pb-7 border-b border-palette-sand/70">
+                    <div className="flex items-center gap-3 text-palette-amber mb-3">
+                      <Icon name="clock" size={18} />
+                      <h3 className="font-heading text-[20px] font-medium text-heading">
+                        Gallery Hours
+                      </h3>
+                    </div>
+                    <div className="text-[14px] leading-relaxed text-body space-y-2">
+                      <p className="flex justify-between">
+                        <span className="text-muted">Monday – Saturday:</span>
+                        <span className="font-medium text-heading">9:30 AM – 6:00 PM</span>
+                      </p>
+                      <p className="flex justify-between">
+                        <span className="text-muted">Sunday:</span>
+                        <span className="font-medium text-heading">10:00 AM – 4:00 PM</span>
+                      </p>
+                    </div>
                   </div>
-                  <div className="text-[14px] leading-relaxed text-body space-y-2 pl-0.5">
-                    <p>
-                      <strong className="text-heading font-medium block">Visitor Desk:</strong>
-                      info@centralasianmuseum.org
-                    </p>
-                    <p>
-                      <strong className="text-heading font-medium block">Curatorial Archive:</strong>
-                      archives@centralasianmuseum.org
-                    </p>
+
+                  {/* Direct Inquiries Block */}
+                  <div>
+                    <div className="flex items-center gap-3 text-palette-amber mb-3">
+                      <Icon name="landmark" size={18} />
+                      <h3 className="font-heading text-[20px] font-medium text-heading">
+                        Direct Inquiries
+                      </h3>
+                    </div>
+                    <div className="text-[14px] leading-relaxed text-body space-y-2">
+                      <p className="flex flex-wrap items-center gap-2">
+                        <strong className="text-heading font-medium">Visitor Desk:</strong>
+                        <span>info@centralasianmuseum.org</span>
+                      </p>
+                      <p className="flex flex-wrap items-center gap-2">
+                        <strong className="text-heading font-medium">Curatorial Archive:</strong>
+                        <span>archives@centralasianmuseum.org</span>
+                      </p>
+                    </div>
                   </div>
                 </div>
               </div>
