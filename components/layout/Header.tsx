@@ -56,7 +56,7 @@ export function Header({
             href="/contact"
             variant="outline"
             size="sm"
-            className="border-white/30! text-white! hover:border-white! hover:bg-white/10!"
+            className="border-white/30 text-white hover:border-white hover:bg-white/10"
           >
             Plan Your Visit
           </Button>
