@@ -66,39 +66,39 @@ export default function ContactPage() {
         <section className="py-16 md:py-24">
           <Container>
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
-              {/* Left Column: Interactive Contact Form */}
+              {/* Left Column: Line-Based Contact Form */}
               <div className="lg:col-span-8">
                 <Suspense fallback={<div className="p-8 text-center text-muted">Loading Inquiry Form...</div>}>
                   <ContactForm />
                 </Suspense>
               </div>
 
-              {/* Right Column: Museum Hours & Direct Contacts */}
-              <div className="lg:col-span-4 flex flex-col gap-8">
-                {/* Museum Location Box */}
-                <div className="rounded-sm border border-border bg-surface p-6 sm:p-8 shadow-xs">
+              {/* Right Column: Line-Based Museum Info Sidebar */}
+              <div className="lg:col-span-4 flex flex-col gap-10">
+                {/* Museum Location Line Block */}
+                <div className="pt-5 border-t border-palette-sand/60">
                   <div className="flex items-center gap-3 text-palette-amber mb-3">
-                    <Icon name="map-pin" size={20} />
+                    <Icon name="map-pin" size={18} />
                     <h3 className="font-heading text-[20px] font-medium text-heading">
                       Museum Location
                     </h3>
                   </div>
-                  <p className="text-[14px] leading-relaxed text-body">
+                  <p className="text-[14px] leading-relaxed text-body pl-0.5">
                     Sheynam, Main Market Road<br />
                     Leh, Ladakh 194101<br />
                     India
                   </p>
                 </div>
 
-                {/* Museum Hours Box */}
-                <div className="rounded-sm border border-border bg-surface p-6 sm:p-8 shadow-xs">
+                {/* Museum Hours Line Block */}
+                <div className="pt-5 border-t border-palette-sand/60">
                   <div className="flex items-center gap-3 text-palette-amber mb-3">
-                    <Icon name="clock" size={20} />
+                    <Icon name="clock" size={18} />
                     <h3 className="font-heading text-[20px] font-medium text-heading">
                       Gallery Hours
                     </h3>
                   </div>
-                  <div className="text-[14px] leading-relaxed text-body space-y-1.5">
+                  <div className="text-[14px] leading-relaxed text-body space-y-2 pl-0.5">
                     <p className="flex justify-between">
                       <span className="text-muted">Monday – Saturday:</span>
                       <span className="font-medium text-heading">9:30 AM – 6:00 PM</span>
@@ -110,15 +110,15 @@ export default function ContactPage() {
                   </div>
                 </div>
 
-                {/* Direct Contact Box */}
-                <div className="rounded-sm border border-border bg-surface p-6 sm:p-8 shadow-xs">
+                {/* Direct Contact Line Block */}
+                <div className="pt-5 border-t border-palette-sand/60">
                   <div className="flex items-center gap-3 text-palette-amber mb-3">
-                    <Icon name="landmark" size={20} />
+                    <Icon name="landmark" size={18} />
                     <h3 className="font-heading text-[20px] font-medium text-heading">
                       Direct Inquiries
                     </h3>
                   </div>
-                  <div className="text-[14px] leading-relaxed text-body space-y-2">
+                  <div className="text-[14px] leading-relaxed text-body space-y-2 pl-0.5">
                     <p>
                       <strong className="text-heading font-medium block">Visitor Desk:</strong>
                       info@centralasianmuseum.org

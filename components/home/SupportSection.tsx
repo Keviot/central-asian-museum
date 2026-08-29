@@ -1,20 +1,16 @@
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Button } from "@/components/ui/Button";
-import { Icon } from "@/components/ui/Icon";
 import { supportIntentsData, type SupportIntentItem } from "@/lib/support";
 
 type SupportSectionProps = {
-  kicker?: string;
   title?: string;
-  description?: string;
+  subtitle?: string;
   items?: SupportIntentItem[];
 };
 
 export function SupportSection({
-  kicker = "Ways to Give & Engage",
-  title = "Support the Central Asian Museum",
-  description = "Preserve two millennia of Silk Road heritage through annual memberships, conservation philanthropy, guided group visits, and scholarly research partnerships.",
+  title = "Ways to support",
+  subtitle = "Choose the way that suits you best.",
   items = supportIntentsData,
 }: SupportSectionProps) {
   return (
@@ -30,74 +26,57 @@ export function SupportSection({
       />
 
       <Container className="relative z-10">
-        {/* Section Header */}
-        <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
-          <SectionHeading
-            kicker={kicker}
-            title={title}
-            description={description}
-          />
+        {/* Section Header: Left Title + Right Subtitle */}
+        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-baseline border-b border-border-subtle/60 pb-8 mb-12">
+          <h2 className="font-heading text-[38px] font-medium text-heading sm:text-[48px] md:text-[54px] leading-none tracking-[-0.01em]">
+            {title}
+          </h2>
 
-          <div className="shrink-0 pb-2">
-            <Button
-              href="/contact"
-              variant="outline"
-              icon="arrow-right"
-              size="md"
-            >
-              Contact Support Office
-            </Button>
-          </div>
+          <p className="text-[14px] sm:text-[15px] text-body font-normal">
+            {subtitle}
+          </p>
         </div>
 
-        {/* Intent Cards Grid */}
-        <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10">
-          {items.map((item) => (
-            <article
-              key={item.id}
-              className="group relative flex flex-col justify-between pt-5 border-t border-palette-sand/60 transition-all duration-300"
-            >
-              <div>
-                {/* Top Stylized Accent Bar */}
-                <div className="flex items-center gap-2 mb-4" aria-hidden="true">
-                  <span className="h-[2px] w-8 bg-palette-amber transition-all duration-500 group-hover:w-14" />
-                  <span className="h-px flex-1 bg-border-subtle/40" />
-                </div>
+        {/* Enclosed 3x2 Grid Table Container */}
+        <div className="border border-palette-sand/70 bg-bg rounded-xs shadow-xs overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-3">
+            {items.map((item, index) => {
+              const isRow1 = index < 3;
+              const isCol1Or2 = index % 3 !== 2;
+              const isLastItem = index === items.length - 1;
 
-                {/* Icon Badge & Kicker Header */}
-                <div className="flex items-center gap-3.5 mb-3">
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-palette-amber/40 bg-palette-amber/15 text-palette-amber transition-colors duration-300 group-hover:bg-palette-amber/25">
-                    <Icon name={item.icon} size={20} />
-                  </div>
+              return (
+                <Link
+                  key={item.id}
+                  href={`/contact?intent=${item.intentKey}`}
+                  className={`group relative flex flex-col justify-between p-7 sm:p-8 transition-colors duration-300 hover:bg-palette-sand/20 cursor-pointer select-none ${
+                    isRow1
+                      ? "border-b border-palette-sand/70"
+                      : isLastItem
+                      ? ""
+                      : "border-b border-palette-sand/70 md:border-b-0"
+                  } ${isCol1Or2 ? "md:border-r md:border-palette-sand/70" : ""}`}
+                >
                   <div>
-                    <p className="font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-palette-amber">
+                    {/* Category Kicker */}
+                    <span className="font-mono text-[11.5px] font-medium uppercase tracking-[0.2em] text-palette-amber block">
                       {item.kicker}
-                    </p>
-                    <h3 className="font-heading text-[22px] font-medium leading-[1.2] text-heading sm:text-[24px] group-hover:text-palette-amber transition-colors">
+                    </span>
+
+                    {/* Main Headline (Single Line) */}
+                    <h3 className="mt-2.5 font-heading text-[19px] sm:text-[21px] font-semibold text-heading leading-snug tracking-tight truncate group-hover:text-palette-amber transition-colors">
                       {item.title}
                     </h3>
+
+                    {/* Short Description (Strict 2 Lines) */}
+                    <p className="mt-2.5 text-[13px] leading-relaxed text-body line-clamp-2">
+                      {item.description}
+                    </p>
                   </div>
-                </div>
-
-                {/* Intent Description */}
-                <p className="mt-3 text-[14px] leading-relaxed text-body pl-0.5">
-                  {item.description}
-                </p>
-              </div>
-
-              {/* Action Button Linking to Contact Page with Query Param */}
-              <div className="mt-6 pt-3 border-t border-border-subtle/40 flex items-center justify-between">
-                <Button
-                  href={`/contact?intent=${item.intentKey}`}
-                  variant="primary"
-                  size="sm"
-                  icon="arrow-right"
-                >
-                  {item.ctaLabel}
-                </Button>
-              </div>
-            </article>
-          ))}
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </Container>
     </section>
