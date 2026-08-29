@@ -66,7 +66,7 @@ export function ContactForm() {
   return (
     <div className="w-full bg-transparent">
       {rawIntent && intentSubjectMap[rawIntent] && (
-        <div className="mb-8 flex items-center gap-3 border-b border-palette-sand/70 pb-4 text-[13.5px] text-heading">
+        <div className="mb-8 flex items-center gap-3 rounded-xs border border-palette-amber/40 bg-palette-amber/10 p-4 text-[13.5px] text-heading">
           <Icon name="sparkles" size={18} className="text-palette-amber shrink-0" />
           <p>
             Inquiry Intent Pre-selected:{" "}
@@ -85,11 +85,11 @@ export function ContactForm() {
 
       {submitted ? (
         <div className="py-12 border-b border-palette-sand/70">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-palette-sage/20 text-palette-sage border border-palette-sage/40">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-500/20 text-emerald-700 border border-emerald-500/40">
             <Icon name="check" size={24} />
           </div>
-          <h3 className="mt-4 font-heading text-[28px] font-medium text-heading">
-            Inquiry Received
+          <h3 className="mt-4 font-heading text-[28px] font-semibold text-heading">
+            Inquiry Transmitted Successfully
           </h3>
           <p className="mt-2 text-[15px] leading-relaxed text-body max-w-md">
             Thank you, <strong className="text-heading">{name}</strong>. Your inquiry regarding{" "}
@@ -110,12 +110,12 @@ export function ContactForm() {
           </div>
         </div>
       ) : (
-        <form onSubmit={handleSubmit} className="flex flex-col">
+        <form onSubmit={handleSubmit} className="flex flex-col space-y-7">
           {/* Row 1: Full Name & Email */}
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-0 mb-8">
-            <div className="sm:pr-8 sm:border-r sm:border-palette-sand/70">
-              <label htmlFor="contact-name" className="block font-mono text-[12px] font-bold uppercase tracking-[0.16em] text-palette-amber mb-2">
-                Full Name <span className="text-palette-amber font-extrabold">*</span>
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <label htmlFor="contact-name" className="block font-mono text-[11.5px] font-bold uppercase tracking-[0.18em] text-palette-amber">
+                Full Name <span className="text-palette-wine font-extrabold">*</span>
               </label>
               <input
                 id="contact-name"
@@ -124,13 +124,13 @@ export function ContactForm() {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="e.g. Eleanor Vance"
-                className="w-full bg-transparent border-b border-palette-sand/70 pb-3 pt-1 text-[15px] text-heading placeholder:text-muted/60 focus:border-palette-amber focus:outline-none transition-colors"
+                className="w-full rounded-none border-b border-palette-sand/80 bg-transparent px-0 py-2.5 text-[14.5px] text-heading placeholder:text-muted/50 focus:border-palette-amber focus:outline-none transition-colors"
               />
             </div>
 
-            <div className="sm:pl-8">
-              <label htmlFor="contact-email" className="block font-mono text-[12px] font-bold uppercase tracking-[0.16em] text-palette-amber mb-2">
-                Email Address <span className="text-palette-amber font-extrabold">*</span>
+            <div className="space-y-1.5">
+              <label htmlFor="contact-email" className="block font-mono text-[11.5px] font-bold uppercase tracking-[0.18em] text-palette-amber">
+                Email Address <span className="text-palette-wine font-extrabold">*</span>
               </label>
               <input
                 id="contact-email"
@@ -139,15 +139,15 @@ export function ContactForm() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="eleanor@example.com"
-                className="w-full bg-transparent border-b border-palette-sand/70 pb-3 pt-1 text-[15px] text-heading placeholder:text-muted/60 focus:border-palette-amber focus:outline-none transition-colors"
+                className="w-full rounded-none border-b border-palette-sand/80 bg-transparent px-0 py-2.5 text-[14.5px] text-heading placeholder:text-muted/50 focus:border-palette-amber focus:outline-none transition-colors"
               />
             </div>
           </div>
 
           {/* Row 2: Phone & Inquiry Subject */}
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-0 mb-8">
-            <div className="sm:pr-8 sm:border-r sm:border-palette-sand/70">
-              <label htmlFor="contact-phone" className="block font-mono text-[12px] font-bold uppercase tracking-[0.16em] text-palette-amber mb-2">
+          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <label htmlFor="contact-phone" className="block font-mono text-[11.5px] font-bold uppercase tracking-[0.18em] text-palette-amber">
                 Phone Number (Optional)
               </label>
               <input
@@ -156,36 +156,36 @@ export function ContactForm() {
                 value={phone}
                 onChange={(e) => setPhone(e.target.value)}
                 placeholder="+1 (555) 000-0000"
-                className="w-full bg-transparent border-b border-palette-sand/70 pb-3 pt-1 text-[15px] text-heading placeholder:text-muted/60 focus:border-palette-amber focus:outline-none transition-colors"
+                className="w-full rounded-none border-b border-palette-sand/80 bg-transparent px-0 py-2.5 text-[14.5px] text-heading placeholder:text-muted/50 focus:border-palette-amber focus:outline-none transition-colors"
               />
             </div>
 
-            <div className="sm:pl-8">
-              <label htmlFor="contact-subject" className="block font-mono text-[12px] font-bold uppercase tracking-[0.16em] text-palette-amber mb-2">
-                Inquiry Subject <span className="text-palette-amber font-extrabold">*</span>
+            <div className="space-y-1.5">
+              <label htmlFor="contact-subject" className="block font-mono text-[11.5px] font-bold uppercase tracking-[0.18em] text-palette-amber">
+                Inquiry Subject <span className="text-palette-wine font-extrabold">*</span>
               </label>
               <select
                 id="contact-subject"
                 required
                 value={subject}
                 onChange={(e) => setSelectedSubject(e.target.value)}
-                className="w-full bg-transparent border-b border-palette-sand/70 pb-3 pt-1 text-[15px] text-heading focus:border-palette-amber focus:outline-none transition-colors cursor-pointer"
+                className="w-full rounded-none border-b border-palette-sand/80 bg-transparent px-0 py-2.5 text-[14.5px] text-heading focus:border-palette-amber focus:outline-none transition-colors cursor-pointer"
               >
-                <option value="General Museum Inquiry" className="bg-bg-secondary text-heading">General Museum Inquiry</option>
-                <option value="Museum Membership & Patronage" className="bg-bg-secondary text-heading">Museum Membership & Patronage</option>
-                <option value="Philanthropy & Relic Conservation" className="bg-bg-secondary text-heading">Philanthropy & Relic Conservation</option>
-                <option value="Group, School & Guided Visits" className="bg-bg-secondary text-heading">Group, School & Guided Visits</option>
-                <option value="Research & Archival Access" className="bg-bg-secondary text-heading">Research & Archival Access</option>
-                <option value="Cultural Partnerships & CSR" className="bg-bg-secondary text-heading">Cultural Partnerships & CSR</option>
-                <option value="Artifact & Gallery Sponsorship" className="bg-bg-secondary text-heading">Artifact & Gallery Sponsorship</option>
+                <option value="General Museum Inquiry" className="bg-white text-heading">General Museum Inquiry</option>
+                <option value="Museum Membership & Patronage" className="bg-white text-heading">Museum Membership & Patronage</option>
+                <option value="Philanthropy & Relic Conservation" className="bg-white text-heading">Philanthropy & Relic Conservation</option>
+                <option value="Group, School & Guided Visits" className="bg-white text-heading">Group, School & Guided Visits</option>
+                <option value="Research & Archival Access" className="bg-white text-heading">Research & Archival Access</option>
+                <option value="Cultural Partnerships & CSR" className="bg-white text-heading">Cultural Partnerships & CSR</option>
+                <option value="Artifact & Gallery Sponsorship" className="bg-white text-heading">Artifact & Gallery Sponsorship</option>
               </select>
             </div>
           </div>
 
           {/* Row 3: Message Textarea */}
-          <div className="mb-8">
-            <label htmlFor="contact-message" className="block font-mono text-[12px] font-bold uppercase tracking-[0.16em] text-palette-amber mb-2">
-              Message & Inquiry Details <span className="text-palette-amber font-extrabold">*</span>
+          <div className="space-y-1.5">
+            <label htmlFor="contact-message" className="block font-mono text-[11.5px] font-bold uppercase tracking-[0.18em] text-palette-amber">
+              Message & Inquiry Details <span className="text-palette-wine font-extrabold">*</span>
             </label>
             <textarea
               id="contact-message"
@@ -194,15 +194,20 @@ export function ContactForm() {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               placeholder="Please describe your support inquiry, date preferences, or research interests..."
-              className="w-full bg-transparent border-b border-palette-sand/70 pb-3 pt-1 text-[15px] text-heading placeholder:text-muted/60 focus:border-palette-amber focus:outline-none transition-colors resize-y"
+              className="w-full rounded-none border-b border-palette-sand/80 bg-transparent px-0 py-2.5 text-[14.5px] text-heading placeholder:text-muted/50 focus:border-palette-amber focus:outline-none transition-colors resize-y"
             />
           </div>
 
-          {/* Submit Action */}
-          <div>
-            <Button type="submit" variant="primary" size="lg" icon="arrow-right" disabled={isSubmitting} className="w-full sm:w-auto">
-              {isSubmitting ? "Transmitting..." : "Submit Inquiry"}
-            </Button>
+          {/* Submit Action Button */}
+          <div className="pt-2">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full sm:w-auto px-8 py-3.5 rounded-xs bg-palette-wine hover:bg-palette-wine/90 border border-palette-wine/30 text-[12.5px] font-mono font-bold uppercase tracking-[0.18em] text-white shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <span>{isSubmitting ? "Transmitting..." : "Submit Inquiry"}</span>
+              <Icon name="arrow-right" size={16} className="text-palette-amber" />
+            </button>
           </div>
         </form>
       )}
