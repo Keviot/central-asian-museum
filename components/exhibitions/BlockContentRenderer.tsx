@@ -51,7 +51,7 @@ export function BlockContentRenderer({
           case "image":
             return (
               <figure key={block.id || idx} className="my-8 space-y-2">
-                <div className="relative aspect-16/9 w-full overflow-hidden rounded-xs border border-palette-sand/70 bg-bg-secondary shadow-xs">
+                <div className="relative aspect-video w-full overflow-hidden rounded-xs border border-palette-sand/70 bg-bg-secondary shadow-xs">
                   <Image
                     src={block.url}
                     alt={block.alt || block.caption || "Exhibition detail artifact"}

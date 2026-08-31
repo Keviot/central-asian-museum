@@ -142,7 +142,7 @@ export default function AdminInquiriesPage() {
       ) : filteredInquiries.length > 0 ? (
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
           {/* Left Column: Inbox List */}
-          <div className="lg:col-span-5 space-y-3 max-h-[650px] overflow-y-auto pr-1">
+          <div className="lg:col-span-5 space-y-3 max-h-162.5 overflow-y-auto pr-1">
             {filteredInquiries.map((item) => {
               const isSelected = selectedInquiry?.id === item.id;
               const isUnread = item.status === "UNREAD";

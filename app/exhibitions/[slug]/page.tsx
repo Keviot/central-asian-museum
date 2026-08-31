@@ -152,7 +152,7 @@ export default async function ExhibitionDetailPage({ params }: Props) {
 
       <main className="flex-1">
         {/* Luxurious Light-Theme Museum Hero Section */}
-        <section className="relative overflow-hidden border-b border-palette-sand/70 bg-gradient-to-b from-[#FBF9F5] via-[#F6F2EA] to-bg pt-28 pb-16 md:pt-36 md:pb-20">
+        <section className="relative overflow-hidden border-b border-palette-sand/70 bg-linear-to-b from-[#FBF9F5] via-[#F6F2EA] to-bg pt-28 pb-16 md:pt-36 md:pb-20">
           {/* Subtle Ambient Background Glows */}
           <div
             className="pointer-events-none absolute -right-32 top-10 h-96 w-96 rounded-full bg-palette-amber/10 blur-3xl"
@@ -255,7 +255,7 @@ export default async function ExhibitionDetailPage({ params }: Props) {
                     sizes="(max-width: 1024px) 100vw, 45vw"
                     className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent" />
                   <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-[11px] font-mono">
                     <span className="bg-black/60 px-2.5 py-1 rounded-xs backdrop-blur-xs">
                       {exhibition.location}

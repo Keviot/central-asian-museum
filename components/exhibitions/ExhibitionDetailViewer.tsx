@@ -251,7 +251,7 @@ export function ExhibitionDetailViewer({ exhibition }: ExhibitionDetailViewerPro
 
             {/* Architectural Timeline */}
             <div className="mt-12 relative">
-              <div className="hidden lg:block absolute top-[9px] left-0 right-0 h-[2px] bg-palette-amber/40 z-0" aria-hidden="true" />
+              <div className="hidden lg:block absolute top-2.25 left-0 right-0 h-0.5 bg-palette-amber/40 z-0" aria-hidden="true" />
 
               <div className="grid grid-cols-1 gap-10 lg:grid-cols-4 lg:gap-8 relative z-10">
                 {exhibition.timeline.map((step, idx) => (

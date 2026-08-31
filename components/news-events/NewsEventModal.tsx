@@ -43,7 +43,7 @@ export function NewsEventModal({ item, onClose }: NewsEventModalProps) {
     >
       {/* Modal Dialog Card */}
       <div
-        className="relative w-full max-w-4xl h-[90vh] md:h-[620px] max-h-[660px] flex flex-col md:grid md:grid-cols-12 rounded-sm border border-border bg-surface text-body shadow-2xl transition-all transform duration-300 overflow-hidden"
+        className="relative w-full max-w-4xl h-[90vh] md:h-155 max-h-165 flex flex-col md:grid md:grid-cols-12 rounded-sm border border-border bg-surface text-body shadow-2xl transition-all transform duration-300 overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close Button */}
@@ -57,7 +57,7 @@ export function NewsEventModal({ item, onClose }: NewsEventModalProps) {
         </button>
 
         {/* Left Side: High-Resolution Event Image */}
-        <div className="relative aspect-16/9 md:aspect-auto md:col-span-5 w-full min-h-[200px] md:min-h-full bg-bg-secondary overflow-hidden shrink-0">
+        <div className="relative aspect-video md:aspect-auto md:col-span-5 w-full min-h-50 md:min-h-full bg-bg-secondary overflow-hidden shrink-0">
           <Image
             src={item.imageSrc}
             alt={item.imageAlt}
@@ -67,7 +67,7 @@ export function NewsEventModal({ item, onClose }: NewsEventModalProps) {
           />
           
           <div
-            className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none"
+            className="absolute inset-0 bg-linear-to-t from-black/60 via-transparent to-transparent pointer-events-none"
             aria-hidden="true"
           />
 
@@ -126,7 +126,7 @@ export function NewsEventModal({ item, onClose }: NewsEventModalProps) {
           </div>
 
           {/* Scrollable Description Only */}
-          <div className="flex-1 min-h-0 overflow-y-auto py-4 pr-3 my-1 space-y-4 [scrollbar-width:thin] [scrollbar-color:var(--museum-border)_transparent]">
+          <div className="flex-1 min-h-0 overflow-y-auto py-4 pr-3 my-1 space-y-4 scrollbar-thin [scrollbar-color:var(--museum-border)_transparent]">
             {/* Summary Paragraph */}
             <p className="text-[15px] font-medium leading-relaxed text-heading">
               {item.summary}
@@ -141,7 +141,7 @@ export function NewsEventModal({ item, onClose }: NewsEventModalProps) {
           </div>
 
           {/* Fixed Action Footer */}
-          <div className="shrink-0 pt-4 border-t border-border-subtle flex flex-wrap items-center justify-between gap-4">
+          <div className="shrink-0 pt-4 border-t border-border-subtle flex items-center justify-start">
             <Button
               href="/contact"
               variant="primary"
@@ -151,14 +151,6 @@ export function NewsEventModal({ item, onClose }: NewsEventModalProps) {
             >
               {item.rsvpRequired ? "Reserve Seat / RSVP" : "Inquire with Curator"}
             </Button>
-
-            <button
-              type="button"
-              onClick={onClose}
-              className="text-[12px] uppercase tracking-[0.14em] font-semibold text-muted hover:text-heading transition-colors"
-            >
-              Close Window
-            </button>
           </div>
         </div>
       </div>

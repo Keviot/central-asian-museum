@@ -457,7 +457,7 @@ export function BlockContentEditor({ value, onChange }: BlockContentEditorProps)
                     <thead className="bg-bg-secondary font-mono text-[11px] uppercase text-palette-amber border-b border-palette-sand/70">
                       <tr>
                         {block.headers.map((header, hIdx) => (
-                          <th key={hIdx} className="p-2 min-w-[140px]">
+                          <th key={hIdx} className="p-2 min-w-35">
                             <div className="flex items-center gap-1.5 border-b border-palette-amber/40 pb-1">
                               <input
                                 type="text"
