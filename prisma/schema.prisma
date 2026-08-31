@@ -96,3 +96,13 @@ model ContactInquiry {
   status    InquiryStatus @default(UNREAD)
   createdAt DateTime      @default(now())
 }
+
+model Category {
+  id        String   @id @default(cuid())
+  type      String   // "exhibition" or "news"
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([type, name])
+}
