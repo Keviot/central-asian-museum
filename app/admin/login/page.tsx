@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 
-export default function AdminLoginPage() {
+function AdminLoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("from") || "/admin/dashboard";
@@ -44,12 +44,10 @@ export default function AdminLoginPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-[#FAF8F5] text-heading p-6 overflow-hidden">
-      {/* Decorative Subtle Sand Radial Backdrop Glow */}
       <div className="pointer-events-none absolute -left-20 -top-20 h-96 w-96 rounded-full bg-palette-sand/40 blur-3xl" />
       <div className="pointer-events-none absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-palette-rose/30 blur-3xl" />
 
       <div className="relative z-10 w-full max-w-md space-y-8 rounded-xs border border-palette-sand/80 bg-white p-8 sm:p-10 shadow-xl">
-        {/* Brand Header */}
         <div className="text-center space-y-3">
           <Link href="/" className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-palette-wine text-white hover:scale-105 transition-transform shadow-md">
             <Icon name="landmark" size={28} />
@@ -75,7 +73,6 @@ export default function AdminLoginPage() {
           </div>
         )}
 
-        {/* Login Credentials Form */}
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-1.5">
             <label htmlFor="email" className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-palette-amber">
@@ -109,7 +106,6 @@ export default function AdminLoginPage() {
             />
           </div>
 
-          {/* Submit Action */}
           <button
             type="submit"
             disabled={loading}
@@ -120,7 +116,6 @@ export default function AdminLoginPage() {
           </button>
         </form>
 
-        {/* Footer Link */}
         <div className="pt-4 border-t border-palette-sand/60 text-center">
           <Link
             href="/"
@@ -131,5 +126,25 @@ export default function AdminLoginPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+function AdminLoginFallback() {
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-[#FAF8F5] p-6">
+      <div className="w-full max-w-md rounded-xs border border-palette-sand/80 bg-white p-8 sm:p-10 shadow-xl text-center">
+        <p className="font-mono text-[12px] uppercase tracking-[0.18em] text-muted">
+          Loading login portal...
+        </p>
+      </div>
+    </div>
+  );
+}
+
+export default function AdminLoginPage() {
+  return (
+    <Suspense fallback={<AdminLoginFallback />}>
+      <AdminLoginForm />
+    </Suspense>
   );
 }
