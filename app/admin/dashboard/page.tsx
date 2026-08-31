@@ -169,7 +169,8 @@ export default function AdminDashboardPage() {
             </div>
           </div>
 
-          {/* Module 3: Contact Inquiry Inbox */}
+          {/* Module 3: Contact Inquiry Inbox (Disabled for now) */}
+          {/*
           <div className="p-7 rounded-xs border border-palette-sand/80 bg-white flex flex-col justify-between hover:border-palette-amber transition-colors shadow-2xs group">
             <div>
               <div className="flex items-center justify-between mb-4">
@@ -195,6 +196,7 @@ export default function AdminDashboardPage() {
               </Link>
             </div>
           </div>
+          */}
         </div>
       </main>
     </div>

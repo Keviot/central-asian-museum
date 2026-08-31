@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
@@ -21,12 +21,31 @@ export function NewsEventsSection({
   kicker = "Lectures, Workshops & Updates",
   title = "Museum News & Events",
   description = "Join our curatorial lectures, artisan weaving masterclasses, press announcements, and seasonal cultural galas.",
-  items = newsEventsData,
+  items: initialItems,
   viewAllHref = "/news-events",
   viewAllLabel = "View All News & Events",
 }: NewsEventsSectionProps) {
+  const [newsItems, setNewsItems] = useState<NewsEventItem[]>(initialItems || newsEventsData);
   const [selectedItem, setSelectedItem] = useState<NewsEventItem | null>(null);
-  const displayItems = items.filter((item) => item.featuredOnHome !== false);
+
+  useEffect(() => {
+    async function loadDynamicNews() {
+      try {
+        const res = await fetch("/api/news-events");
+        const data = await res.json();
+        if (res.ok && data.newsEvents && data.newsEvents.length > 0) {
+          setNewsItems(data.newsEvents);
+        }
+      } catch (err) {
+        console.error("Failed to load homepage news events dynamically:", err);
+      }
+    }
+    if (!initialItems) {
+      loadDynamicNews();
+    }
+  }, [initialItems]);
+
+  const displayItems = newsItems.filter((item) => item.featuredOnHome !== false);
 
   const handleClose = useCallback(() => {
     setSelectedItem(null);
@@ -89,3 +108,4 @@ export function NewsEventsSection({
     </section>
   );
 }
+

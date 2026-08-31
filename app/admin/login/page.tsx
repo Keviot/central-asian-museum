@@ -43,7 +43,7 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-[#FAF8F5] text-heading p-6">
+    <div className="relative flex min-h-screen items-center justify-center bg-[#FAF8F5] text-heading p-6 overflow-hidden">
       {/* Decorative Subtle Sand Radial Backdrop Glow */}
       <div className="pointer-events-none absolute -left-20 -top-20 h-96 w-96 rounded-full bg-palette-sand/40 blur-3xl" />
       <div className="pointer-events-none absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-palette-rose/30 blur-3xl" />

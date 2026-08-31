@@ -1,3 +1,6 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
@@ -17,11 +20,30 @@ export function ExhibitionsSection({
   kicker = "Special & Retrospective Galleries",
   title = "Curated Exhibitions",
   description = "Immerse yourself in featured galleries, seasonal retrospectives, and digital art installations tracing Central Asian heritage.",
-  items = exhibitionsData,
+  items: initialItems,
   viewAllHref = "/exhibitions",
   viewAllLabel = "Explore More",
 }: ExhibitionsSectionProps) {
-  const displayItems = items
+  const [exhibitionsList, setExhibitionsList] = useState<ExhibitionItem[]>(initialItems || exhibitionsData);
+
+  useEffect(() => {
+    async function loadDynamicExhibitions() {
+      try {
+        const res = await fetch("/api/exhibitions");
+        const data = await res.json();
+        if (res.ok && data.exhibitions && data.exhibitions.length > 0) {
+          setExhibitionsList(data.exhibitions);
+        }
+      } catch (err) {
+        console.error("Failed to load homepage exhibitions dynamically:", err);
+      }
+    }
+    if (!initialItems) {
+      loadDynamicExhibitions();
+    }
+  }, [initialItems]);
+
+  const displayItems = exhibitionsList
     .filter((item) => item.featuredOnHome !== false)
     .slice(0, 4);
 
@@ -72,3 +94,4 @@ export function ExhibitionsSection({
     </section>
   );
 }
+

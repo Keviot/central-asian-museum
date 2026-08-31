@@ -14,17 +14,44 @@ export async function POST(request: Request) {
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
-    // Ensure public/uploads directory exists
+    // Cloudinary Credentials Check
+    const cloudName = process.env.CLOUDINARY_CLOUD_NAME || process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME;
+    const uploadPreset = process.env.CLOUDINARY_UPLOAD_PRESET || process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET;
+
+    if (cloudName && uploadPreset) {
+      try {
+        const cldFormData = new FormData();
+        const blob = new Blob([buffer], { type: file.type || "image/jpeg" });
+        cldFormData.append("file", blob, file.name);
+        cldFormData.append("upload_preset", uploadPreset);
+
+        const cldRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
+          method: "POST",
+          body: cldFormData,
+        });
+
+        const cldData = await cldRes.json();
+        if (cldRes.ok && cldData.secure_url) {
+          return NextResponse.json({
+            success: true,
+            url: cldData.secure_url,
+            filename: cldData.public_id,
+          });
+        }
+      } catch (cldErr) {
+        console.warn("Cloudinary upload failed, falling back to local uploads:", cldErr);
+      }
+    }
+
+    // Local Storage Fallback
     const uploadsDir = path.join(process.cwd(), "public", "uploads");
     await mkdir(uploadsDir, { recursive: true });
 
-    // Generate clean unique filename
     const safeName = file.name.toLowerCase().replace(/[^a-z0-9.-]/g, "-");
     const filename = `${Date.now()}-${safeName}`;
     const filePath = path.join(uploadsDir, filename);
 
     await writeFile(filePath, buffer);
-
     const fileUrl = `/uploads/${filename}`;
 
     return NextResponse.json({
@@ -40,3 +67,4 @@ export async function POST(request: Request) {
     );
   }
 }
+

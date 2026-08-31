@@ -1,22 +1,42 @@
 "use client";
 
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState, useCallback, useEffect } from "react";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import { NewsEventCard } from "./NewsEventCard";
 import { NewsEventModal } from "./NewsEventModal";
-import {
-  newsEventCategories,
-  newsEventsData,
-  type NewsEventCategory,
-  type NewsEventItem,
-} from "@/lib/newsEvents";
+import { type NewsEventItem } from "@/lib/newsEvents";
 
-export function NewsEventsExplorer() {
-  const [selectedCategory, setSelectedCategory] =
-    useState<NewsEventCategory>("All");
+type NewsEventsExplorerProps = {
+  initialItems?: NewsEventItem[];
+};
+
+export function NewsEventsExplorer({ initialItems }: NewsEventsExplorerProps) {
+  const [items, setItems] = useState<NewsEventItem[]>(initialItems || []);
+  const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedItem, setSelectedItem] = useState<NewsEventItem | null>(null);
+
+  useEffect(() => {
+    async function loadNewsEvents() {
+      try {
+        const res = await fetch("/api/news-events");
+        const data = await res.json();
+        if (res.ok && data.newsEvents && data.newsEvents.length > 0) {
+          setItems(data.newsEvents);
+        }
+      } catch (err) {
+        console.error("Failed to load news events dynamically:", err);
+      }
+    }
+    loadNewsEvents();
+  }, []);
+
+  // Dynamically compute categories ONLY from existing items
+  const dynamicCategories = useMemo(() => {
+    const cats = Array.from(new Set(items.map((i) => i.category).filter(Boolean)));
+    return ["All", ...cats];
+  }, [items]);
 
   const handleClose = useCallback(() => {
     setSelectedItem(null);
@@ -27,7 +47,7 @@ export function NewsEventsExplorer() {
   }, []);
 
   const filteredItems = useMemo(() => {
-    return newsEventsData.filter((item) => {
+    return items.filter((item) => {
       const matchesCategory =
         selectedCategory === "All" ? true : item.category === selectedCategory;
 
@@ -38,19 +58,19 @@ export function NewsEventsExplorer() {
         item.category.toLowerCase().includes(query) ||
         item.location.toLowerCase().includes(query) ||
         item.summary.toLowerCase().includes(query) ||
-        item.fullContent.toLowerCase().includes(query);
+        (item.fullContent && item.fullContent.toLowerCase().includes(query));
 
       return matchesCategory && matchesSearch;
     });
-  }, [selectedCategory, searchQuery]);
+  }, [items, selectedCategory, searchQuery]);
 
   return (
     <div className="w-full">
       {/* Filter Bar: Category Tabs & Search Input */}
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between border-b border-border-subtle pb-8">
-        {/* Category Filter Pills */}
+        {/* Dynamic Category Filter Pills */}
         <div className="flex flex-wrap items-center gap-2">
-          {newsEventCategories.map((category) => {
+          {dynamicCategories.map((category) => {
             const isActive = selectedCategory === category;
             return (
               <button
@@ -164,3 +184,4 @@ export function NewsEventsExplorer() {
     </div>
   );
 }
+

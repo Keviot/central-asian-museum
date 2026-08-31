@@ -17,7 +17,7 @@ export function ExhibitionsExplorer() {
   useEffect(() => {
     async function loadLiveExhibitions() {
       try {
-        const res = await fetch("/api/admin/exhibitions");
+        const res = await fetch("/api/exhibitions");
         const data = await res.json();
         if (res.ok && data.exhibitions?.length > 0) {
           setItems(data.exhibitions);

@@ -18,7 +18,13 @@ export type IconName =
   | "book-open"
   | "search"
   | "trash"
-  | "upload";
+  | "upload"
+  | "mail"
+  | "external-link"
+  | "edit"
+  | "image"
+  | "video"
+  | "grid";
 
 export type IconProps = ComponentProps<"svg"> & {
   name: IconName;
@@ -147,6 +153,47 @@ export function Icon({
           <line x1="12" x2="12" y1="3" y2="15" />
         </>
       )}
+      {name === "mail" && (
+        <>
+          <rect width="20" height="16" x="2" y="4" rx="2" />
+          <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
+        </>
+      )}
+      {name === "external-link" && (
+        <>
+          <path d="M15 3h6v6" />
+          <path d="M10 14 21 3" />
+          <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+        </>
+      )}
+      {name === "edit" && (
+        <>
+          <path d="M12 20h9" />
+          <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+        </>
+      )}
+      {name === "image" && (
+        <>
+          <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
+          <circle cx="9" cy="9" r="2" />
+          <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
+        </>
+      )}
+      {name === "video" && (
+        <>
+          <path d="m22 8-6 4 6 4V8z" />
+          <rect width="14" height="12" x="2" y="6" rx="2" ry="2" />
+        </>
+      )}
+      {name === "grid" && (
+        <>
+          <rect width="7" height="7" x="3" y="3" rx="1" />
+          <rect width="7" height="7" x="14" y="3" rx="1" />
+          <rect width="7" height="7" x="14" y="14" rx="1" />
+          <rect width="7" height="7" x="3" y="14" rx="1" />
+        </>
+      )}
     </svg>
   );
 }
+

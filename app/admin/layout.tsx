@@ -52,11 +52,11 @@ export default function AdminLayout({
     router.refresh();
   };
 
-  const navigation = [
+  const navigation: { name: string; href: string; icon: import("@/components/ui/Icon").IconName }[] = [
     { name: "Dashboard Overview", href: "/admin/dashboard", icon: "landmark" },
     { name: "Exhibitions Manager", href: "/admin/exhibitions", icon: "sparkles" },
     { name: "News & Events CMS", href: "/admin/news-events", icon: "calendar" },
-    { name: "Visitor Inquiries", href: "/admin/inquiries", icon: "mail" },
+    // { name: "Visitor Inquiries", href: "/admin/inquiries", icon: "mail" },
   ];
 
   return (
