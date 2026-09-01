@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
+import { formatDateRange } from "@/lib/exhibitions";
 
 type Exhibition = {
   id: string;
@@ -214,7 +215,7 @@ export default function AdminExhibitionsPage() {
                     {/* Location & Date */}
                     <td className="py-4 px-4 text-[12.5px] text-body">
                       <p className="font-semibold text-heading">{item.location}</p>
-                      <p className="text-[11.5px] text-muted">{item.dateRange}</p>
+                      <p className="text-[11.5px] text-muted">{formatDateRange(item.dateRange)}</p>
                     </td>
 
                     {/* Actions */}

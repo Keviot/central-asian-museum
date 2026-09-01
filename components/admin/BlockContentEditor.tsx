@@ -51,9 +51,9 @@ export function BlockContentEditor({ value, onChange }: BlockContentEditorProps)
     const newBlock: ContentBlock = {
       id: `img-${Date.now()}`,
       type: "image",
-      url: "/images/exhibitions/silk-road-transformed.png",
-      caption: "Artifact detail view in Gallery A",
-      alt: "Museum artifact",
+      url: "",
+      caption: "",
+      alt: "",
     };
     updateBlocks([...blocks, newBlock]);
   };
@@ -62,8 +62,8 @@ export function BlockContentEditor({ value, onChange }: BlockContentEditorProps)
     const newBlock: ContentBlock = {
       id: `yt-${Date.now()}`,
       type: "youtube",
-      videoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
-      title: "Curator Exhibition Walkthrough Video",
+      videoUrl: "",
+      title: "",
     };
     updateBlocks([...blocks, newBlock]);
   };
@@ -72,10 +72,9 @@ export function BlockContentEditor({ value, onChange }: BlockContentEditorProps)
     const newBlock: ContentBlock = {
       id: `tbl-${Date.now()}`,
       type: "table",
-      headers: ["Artifact Name", "Provenance Site", "Date / Era"],
+      headers: ["Column 1", "Column 2", "Column 3"],
       rows: [
-        ["Sogdian Silver Pitcher", "Panjakent, Tajikistan", "7th Century CE"],
-        ["Samarkand Cobalt Tile", "Registan, Uzbekistan", "14th Century CE"],
+        ["", "", ""],
       ],
     };
     updateBlocks([...blocks, newBlock]);
@@ -85,8 +84,8 @@ export function BlockContentEditor({ value, onChange }: BlockContentEditorProps)
     const newBlock: ContentBlock = {
       id: `q-${Date.now()}`,
       type: "quote",
-      text: "The Silk Road was far more than a commercial conduit—it was an engine of artistic hybridity across Asia.",
-      author: "Dr. Alisher Narzullaev",
+      text: "",
+      author: "",
     };
     updateBlocks([...blocks, newBlock]);
   };
@@ -270,98 +269,82 @@ export function BlockContentEditor({ value, onChange }: BlockContentEditorProps)
               </div>
             )}
 
-            {/* BLOCK TYPE 3: INLINE IMAGE WITH FILE UPLOADER & DELETE ICON */}
+            {/* BLOCK TYPE 3: INLINE IMAGE */}
             {block.type === "image" && (
               <div className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {/* Image Source & File Upload */}
-                  <div className="space-y-2">
-                    <label className="block font-mono text-[10.5px] uppercase tracking-wider text-palette-amber font-bold">
-                      Image URL or Upload Local Image File
-                    </label>
+                <div className="space-y-2">
+                  <label className="block font-mono text-[10.5px] uppercase tracking-wider text-palette-amber font-bold">
+                    Inline Image
+                  </label>
 
-                    <input
-                      type="text"
-                      value={block.url}
-                      onChange={(e) => updateBlockData(index, { url: e.target.value })}
-                      placeholder="/images/exhibitions/..."
-                      className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary px-3 py-2 text-[13px] font-mono text-heading focus:border-palette-amber focus:outline-none"
-                    />
-
-                    {/* Native File Upload Input */}
-                    <div className="flex items-center gap-2">
-                      <label className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xs border border-palette-amber/60 bg-palette-amber/10 hover:bg-palette-amber/20 text-[12px] font-mono font-bold uppercase tracking-wider text-palette-amber cursor-pointer transition-all">
-                        <Icon name="upload" size={14} />
-                        <span>{uploadingIndex === index ? "Uploading..." : "Upload Image File"}</span>
-                        <input
-                          type="file"
-                          accept="image/*"
-                          onChange={(e) => {
-                            if (e.target.files?.[0]) {
-                              handleImageUpload(index, e.target.files[0]);
-                            }
-                          }}
-                          className="hidden"
+                  {block.url ? (
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-3.5 rounded-xs border border-palette-sand/70 bg-bg-secondary">
+                      <div className="flex items-center gap-3">
+                        <img
+                          src={block.url}
+                          alt={block.alt || "Inline Image"}
+                          className="h-16 w-24 object-cover rounded-xs border border-palette-sand"
+                          onError={(e) => (e.currentTarget.style.display = "none")}
                         />
-                      </label>
-
-                      {block.url && (
-                        <button
-                          type="button"
-                          onClick={() => updateBlockData(index, { url: "" })}
-                          className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-xs border border-red-400/50 text-red-600 hover:bg-red-500/10 text-[11px] font-mono uppercase font-bold"
-                          title="Remove Image"
-                        >
-                          <Icon name="trash" size={13} />
-                          <span>Clear Image</span>
-                        </button>
-                      )}
+                        <div>
+                          <label className="px-3 py-1.5 rounded-xs border border-palette-sand/80 bg-white hover:border-palette-amber text-[11px] font-mono font-bold uppercase tracking-wider text-heading cursor-pointer shrink-0 inline-block">
+                            <span>{uploadingIndex === index ? "Uploading..." : "Change Image"}</span>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              onChange={(e) => {
+                                if (e.target.files?.[0]) {
+                                  handleImageUpload(index, e.target.files[0]);
+                                }
+                              }}
+                              className="hidden"
+                            />
+                          </label>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => updateBlockData(index, { url: "" })}
+                        className="px-3 py-1.5 rounded-xs border border-red-400/60 bg-red-500/10 text-red-600 hover:bg-red-500/20 text-[11px] font-mono font-bold uppercase tracking-wider shrink-0 flex items-center gap-1 self-start sm:self-center"
+                      >
+                        <Icon name="trash" size={13} />
+                        <span>Remove</span>
+                      </button>
                     </div>
-                  </div>
-
-                  {/* Caption & Alt Text */}
-                  <div className="space-y-2">
-                    <div>
-                      <label className="block font-mono text-[10.5px] uppercase tracking-wider text-palette-amber font-bold mb-1">
-                        Image Caption Text
-                      </label>
+                  ) : (
+                    <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-palette-sand/80 rounded-xs bg-bg-secondary/50 hover:bg-bg-secondary hover:border-palette-amber cursor-pointer transition-colors text-center">
+                      <Icon name="upload" size={24} className="text-palette-amber mb-2" />
+                      <span className="font-mono text-[12px] font-bold uppercase tracking-wider text-palette-amber">
+                        {uploadingIndex === index ? "Uploading Image..." : "Upload Inline Image File"}
+                      </span>
+                      <span className="text-[11px] text-muted mt-1">PNG, JPG, WEBP up to 5MB</span>
                       <input
-                        type="text"
-                        value={block.caption || ""}
-                        onChange={(e) => updateBlockData(index, { caption: e.target.value })}
-                        placeholder="e.g. Fig 1.2: Glazed Sogdian Pitcher Detail"
-                        className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary px-3 py-2 text-[13.5px] text-heading focus:border-palette-amber focus:outline-none"
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          if (e.target.files?.[0]) {
+                            handleImageUpload(index, e.target.files[0]);
+                          }
+                        }}
+                        className="hidden"
                       />
-                    </div>
-                  </div>
+                    </label>
+                  )}
                 </div>
 
-                {/* Live Image Preview Card */}
-                {block.url ? (
-                  <div className="p-3 rounded-xs border border-palette-sand/60 bg-bg-secondary flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <img
-                        src={block.url}
-                        alt={block.alt || "Preview"}
-                        className="h-16 w-24 object-cover rounded-xs border border-palette-sand/70"
-                        onError={(e) => (e.currentTarget.style.display = "none")}
-                      />
-                      <div>
-                        <p className="font-mono text-[11.5px] text-heading font-bold">Image Preview</p>
-                        <p className="font-mono text-[10.5px] text-muted truncate max-w-md">{block.url}</p>
-                      </div>
-                    </div>
-
-                    <button
-                      type="button"
-                      onClick={() => updateBlockData(index, { url: "" })}
-                      className="p-1.5 text-red-500 hover:text-red-700"
-                      title="Delete image"
-                    >
-                      <Icon name="trash" size={16} />
-                    </button>
-                  </div>
-                ) : null}
+                {/* Caption Field */}
+                <div>
+                  <label className="block font-mono text-[10.5px] uppercase tracking-wider text-palette-amber font-bold mb-1">
+                    Image Caption Text
+                  </label>
+                  <input
+                    type="text"
+                    value={block.caption || ""}
+                    onChange={(e) => updateBlockData(index, { caption: e.target.value })}
+                    placeholder="e.g. Fig 1.2: Glazed Sogdian Pitcher Detail"
+                    className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary px-3 py-2 text-[13.5px] text-heading focus:border-palette-amber focus:outline-none"
+                  />
+                </div>
               </div>
             )}
 

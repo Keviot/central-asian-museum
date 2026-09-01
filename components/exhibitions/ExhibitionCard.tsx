@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import type { ExhibitionItem } from "@/lib/exhibitions";
+import { formatDateRange } from "@/lib/exhibitions";
 
 type ExhibitionCardProps = {
   exhibition: ExhibitionItem;
@@ -65,7 +66,7 @@ export function ExhibitionCard({
           <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] font-medium text-muted">
             <div className="flex items-center gap-1.5">
               <Icon name="calendar" size={13} className="text-palette-sage" />
-              <span>{exhibition.dateRange}</span>
+              <span>{formatDateRange(exhibition.dateRange)}</span>
             </div>
             <div className="flex items-center gap-1.5">
               <Icon name="map-pin" size={13} className="text-palette-sage" />

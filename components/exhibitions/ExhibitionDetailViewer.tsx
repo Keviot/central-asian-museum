@@ -94,6 +94,21 @@ export function ExhibitionDetailViewer({ exhibition }: ExhibitionDetailViewerPro
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
             {/* Left Column: Essay & Catalog Download */}
             <div className="lg:col-span-8 space-y-10">
+              {/* Short Description (Card Summary) */}
+              {exhibition.description && (
+                <div>
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="h-px w-8 bg-palette-amber" aria-hidden="true" />
+                    <p className="font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-palette-amber">
+                      Short Description
+                    </p>
+                  </div>
+                  <p className="text-[17px] sm:text-[19px] leading-relaxed text-heading font-serif italic border-l-2 border-palette-amber/60 pl-4 py-1">
+                    {exhibition.description}
+                  </p>
+                </div>
+              )}
+
               <div>
                 <div className="flex items-center gap-3 mb-6">
                   <span className="h-px w-8 bg-palette-amber" aria-hidden="true" />
@@ -105,20 +120,7 @@ export function ExhibitionDetailViewer({ exhibition }: ExhibitionDetailViewerPro
                 <BlockContentRenderer essay={exhibition.curatorialEssay} />
               </div>
 
-              {/* Download Exhibition Catalog Banner */}
-              <div className="p-6 sm:p-7 rounded-xs border border-palette-sand/80 bg-bg-secondary flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shadow-xs">
-                <div>
-                  <h4 className="font-heading text-[19px] font-semibold text-heading">
-                    Download Official Exhibition Catalog (PDF)
-                  </h4>
-                  <p className="text-[13.5px] text-body mt-1">
-                    Includes 120-page high-resolution color plates, artifact provenance maps, and scholarly essays.
-                  </p>
-                </div>
-                <Button href="/contact?intent=research" variant="primary" size="sm" icon="arrow-right" className="bg-palette-wine hover:bg-palette-wine/90 shrink-0">
-                  Request Catalog
-                </Button>
-              </div>
+
             </div>
 
             {/* Right Column Sidebar: Overview + Research + Masterwork Detail Spec at Bottom */}

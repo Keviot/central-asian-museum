@@ -7,6 +7,7 @@ import Image from "next/image";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import { BlockContentEditor } from "@/components/admin/BlockContentEditor";
+import { formatDateToDDMMYYYY } from "@/lib/exhibitions";
 
 type Props = {
   params: Promise<{
@@ -84,6 +85,10 @@ export default function EditExhibitionPage({ params }: Props) {
         if (!str) return "";
         const trimmed = str.trim();
         if (/^\d{4}-\d{2}-\d{2}$/.test(trimmed)) return trimmed;
+        if (/^\d{2}\/\d{2}\/\d{4}$/.test(trimmed)) {
+          const [day, m, y] = trimmed.split("/");
+          return `${y}-${m}-${day}`;
+        }
         const d = new Date(trimmed);
         if (!isNaN(d.getTime())) {
           const y = d.getFullYear();
@@ -141,10 +146,12 @@ export default function EditExhibitionPage({ params }: Props) {
   const handleDateChange = (start: string, end: string) => {
     setStartDate(start);
     setEndDate(end);
-    if (start && end) {
-      setFormData((prev) => ({ ...prev, dateRange: `${start} – ${end}` }));
-    } else if (start) {
-      setFormData((prev) => ({ ...prev, dateRange: `From ${start}` }));
+    const startFormatted = formatDateToDDMMYYYY(start);
+    const endFormatted = formatDateToDDMMYYYY(end);
+    if (startFormatted && endFormatted) {
+      setFormData((prev) => ({ ...prev, dateRange: `${startFormatted} – ${endFormatted}` }));
+    } else if (startFormatted) {
+      setFormData((prev) => ({ ...prev, dateRange: `From ${startFormatted}` }));
     }
   };
 
@@ -559,14 +566,14 @@ export default function EditExhibitionPage({ params }: Props) {
             />
           </div>
 
-          {/* Cover Image Upload (No raw path text box!) */}
-          <div className="sm:col-span-2 space-y-2">
+          {/* Cover Image Upload */}
+          <div className="space-y-1.5">
             <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
               Exhibition Cover Image *
             </label>
 
             {formData.imageSrc ? (
-              <div className="flex items-center gap-4 p-3 rounded-xs border border-palette-sand/70 bg-bg-secondary">
+              <div className="flex items-center justify-between gap-4 p-3 rounded-xs border border-palette-sand/70 bg-bg-secondary">
                 <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xs border border-palette-sand">
                   <Image
                     src={formData.imageSrc}
@@ -575,11 +582,8 @@ export default function EditExhibitionPage({ params }: Props) {
                     className="object-cover"
                   />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[12px] font-mono font-bold text-heading truncate">Cover Image Selected</p>
-                  <p className="text-[11px] font-mono text-muted truncate">{formData.imageSrc}</p>
-                </div>
-                <label className="px-3 py-1.5 rounded-xs border border-palette-sand/80 bg-white hover:border-palette-amber text-[11px] font-mono font-bold uppercase tracking-wider text-heading cursor-pointer shrink-0">
+                <div className="flex items-center gap-2">
+                  <label className="px-3 py-1.5 rounded-xs border border-palette-sand/80 bg-white hover:border-palette-amber text-[11px] font-mono font-bold uppercase tracking-wider text-heading cursor-pointer shrink-0">
                   <span>Change</span>
                   <input
                     type="file"
@@ -605,15 +609,13 @@ export default function EditExhibitionPage({ params }: Props) {
                   <Icon name="trash" size={13} />
                   <span>Remove</span>
                 </button>
+                </div>
               </div>
             ) : (
               <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-palette-sand/80 rounded-xs bg-bg-secondary/50 hover:bg-bg-secondary hover:border-palette-amber cursor-pointer transition-colors text-center">
                 <Icon name="upload" size={24} className="text-palette-amber mb-2" />
                 <span className="text-[13px] font-mono font-bold text-heading uppercase tracking-wider">
                   Upload Cover Image
-                </span>
-                <span className="text-[11px] text-muted mt-1">
-                  Uploads directly to Cloudinary storage
                 </span>
                 <input
                   type="file"
@@ -666,7 +668,7 @@ export default function EditExhibitionPage({ params }: Props) {
             Cancel
           </Button>
           <Button type="submit" variant="primary" size="md" disabled={isSubmitting} className="bg-palette-wine hover:bg-palette-wine/90">
-            {isSubmitting ? "Updating Database..." : "Save Changes"}
+            {isSubmitting ? "Saving Changes..." : "Save Changes"}
           </Button>
         </div>
       </form>

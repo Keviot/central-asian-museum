@@ -58,6 +58,20 @@ export type ExhibitionItem = {
   audioGuide?: AudioGuideTrack;
 };
 
+export function formatDateToDDMMYYYY(dateStr: string): string {
+  if (!dateStr) return "";
+  const parts = dateStr.trim().split("-");
+  if (parts.length === 3 && parts[0].length === 4) {
+    return `${parts[2]}/${parts[1]}/${parts[0]}`;
+  }
+  return dateStr;
+}
+
+export function formatDateRange(dateRange: string): string {
+  if (!dateRange) return "";
+  return dateRange.replace(/\b(\d{4})-(\d{2})-(\d{2})\b/g, "$3/$2/$1");
+}
+
 export const exhibitionCategories: ExhibitionCategory[] = [
   "All",
   "Current",

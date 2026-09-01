@@ -423,14 +423,14 @@ export default function NewNewsEventPage() {
             />
           </div>
 
-          {/* Cover Image Upload (No raw path text box!) */}
-          <div className="sm:col-span-2 space-y-2">
+          {/* Cover Image Upload */}
+          <div className="space-y-1.5">
             <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
               Event Cover Image *
             </label>
 
             {formData.imageSrc ? (
-              <div className="flex items-center gap-4 p-3 rounded-xs border border-palette-sand/70 bg-bg-secondary">
+              <div className="flex items-center justify-between gap-4 p-3 rounded-xs border border-palette-sand/70 bg-bg-secondary">
                 <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xs border border-palette-sand">
                   <Image
                     src={formData.imageSrc}
@@ -439,45 +439,40 @@ export default function NewNewsEventPage() {
                     className="object-cover"
                   />
                 </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-[12px] font-mono font-bold text-heading truncate">Cover Image Selected</p>
-                  <p className="text-[11px] font-mono text-muted truncate">{formData.imageSrc}</p>
+                <div className="flex items-center gap-2">
+                  <label className="px-3 py-1.5 rounded-xs border border-palette-sand/80 bg-white hover:border-palette-amber text-[11px] font-mono font-bold uppercase tracking-wider text-heading cursor-pointer shrink-0">
+                    <span>Change</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={async (e) => {
+                        if (e.target.files?.[0]) {
+                          const file = e.target.files[0];
+                          const data = new FormData();
+                          data.append("file", file);
+                          const res = await fetch("/api/admin/upload", { method: "POST", body: data });
+                          const json = await res.json();
+                          if (res.ok && json.url) setFormData((prev) => ({ ...prev, imageSrc: json.url }));
+                        }
+                      }}
+                      className="hidden"
+                    />
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, imageSrc: "" })}
+                    className="px-3 py-1.5 rounded-xs border border-red-400/60 bg-red-500/10 text-red-600 hover:bg-red-500/20 text-[11px] font-mono font-bold uppercase tracking-wider shrink-0 flex items-center gap-1"
+                  >
+                    <Icon name="trash" size={13} />
+                    <span>Remove</span>
+                  </button>
                 </div>
-                <label className="px-3 py-1.5 rounded-xs border border-palette-sand/80 bg-white hover:border-palette-amber text-[11px] font-mono font-bold uppercase tracking-wider text-heading cursor-pointer shrink-0">
-                  <span>Change</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={async (e) => {
-                      if (e.target.files?.[0]) {
-                        const file = e.target.files[0];
-                        const data = new FormData();
-                        data.append("file", file);
-                        const res = await fetch("/api/admin/upload", { method: "POST", body: data });
-                        const json = await res.json();
-                        if (res.ok && json.url) setFormData((prev) => ({ ...prev, imageSrc: json.url }));
-                      }
-                    }}
-                    className="hidden"
-                  />
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, imageSrc: "" })}
-                  className="px-3 py-1.5 rounded-xs border border-red-400/60 bg-red-500/10 text-red-600 hover:bg-red-500/20 text-[11px] font-mono font-bold uppercase tracking-wider shrink-0 flex items-center gap-1"
-                >
-                  <Icon name="trash" size={13} />
-                  <span>Remove</span>
-                </button>
               </div>
             ) : (
               <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-palette-sand/80 rounded-xs bg-bg-secondary/50 hover:bg-bg-secondary hover:border-palette-amber cursor-pointer transition-colors text-center">
                 <Icon name="upload" size={24} className="text-palette-amber mb-2" />
                 <span className="text-[13px] font-mono font-bold text-heading uppercase tracking-wider">
                   Upload Cover Image
-                </span>
-                <span className="text-[11px] text-muted mt-1">
-                  Uploads directly to Cloudinary storage
                 </span>
                 <input
                   type="file"

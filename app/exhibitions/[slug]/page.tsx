@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { ExhibitionCard } from "@/components/exhibitions/ExhibitionCard";
 import { ExhibitionDetailViewer } from "@/components/exhibitions/ExhibitionDetailViewer";
-import { exhibitionsData } from "@/lib/exhibitions";
+import { exhibitionsData, formatDateRange } from "@/lib/exhibitions";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -214,7 +214,7 @@ export default async function ExhibitionDetailPage({ params }: Props) {
                 <div className="flex flex-wrap items-center gap-6 border-y border-palette-sand/70 py-4 text-[13.5px] text-body">
                   <div className="flex items-center gap-2">
                     <Icon name="calendar" size={16} className="text-palette-amber shrink-0" />
-                    <span className="font-medium">{exhibition.dateRange}</span>
+                    <span className="font-medium">{formatDateRange(exhibition.dateRange)}</span>
                   </div>
                   <div className="flex items-center gap-2">
                     <Icon name="map-pin" size={16} className="text-palette-amber shrink-0" />

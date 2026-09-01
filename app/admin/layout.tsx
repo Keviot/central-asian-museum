@@ -78,9 +78,9 @@ export default function AdminLayout({
         </button>
       </div>
 
-      {/* Admin Sidebar Navigation - PRISTINE LIGHT THEME WITH PALETTE ACCENTS */}
+      {/* Admin Sidebar Navigation - STICKY NON-SCROLLABLE SIDEBAR */}
       <aside
-        className={`w-full md:w-64 shrink-0 bg-white border-r border-palette-sand/70 flex flex-col justify-between shadow-xs ${
+        className={`w-full md:w-64 shrink-0 bg-white border-r border-palette-sand/70 flex flex-col justify-between shadow-xs md:sticky md:top-0 md:h-screen md:overflow-y-auto ${
           isMobileMenuOpen ? "block" : "hidden md:flex"
         }`}
       >
@@ -157,9 +157,9 @@ export default function AdminLayout({
       </aside>
 
       {/* Main Admin Page Content */}
-      <div className="flex-1 overflow-y-auto">
+      <main className="flex-1 min-w-0">
         {children}
-      </div>
+      </main>
     </div>
   );
 }
