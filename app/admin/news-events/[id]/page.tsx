@@ -24,6 +24,7 @@ export default function EditNewsEventPage({ params }: Props) {
   const [id, setId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [categoriesList, setCategoriesList] = useState<CategoryItem[]>([]);
@@ -466,7 +467,15 @@ export default function EditNewsEventPage({ params }: Props) {
               Event Cover Image *
             </label>
 
-            {formData.imageSrc ? (
+            {isUploadingImage ? (
+              <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-palette-amber/70 rounded-xs bg-palette-amber/5 text-center">
+                <div className="h-6 w-6 border-2 border-palette-wine border-t-transparent rounded-full animate-spin mb-2" />
+                <span className="text-[13px] font-mono font-bold text-palette-wine uppercase tracking-wider">
+                  Processing & Uploading Image...
+                </span>
+                <span className="text-[11px] text-muted font-mono mt-1">Please wait while the image is being processed</span>
+              </div>
+            ) : formData.imageSrc ? (
               <div className="flex items-center justify-between gap-4 p-3 rounded-xs border border-palette-sand/70 bg-bg-secondary">
                 <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xs border border-palette-sand">
                   <Image
@@ -487,9 +496,17 @@ export default function EditNewsEventPage({ params }: Props) {
                           const file = e.target.files[0];
                           const data = new FormData();
                           data.append("file", file);
-                          const res = await fetch("/api/admin/upload", { method: "POST", body: data });
-                          const json = await res.json();
-                          if (res.ok && json.url) setFormData((prev) => ({ ...prev, imageSrc: json.url }));
+                          setIsUploadingImage(true);
+                          try {
+                            const res = await fetch("/api/admin/upload", { method: "POST", body: data });
+                            const json = await res.json();
+                            if (res.ok && json.url) setFormData((prev) => ({ ...prev, imageSrc: json.url }));
+                          } catch (err) {
+                            console.error(err);
+                          } finally {
+                            setIsUploadingImage(false);
+                            e.target.value = "";
+                          }
                         }
                       }}
                       className="hidden"
@@ -519,9 +536,17 @@ export default function EditNewsEventPage({ params }: Props) {
                       const file = e.target.files[0];
                       const data = new FormData();
                       data.append("file", file);
-                      const res = await fetch("/api/admin/upload", { method: "POST", body: data });
-                      const json = await res.json();
-                      if (res.ok && json.url) setFormData((prev) => ({ ...prev, imageSrc: json.url }));
+                      setIsUploadingImage(true);
+                      try {
+                        const res = await fetch("/api/admin/upload", { method: "POST", body: data });
+                        const json = await res.json();
+                        if (res.ok && json.url) setFormData((prev) => ({ ...prev, imageSrc: json.url }));
+                      } catch (err) {
+                        console.error(err);
+                      } finally {
+                        setIsUploadingImage(false);
+                        e.target.value = "";
+                      }
                     }
                   }}
                   className="hidden"
@@ -564,7 +589,7 @@ export default function EditNewsEventPage({ params }: Props) {
             Cancel
           </Button>
           <Button type="submit" variant="primary" size="md" disabled={isSubmitting} className="bg-palette-wine hover:bg-palette-wine/90">
-            {isSubmitting ? "Saving Changes..." : "Save Changes"}
+            {isSubmitting ? "Publishing..." : "Save Changes"}
           </Button>
         </div>
       </form>

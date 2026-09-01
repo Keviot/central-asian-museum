@@ -72,7 +72,7 @@ export function Button({
     </>
   );
 
-  const sharedClasses = `group inline-flex items-center justify-center font-medium uppercase rounded-[3px] transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 select-none ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
+  const sharedClasses = `group inline-flex items-center justify-center font-medium uppercase rounded-[3px] transition-all duration-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 select-none cursor-pointer disabled:cursor-not-allowed ${variantClasses[variant]} ${sizeClasses[size]} ${className}`;
 
   if ("href" in props && typeof props.href === "string") {
     const { href, ...linkProps } = props as LinkButtonProps;

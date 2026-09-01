@@ -111,7 +111,7 @@ function AdminLoginForm() {
             disabled={loading}
             className="w-full rounded-xs bg-palette-wine hover:bg-palette-wine/90 border border-palette-wine/30 py-3.5 text-[12.5px] font-mono font-bold uppercase tracking-[0.18em] text-white shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer flex items-center justify-center gap-2"
           >
-            <span>{loading ? "Authenticating..." : "Access Curatorial Panel"}</span>
+            <span>{loading ? "Logining..." : "Sign In"}</span>
             <Icon name="arrow-right" size={16} className="text-white" />
           </button>
         </form>
@@ -121,7 +121,7 @@ function AdminLoginForm() {
             href="/"
             className="inline-flex items-center gap-1.5 font-mono text-[11.5px] uppercase tracking-wider text-body hover:text-palette-wine transition-colors"
           >
-            <span>← Return to Public Website</span>
+            <span>← Return to Website</span>
           </Link>
         </div>
       </div>

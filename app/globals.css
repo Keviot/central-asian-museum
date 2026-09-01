@@ -84,6 +84,22 @@ body {
   font-family: var(--font-manrope), system-ui, sans-serif;
 }
 
+button,
+[role="button"],
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  cursor: pointer;
+}
+
+button:disabled,
+[role="button"][aria-disabled="true"],
+input[type="button"]:disabled,
+input[type="submit"]:disabled,
+input[type="reset"]:disabled {
+  cursor: not-allowed;
+}
+
 h1,
 h2,
 h3,

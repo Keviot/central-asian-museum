@@ -26,6 +26,7 @@ export default function EditExhibitionPage({ params }: Props) {
   const [id, setId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [categoriesList, setCategoriesList] = useState<CategoryItem[]>([]);
@@ -578,7 +579,15 @@ export default function EditExhibitionPage({ params }: Props) {
               Exhibition Cover Image *
             </label>
 
-            {formData.imageSrc ? (
+            {isUploadingImage ? (
+              <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-palette-amber/70 rounded-xs bg-palette-amber/5 text-center">
+                <div className="h-6 w-6 border-2 border-palette-wine border-t-transparent rounded-full animate-spin mb-2" />
+                <span className="text-[13px] font-mono font-bold text-palette-wine uppercase tracking-wider">
+                  Processing & Uploading Image...
+                </span>
+                <span className="text-[11px] text-muted font-mono mt-1">Please wait while the image is being processed</span>
+              </div>
+            ) : formData.imageSrc ? (
               <div className="flex items-center justify-between gap-4 p-3 rounded-xs border border-palette-sand/70 bg-bg-secondary">
                 <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xs border border-palette-sand">
                   <Image
@@ -599,9 +608,17 @@ export default function EditExhibitionPage({ params }: Props) {
                         const file = e.target.files[0];
                         const data = new FormData();
                         data.append("file", file);
-                        const res = await fetch("/api/admin/upload", { method: "POST", body: data });
-                        const json = await res.json();
-                        if (res.ok && json.url) setFormData((prev) => ({ ...prev, imageSrc: json.url }));
+                        setIsUploadingImage(true);
+                        try {
+                          const res = await fetch("/api/admin/upload", { method: "POST", body: data });
+                          const json = await res.json();
+                          if (res.ok && json.url) setFormData((prev) => ({ ...prev, imageSrc: json.url }));
+                        } catch (err) {
+                          console.error(err);
+                        } finally {
+                          setIsUploadingImage(false);
+                          e.target.value = "";
+                        }
                       }
                     }}
                     className="hidden"
@@ -631,9 +648,17 @@ export default function EditExhibitionPage({ params }: Props) {
                       const file = e.target.files[0];
                       const data = new FormData();
                       data.append("file", file);
-                      const res = await fetch("/api/admin/upload", { method: "POST", body: data });
-                      const json = await res.json();
-                      if (res.ok && json.url) setFormData((prev) => ({ ...prev, imageSrc: json.url }));
+                      setIsUploadingImage(true);
+                      try {
+                        const res = await fetch("/api/admin/upload", { method: "POST", body: data });
+                        const json = await res.json();
+                        if (res.ok && json.url) setFormData((prev) => ({ ...prev, imageSrc: json.url }));
+                      } catch (err) {
+                        console.error(err);
+                      } finally {
+                        setIsUploadingImage(false);
+                        e.target.value = "";
+                      }
                     }
                   }}
                   className="hidden"
@@ -642,38 +667,32 @@ export default function EditExhibitionPage({ params }: Props) {
             )}
           </div>
 
-          {/* Horizontal Divider before Short Description */}
-          <div className="sm:col-span-2 border-t-2 border-palette-sand pt-6 mt-2">
-            <span className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-palette-amber flex items-center gap-2 mb-4">
-              <span className="h-2 w-2 rounded-full bg-palette-amber" />
-              1. Short Description Section
-            </span>
-            <div className="space-y-4 rounded-xs border border-palette-sand/70 bg-bg-secondary/30 p-5">
-              <div className="space-y-1.5">
-                <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
-                  Short Description Section Header Text
-                </label>
-                <input
-                  type="text"
-                  value={formData.descriptionHeading}
-                  onChange={(e) => setFormData({ ...formData, descriptionHeading: e.target.value })}
-                  placeholder="Short Description"
-                  className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary px-4 py-2.5 text-[13.5px] text-heading focus:border-palette-amber focus:outline-none"
-                />
-              </div>
+          {/* Short Description Section (Part of top section) */}
+          <div className="sm:col-span-2 space-y-4 rounded-xs border border-palette-sand/70 bg-bg-secondary/30 p-5 mt-2">
+            <div className="space-y-1.5">
+              <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
+                Short Description Section Header Text
+              </label>
+              <input
+                type="text"
+                value={formData.descriptionHeading}
+                onChange={(e) => setFormData({ ...formData, descriptionHeading: e.target.value })}
+                placeholder="Short Description"
+                className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary px-4 py-2.5 text-[13.5px] text-heading focus:border-palette-amber focus:outline-none"
+              />
+            </div>
 
-              <div className="space-y-1.5">
-                <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
-                  Short Description (Card Summary) *
-                </label>
-                <textarea
-                  required
-                  rows={3}
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                  className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary p-4 text-[14px] text-heading focus:border-palette-amber focus:outline-none"
-                />
-              </div>
+            <div className="space-y-1.5">
+              <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
+                Short Description (Card Summary) *
+              </label>
+              <textarea
+                required
+                rows={3}
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary p-4 text-[14px] text-heading focus:border-palette-amber focus:outline-none"
+              />
             </div>
           </div>
 
@@ -681,7 +700,7 @@ export default function EditExhibitionPage({ params }: Props) {
           <div className="sm:col-span-2 border-t-2 border-palette-sand pt-6 mt-2">
             <span className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-palette-amber flex items-center gap-2 mb-4">
               <span className="h-2 w-2 rounded-full bg-palette-amber" />
-              2. Curatorial Narrative Essay Section
+              1. Curatorial Narrative Essay Section
             </span>
             <div className="space-y-6 rounded-xs border border-palette-sand/70 bg-bg-secondary/30 p-5">
               <div className="space-y-1.5">
@@ -717,7 +736,7 @@ export default function EditExhibitionPage({ params }: Props) {
             Cancel
           </Button>
           <Button type="submit" variant="primary" size="md" disabled={isSubmitting} className="bg-palette-wine hover:bg-palette-wine/90">
-            {isSubmitting ? "Saving Changes..." : "Save Changes"}
+            {isSubmitting ? "Publishing..." : "Save Changes"}
           </Button>
         </div>
       </form>

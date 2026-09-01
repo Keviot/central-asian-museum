@@ -277,7 +277,15 @@ export function BlockContentEditor({ value, onChange }: BlockContentEditorProps)
                     Inline Image
                   </label>
 
-                  {block.url ? (
+                  {uploadingIndex === index ? (
+                    <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-palette-amber/70 rounded-xs bg-palette-amber/5 text-center">
+                      <div className="h-6 w-6 border-2 border-palette-wine border-t-transparent rounded-full animate-spin mb-2" />
+                      <span className="font-mono text-[12px] font-bold uppercase tracking-wider text-palette-wine">
+                        Processing & Uploading Image...
+                      </span>
+                      <span className="text-[11px] text-muted font-mono mt-1">Please wait while the image is being processed</span>
+                    </div>
+                  ) : block.url ? (
                     <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-3.5 rounded-xs border border-palette-sand/70 bg-bg-secondary">
                       <div className="flex items-center gap-3">
                         <img
@@ -288,7 +296,7 @@ export function BlockContentEditor({ value, onChange }: BlockContentEditorProps)
                         />
                         <div>
                           <label className="px-3 py-1.5 rounded-xs border border-palette-sand/80 bg-white hover:border-palette-amber text-[11px] font-mono font-bold uppercase tracking-wider text-heading cursor-pointer shrink-0 inline-block">
-                            <span>{uploadingIndex === index ? "Uploading..." : "Change Image"}</span>
+                            <span>Change Image</span>
                             <input
                               type="file"
                               accept="image/*"
@@ -315,7 +323,7 @@ export function BlockContentEditor({ value, onChange }: BlockContentEditorProps)
                     <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-palette-sand/80 rounded-xs bg-bg-secondary/50 hover:bg-bg-secondary hover:border-palette-amber cursor-pointer transition-colors text-center">
                       <Icon name="upload" size={24} className="text-palette-amber mb-2" />
                       <span className="font-mono text-[12px] font-bold uppercase tracking-wider text-palette-amber">
-                        {uploadingIndex === index ? "Uploading Image..." : "Upload Inline Image File"}
+                        Upload Inline Image File
                       </span>
                       <span className="text-[11px] text-muted mt-1">PNG, JPG, WEBP up to 5MB</span>
                       <input
