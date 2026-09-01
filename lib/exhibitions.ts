@@ -46,7 +46,9 @@ export type ExhibitionItem = {
   location: string;
   imageSrc: string;
   imageAlt: string;
+  descriptionHeading?: string;
   description: string;
+  curatorialEssayHeading?: string;
   curatorialEssay: string;
   curator: string;
   status: ExhibitionStatus;

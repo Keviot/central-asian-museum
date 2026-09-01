@@ -1,13 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { BlockContentRenderer } from "./BlockContentRenderer";
-import type { ExhibitionItem, ArtifactHighlight } from "@/lib/exhibitions";
+import type { ExhibitionItem } from "@/lib/exhibitions";
 
 type ExhibitionDetailViewerProps = {
   exhibition: ExhibitionItem;
@@ -16,9 +14,6 @@ type ExhibitionDetailViewerProps = {
 export function ExhibitionDetailViewer({ exhibition }: ExhibitionDetailViewerProps) {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [showTranscript, setShowTranscript] = useState(false);
-  const [activeArtifact, setActiveArtifact] = useState<ArtifactHighlight | null>(
-    exhibition.highlights && exhibition.highlights.length > 0 ? exhibition.highlights[0] : null
-  );
 
   return (
     <div className="w-full">
@@ -100,7 +95,7 @@ export function ExhibitionDetailViewer({ exhibition }: ExhibitionDetailViewerPro
                   <div className="flex items-center gap-3 mb-3">
                     <span className="h-px w-8 bg-palette-amber" aria-hidden="true" />
                     <p className="font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-palette-amber">
-                      Short Description
+                      {exhibition.descriptionHeading || "Short Description"}
                     </p>
                   </div>
                   <p className="text-[17px] sm:text-[19px] leading-relaxed text-heading font-serif italic border-l-2 border-palette-amber/60 pl-4 py-1">
@@ -113,7 +108,7 @@ export function ExhibitionDetailViewer({ exhibition }: ExhibitionDetailViewerPro
                 <div className="flex items-center gap-3 mb-6">
                   <span className="h-px w-8 bg-palette-amber" aria-hidden="true" />
                   <p className="font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-palette-amber">
-                    Curatorial Narrative & Historical Context
+                    {exhibition.curatorialEssayHeading || "Curatorial Narrative & Historical Context"}
                   </p>
                 </div>
 
@@ -146,20 +141,11 @@ export function ExhibitionDetailViewer({ exhibition }: ExhibitionDetailViewerPro
                     <span className="font-medium text-heading">{exhibition.location}</span>
                   </div>
 
-                  <div className="flex justify-between border-b border-palette-sand/60 pb-2">
+                  <div className="flex justify-between">
                     <span className="font-mono text-[11px] uppercase tracking-[0.16em] font-bold text-palette-amber">
                       Lead Curator
                     </span>
                     <span className="font-medium text-heading">{exhibition.curator}</span>
-                  </div>
-
-                  <div className="pt-1">
-                    <span className="font-mono text-[11px] uppercase tracking-[0.16em] font-bold text-palette-amber block mb-1">
-                      Admission & Audio Guide
-                    </span>
-                    <p className="text-body leading-snug text-[13px]">
-                      Included with Museum General Ticket. Guided walkthroughs daily at 11:00 AM & 3:00 PM.
-                    </p>
                   </div>
                 </div>
               </div>
@@ -180,62 +166,7 @@ export function ExhibitionDetailViewer({ exhibition }: ExhibitionDetailViewerPro
                 </p>
               </div>
 
-              {/* Sidebar Item 3: MASTERWORK DETAIL SPEC (Placed right at the bottom of the right sidebar!) */}
-              {activeArtifact && (
-                <div className="p-6 rounded-xs border-2 border-palette-amber/60 bg-white shadow-md space-y-4">
-                  <div className="flex items-center justify-between border-b border-palette-sand/70 pb-3">
-                    <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-palette-amber font-bold flex items-center gap-1.5">
-                      <Icon name="sparkles" size={13} />
-                      Masterwork Detail Spec
-                    </span>
-                    {activeArtifact.accessionNumber && (
-                      <span className="font-mono text-[10.5px] text-muted">
-                        {activeArtifact.accessionNumber}
-                      </span>
-                    )}
-                  </div>
 
-                  <div>
-                    <h3 className="font-heading text-[22px] font-semibold text-heading leading-tight">
-                      {activeArtifact.title}
-                    </h3>
-                  </div>
-
-                  <div className="space-y-2 text-[13px]">
-                    <p className="flex justify-between border-b border-palette-sand/50 pb-1.5">
-                      <strong className="text-heading font-medium">Provenance:</strong>
-                      <span className="text-body font-normal">{activeArtifact.provenance}</span>
-                    </p>
-                    <p className="flex justify-between border-b border-palette-sand/50 pb-1.5">
-                      <strong className="text-heading font-medium">Historical Era:</strong>
-                      <span className="text-body font-normal">{activeArtifact.date}</span>
-                    </p>
-                    {activeArtifact.material && (
-                      <p className="flex justify-between border-b border-palette-sand/50 pb-1.5">
-                        <strong className="text-heading font-medium">Material:</strong>
-                        <span className="text-body font-normal">{activeArtifact.material}</span>
-                      </p>
-                    )}
-                    {activeArtifact.dimensions && (
-                      <p className="flex justify-between border-b border-palette-sand/50 pb-1.5">
-                        <strong className="text-heading font-medium">Dimensions:</strong>
-                        <span className="text-body font-normal">{activeArtifact.dimensions}</span>
-                      </p>
-                    )}
-                  </div>
-
-                  <p className="text-[13px] leading-relaxed text-body pt-1">
-                    {activeArtifact.description}
-                  </p>
-
-                  <div className="pt-3 border-t border-palette-sand/70 flex justify-between items-center text-[11.5px]">
-                    <span className="text-palette-amber font-bold font-mono">On View in {exhibition.location}</span>
-                    <Link href="/contact?intent=research" className="text-palette-wine underline font-semibold hover:text-heading">
-                      Inquire High-Res Scan →
-                    </Link>
-                  </div>
-                </div>
-              )}
             </div>
           </div>
         </div>

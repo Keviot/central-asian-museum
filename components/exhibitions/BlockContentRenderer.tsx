@@ -29,7 +29,7 @@ export function BlockContentRenderer({
             return (
               <p
                 key={block.id || idx}
-                className="text-[16.5px] sm:text-[18px] leading-relaxed text-body font-normal mb-6"
+                className="text-[15px] sm:text-[16px] leading-relaxed text-body font-normal mb-6"
               >
                 {block.text}
               </p>

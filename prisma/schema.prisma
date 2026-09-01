@@ -41,8 +41,10 @@ model Exhibition {
   location        String
   imageSrc        String
   imageAlt        String
+  descriptionHeading      String?             @default("Short Description")
   description     String              @db.Text
-  curatorialEssay String              @db.Text
+  curatorialEssayHeading  String?             @default("Curatorial Narrative & Historical Context")
+  curatorialEssay         String              @db.Text
   curator         String
   status          ExhibitionStatus    @default(Current)
   badgeLabel      String

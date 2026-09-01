@@ -42,7 +42,9 @@ export default function NewExhibitionPage() {
     badgeLabel: "Featured Exhibition",
     imageSrc: "",
     imageAlt: "",
+    descriptionHeading: "Short Description",
     description: "",
+    curatorialEssayHeading: "Curatorial Narrative & Historical Context",
     curatorialEssay: "",
     featuredOnHome: true,
   });
@@ -571,29 +573,72 @@ export default function NewExhibitionPage() {
             )}
           </div>
 
-          {/* Summary Description */}
-          <div className="sm:col-span-2 space-y-1.5">
-            <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
-              Short Description (Card Summary) *
-            </label>
-            <textarea
-              required
-              rows={3}
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary p-4 text-[14px] text-heading focus:border-palette-amber focus:outline-none"
-            />
+          {/* Horizontal Divider before Short Description */}
+          <div className="sm:col-span-2 border-t-2 border-palette-sand pt-6 mt-2">
+            <span className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-palette-amber flex items-center gap-2 mb-4">
+              <span className="h-2 w-2 rounded-full bg-palette-amber" />
+              1. Short Description Section
+            </span>
+            <div className="space-y-4 rounded-xs border border-palette-sand/70 bg-bg-secondary/30 p-5">
+              <div className="space-y-1.5">
+                <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
+                  Short Description Section Header Text
+                </label>
+                <input
+                  type="text"
+                  value={formData.descriptionHeading}
+                  onChange={(e) => setFormData({ ...formData, descriptionHeading: e.target.value })}
+                  placeholder="Short Description"
+                  className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary px-4 py-2.5 text-[13.5px] text-heading focus:border-palette-amber focus:outline-none"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
+                  Short Description (Card Summary) *
+                </label>
+                <textarea
+                  required
+                  rows={3}
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary p-4 text-[14px] text-heading focus:border-palette-amber focus:outline-none"
+                />
+              </div>
+            </div>
           </div>
 
-          {/* Curatorial Essay Block CMS Editor */}
-          <div className="sm:col-span-2 space-y-1.5">
-            <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber mb-2">
-              Curatorial Narrative Essay & Content Blocks (Text, Images, YouTube & Tables)
-            </label>
-            <BlockContentEditor
-              value={formData.curatorialEssay}
-              onChange={(essayStr) => setFormData({ ...formData, curatorialEssay: essayStr })}
-            />
+          {/* Horizontal Divider before Curatorial Essay Section */}
+          <div className="sm:col-span-2 border-t-2 border-palette-sand pt-6 mt-2">
+            <span className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-palette-amber flex items-center gap-2 mb-4">
+              <span className="h-2 w-2 rounded-full bg-palette-amber" />
+              2. Curatorial Narrative Essay Section
+            </span>
+            <div className="space-y-6 rounded-xs border border-palette-sand/70 bg-bg-secondary/30 p-5">
+              <div className="space-y-1.5">
+                <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
+                  Curatorial Essay Section Header Text
+                </label>
+                <input
+                  type="text"
+                  value={formData.curatorialEssayHeading}
+                  onChange={(e) => setFormData({ ...formData, curatorialEssayHeading: e.target.value })}
+                  placeholder="Curatorial Narrative & Historical Context"
+                  className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary px-4 py-2.5 text-[13.5px] text-heading focus:border-palette-amber focus:outline-none"
+                />
+              </div>
+
+              {/* Horizontal line between header text and block content */}
+              <div className="border-t border-palette-sand/70 pt-4">
+                <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber mb-3">
+                  Curatorial Narrative Essay & Content Blocks (Text, Images, YouTube & Tables)
+                </label>
+                <BlockContentEditor
+                  value={formData.curatorialEssay}
+                  onChange={(essayStr) => setFormData({ ...formData, curatorialEssay: essayStr })}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
