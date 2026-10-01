@@ -68,10 +68,21 @@ export function ExhibitionCard({
               <Icon name="calendar" size={13} className="text-palette-sage" />
               <span>{formatDateRange(exhibition.dateRange)}</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Icon name="map-pin" size={13} className="text-palette-sage" />
-              <span>{exhibition.location}</span>
-            </div>
+            {exhibition.location && (
+              <a
+                href="https://maps.app.goo.gl/CHsSHHyECqD3nZUe7"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className="flex items-center gap-1.5 hover:text-heading transition-colors"
+                title="View on Google Maps"
+              >
+                <Icon name="map-pin" size={13} className="text-palette-sage" />
+                <span className="underline decoration-muted/40 underline-offset-2 hover:decoration-heading">
+                  {exhibition.location}
+                </span>
+              </a>
+            )}
           </div>
         </div>
 

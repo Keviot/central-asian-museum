@@ -7,10 +7,6 @@ import { Footer } from "@/components/layout/Footer";
 import { Container } from "@/components/ui/Container";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { ExhibitionCard } from "@/components/exhibitions/ExhibitionCard";
-import { ExhibitionDetailViewer } from "@/components/exhibitions/ExhibitionDetailViewer";
-import { exhibitionsData, formatDateRange } from "@/lib/exhibitions";
 import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
@@ -26,34 +22,16 @@ async function getExhibition(slug: string) {
   try {
     const dbExhibition = await prisma.exhibition.findUnique({
       where: { slug },
-      include: {
-        highlights: true,
-      },
     });
 
     if (dbExhibition) {
-      return dbExhibition as any;
+      return dbExhibition;
     }
   } catch (error) {
     console.error("Database fetch error in getExhibition:", error);
   }
 
-  return exhibitionsData.find((item) => item.slug === slug) || null;
-}
-
-export async function generateStaticParams() {
-  try {
-    const dbExhibitions = await prisma.exhibition.findMany({ select: { slug: true } });
-    if (dbExhibitions.length > 0) {
-      return dbExhibitions.map((item) => ({ slug: item.slug }));
-    }
-  } catch (e) {
-    // Fallback
-  }
-
-  return exhibitionsData.map((exhibition) => ({
-    slug: exhibition.slug,
-  }));
+  return null;
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -67,7 +45,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   return {
-    title: `${exhibition.title} | Central Asian Museum`,
+    title: `${exhibition.title} | Central Asian Museum, Leh`,
     description: exhibition.description,
     keywords: exhibition.seoKeywords || [],
     openGraph: {
@@ -83,12 +61,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       ],
       type: "article",
     },
-    twitter: {
-      card: "summary_large_image",
-      title: exhibition.title,
-      description: exhibition.description,
-      images: [exhibition.imageSrc],
-    },
   };
 }
 
@@ -100,36 +72,32 @@ export default async function ExhibitionDetailPage({ params }: Props) {
     notFound();
   }
 
-  // Fetch recommended exhibitions
-  let otherExhibitions: any[] = [];
+  // Fetch the other exhibition so users can navigate between them
+  let nextExhibition: { slug: string; title: string } | null = null;
   try {
-    const allDb = await prisma.exhibition.findMany({
+    const other = await prisma.exhibition.findFirst({
       where: { NOT: { slug: exhibition.slug } },
-      take: 2,
+      select: { slug: true, title: true },
     });
-    if (allDb.length > 0) {
-      otherExhibitions = allDb;
+    if (other) {
+      nextExhibition = other;
     }
   } catch (e) {
-    otherExhibitions = exhibitionsData
-      .filter((item) => item.slug !== exhibition.slug)
-      .slice(0, 2);
+    // ignore
   }
 
-  // Schema.org JSON-LD Structured Data for Exhibition Event
+  // Schema.org JSON-LD
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "ExhibitionEvent",
     name: exhibition.title,
     description: exhibition.description,
-    startDate: "2025-10-15",
-    endDate: "2026-04-30",
     location: {
       "@type": "Place",
       name: "Central Asian Museum",
       address: {
         "@type": "PostalAddress",
-        streetAddress: "Sheynam, Main Market Road",
+        streetAddress: "Tsas Soma Garden, Main Market Road",
         addressLocality: "Leh",
         addressRegion: "Ladakh",
         postalCode: "194101",
@@ -137,15 +105,10 @@ export default async function ExhibitionDetailPage({ params }: Props) {
       },
     },
     image: [exhibition.imageSrc],
-    performer: {
-      "@type": "Organization",
-      name: "Central Asian Museum Curatorial Office",
-    },
   };
 
   return (
     <div className="flex min-h-screen flex-col bg-bg text-body">
-      {/* Inject JSON-LD for Google Search Rich Snippets */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -154,147 +117,163 @@ export default async function ExhibitionDetailPage({ params }: Props) {
       <Header variant="solid" />
 
       <main className="flex-1">
-        {/* Luxurious Light-Theme Museum Hero Section */}
-        <section className="relative overflow-hidden border-b border-palette-sand/70 bg-linear-to-b from-[#FBF9F5] via-[#F6F2EA] to-bg pt-28 pb-16 md:pt-36 md:pb-20">
-          {/* Subtle Ambient Background Glows */}
+        {/* Exhibition Header Hero */}
+        <section className="relative overflow-hidden border-b border-border-subtle bg-bg-secondary py-14 sm:py-20">
           <div
-            className="pointer-events-none absolute -right-32 top-10 h-96 w-96 rounded-full bg-palette-amber/10 blur-3xl"
+            className="pointer-events-none absolute -right-32 top-0 h-96 w-96 rounded-full bg-palette-amber/10 blur-3xl"
             aria-hidden="true"
           />
           <div
-            className="pointer-events-none absolute -left-32 bottom-0 h-96 w-96 rounded-full bg-palette-sage/20 blur-3xl"
+            className="pointer-events-none absolute -left-32 bottom-0 h-96 w-96 rounded-full bg-palette-sand/40 blur-3xl"
             aria-hidden="true"
           />
 
           <Container className="relative z-10">
-            {/* Breadcrumbs */}
+            {/* Breadcrumb Navigation */}
             <nav
-              className="mb-8 flex flex-wrap items-center gap-2 text-[12px] font-mono uppercase tracking-[0.16em] text-muted"
+              className="mb-6 flex flex-wrap items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-muted"
               aria-label="Breadcrumb"
             >
-              <Link href="/" className="hover:text-palette-wine transition-colors">
+              <Link href="/" className="hover:text-heading transition-colors">
                 Home
               </Link>
-              <Icon name="chevron-right" size={12} className="text-palette-amber" />
-              <Link href="/exhibitions" className="hover:text-palette-wine transition-colors">
+              <Icon name="chevron-right" size={12} className="text-palette-sage" />
+              <Link href="/exhibitions" className="hover:text-heading transition-colors">
                 Exhibitions
               </Link>
-              <Icon name="chevron-right" size={12} className="text-palette-amber" />
-              <span className="text-palette-wine font-bold truncate max-w-xs sm:max-w-md">
+              <Icon name="chevron-right" size={12} className="text-palette-sage" />
+              <span className="text-heading font-medium truncate max-w-xs sm:max-w-md">
                 {exhibition.title}
               </span>
             </nav>
 
-            <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-center lg:gap-12">
-              {/* Left Column: Details & Actions */}
-              <div className="lg:col-span-7 space-y-6">
-                {/* Category & Status Badges */}
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="inline-flex items-center gap-1.5 rounded-xs bg-palette-wine/10 border border-palette-wine/25 px-3 py-1 text-[10.5px] font-mono font-bold uppercase tracking-[0.18em] text-palette-wine">
-                    <span className="h-1.5 w-1.5 rounded-full bg-palette-wine animate-pulse" />
-                    <span>{exhibition.badgeLabel}</span>
-                  </span>
-                  <span className="text-[12px] font-mono font-bold uppercase tracking-[0.2em] text-palette-amber">
-                    {exhibition.category}
-                  </span>
+            <div className="max-w-3xl">
+              {/* Badge if present */}
+              {exhibition.badgeLabel && (
+                <div className="mb-4 inline-flex items-center gap-2 rounded-xs border border-palette-wine/25 bg-palette-wine/10 px-3 py-1 text-[11px] font-mono font-bold uppercase tracking-[0.18em] text-palette-wine">
+                  <span className="h-1.5 w-1.5 rounded-full bg-palette-wine animate-pulse" />
+                  <span>{exhibition.badgeLabel}</span>
                 </div>
+              )}
 
-                {/* Title & Subtitle */}
-                <div>
-                  <h1 className="font-heading text-[36px] font-semibold leading-[1.1] text-heading sm:text-[46px] md:text-[52px] lg:text-[58px]">
-                    {exhibition.title}
-                  </h1>
+              {/* Title */}
+              <h1 className="font-heading text-[36px] font-medium leading-[1.15] text-heading sm:text-[46px] md:text-[54px]">
+                {exhibition.title}
+              </h1>
 
-                  <p className="mt-4 font-heading text-[18px] sm:text-[21px] font-normal leading-snug text-body/90 italic">
-                    {exhibition.subtitle}
-                  </p>
-                </div>
+              {/* Subtitle */}
+              {exhibition.subtitle && (
+                <p className="mt-4 font-heading text-[18px] sm:text-[21px] font-normal leading-relaxed text-body italic">
+                  {exhibition.subtitle}
+                </p>
+              )}
 
-                {/* Key Metadata Bar */}
-                <div className="flex flex-wrap items-center gap-6 border-y border-palette-sand/70 py-4 text-[13.5px] text-body">
+              {/* Key Metadata Pill Bar */}
+              <div className="mt-8 flex flex-wrap items-center gap-4 sm:gap-6 border-t border-border-subtle pt-6 text-[13.5px] text-body">
+                {exhibition.dateRange && (
                   <div className="flex items-center gap-2">
-                    <Icon name="calendar" size={16} className="text-palette-amber shrink-0" />
-                    <span className="font-medium">{formatDateRange(exhibition.dateRange)}</span>
+                    <Icon name="calendar" size={15} className="text-palette-sage shrink-0" />
+                    <span className="font-medium text-heading">{exhibition.dateRange}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Icon name="map-pin" size={16} className="text-palette-amber shrink-0" />
-                    <span>{exhibition.location}</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Icon name="sparkles" size={16} className="text-palette-amber shrink-0" />
-                    <span>Curator: <strong className="text-heading">{exhibition.curator}</strong></span>
-                  </div>
-                </div>
-
-                {/* Action CTAs */}
-                <div className="flex flex-wrap items-center gap-4 pt-2">
-                  <Button
-                    href="/contact?intent=visits"
-                    variant="primary"
-                    size="lg"
-                    icon="arrow-right"
-                    className="bg-palette-wine hover:bg-palette-wine/90"
+                )}
+                {exhibition.location && (
+                  <a
+                    href="https://maps.app.goo.gl/CHsSHHyECqD3nZUe7"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 hover:text-heading transition-colors"
+                    title="View on Google Maps"
                   >
-                    Book Guided Group Visit
-                  </Button>
-                  <Button
-                    href="/contact?intent=patron"
-                    variant="outline"
-                    size="lg"
-                  >
-                    Support Exhibition
-                  </Button>
-                </div>
-              </div>
-
-              {/* Right Column: Hero Cover Image Framing */}
-              <div className="lg:col-span-5">
-                <div className="relative aspect-4/3 sm:aspect-16/10 lg:aspect-4/3 w-full overflow-hidden rounded-xs border-2 border-palette-sand/80 bg-bg-secondary shadow-md group">
-                  <Image
-                    src={exhibition.imageSrc}
-                    alt={exhibition.imageAlt || exhibition.title}
-                    fill
-                    priority
-                    sizes="(max-width: 1024px) 100vw, 45vw"
-                    className="object-cover object-center transition-transform duration-700 group-hover:scale-105"
-                  />
-                  <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent" />
-                  <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-[11px] font-mono">
-                    <span className="bg-black/60 px-2.5 py-1 rounded-xs backdrop-blur-xs">
+                    <Icon name="pin" size={15} className="text-palette-sage shrink-0" />
+                    <span className="underline decoration-muted/40 underline-offset-2 hover:decoration-heading">
                       {exhibition.location}
                     </span>
-                    <span className="bg-palette-amber text-surface-dark px-2.5 py-1 rounded-xs font-bold uppercase tracking-wider">
-                      {exhibition.status}
+                  </a>
+                )}
+                {exhibition.curator && (
+                  <div className="flex items-center gap-2">
+                    <Icon name="users" size={15} className="text-palette-sage shrink-0" />
+                    <span>
+                      Curated by <strong className="text-heading">{exhibition.curator}</strong>
                     </span>
                   </div>
-                </div>
+                )}
               </div>
             </div>
           </Container>
         </section>
 
-        {/* Interactive Curatorial Viewer Components */}
-        <ExhibitionDetailViewer exhibition={exhibition} />
+        {/* Exhibition Content & Visual Frame */}
+        <section className="py-14 sm:py-20">
+          <Container className="max-w-4xl">
+            {/* Museum Cover Image */}
+            <figure className="relative aspect-16/10 w-full overflow-hidden rounded-xs border border-border bg-bg-secondary shadow-sm">
+              <Image
+                src={exhibition.imageSrc}
+                alt={exhibition.imageAlt || exhibition.title}
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 896px"
+                className="object-cover object-center"
+              />
+            </figure>
+            {exhibition.imageAlt && (
+              <p className="mt-3 text-[12.5px] text-muted italic">
+                {exhibition.imageAlt}
+              </p>
+            )}
 
-        {/* Recommended Other Exhibitions */}
-        <section className="py-20 sm:py-24 bg-bg">
-          <Container>
-            <SectionHeading
-              kicker="Explore Further"
-              title="More Exhibitions at the Museum"
-              description="Discover complementary galleries exploring Silk Road textiles, celestial manuscripts, and Timurid architecture."
-            />
+            {/* Description / Story Section */}
+            <div className="mt-12 space-y-10">
+              {exhibition.description && (
+                <div className="space-y-4">
+                  <h2 className="font-heading text-[24px] sm:text-[28px] font-medium text-heading border-b border-border-subtle pb-3">
+                    {exhibition.descriptionHeading || "About the Exhibition"}
+                  </h2>
+                  <div className="text-[16px] sm:text-[17px] leading-relaxed text-body whitespace-pre-line">
+                    {exhibition.description}
+                  </div>
+                </div>
+              )}
 
-            <div className="mt-14 grid grid-cols-1 gap-8 md:grid-cols-2">
-              {otherExhibitions.map((item) => (
-                <ExhibitionCard key={item.id} exhibition={item} />
-              ))}
+              {/* Historical Context / Curatorial Narrative */}
+              {exhibition.curatorialEssay && (
+                <div className="space-y-4 pt-4">
+                  <h2 className="font-heading text-[24px] sm:text-[28px] font-medium text-heading border-b border-border-subtle pb-3">
+                    {exhibition.curatorialEssayHeading || "Historical Context"}
+                  </h2>
+                  <div className="text-[16px] sm:text-[17px] leading-relaxed text-body whitespace-pre-line">
+                    {exhibition.curatorialEssay}
+                  </div>
+                </div>
+              )}
             </div>
 
-            <div className="mt-12 text-center">
-              <Button href="/exhibitions" variant="outline" icon="arrow-right" size="lg">
-                View All 6 Exhibitions
+            {/* Bottom Actions & Navigation */}
+            <div className="mt-16 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 border-t border-border-subtle pt-8">
+              <Button
+                href="/exhibitions"
+                variant="outline"
+                size="md"
+                icon="arrow-right"
+                className="self-start rotate-180 inline-flex flex-row-reverse"
+              >
+                <span>All Exhibitions</span>
               </Button>
+
+              {nextExhibition && (
+                <Link
+                  href={`/exhibitions/${nextExhibition.slug}`}
+                  className="group flex flex-col items-start sm:items-end text-left sm:text-right transition-colors"
+                >
+                  <span className="text-[11px] font-mono uppercase tracking-[0.16em] text-muted">
+                    Other Exhibition →
+                  </span>
+                  <span className="font-heading text-[18px] font-medium text-heading group-hover:text-palette-amber transition-colors mt-0.5">
+                    {nextExhibition.title}
+                  </span>
+                </Link>
+              )}
             </div>
           </Container>
         </section>

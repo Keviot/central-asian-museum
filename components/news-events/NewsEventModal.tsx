@@ -117,11 +117,23 @@ export function NewsEventModal({ item, onClose }: NewsEventModalProps) {
                 </>
               )}
 
-              <span className="text-border-subtle">•</span>
-              <div className="flex items-center gap-1.5 text-muted">
-                <Icon name="map-pin" size={14} />
-                <span>{item.location}</span>
-              </div>
+              {item.location && (
+                <>
+                  <span className="text-border-subtle">•</span>
+                  <a
+                    href="https://maps.app.goo.gl/CHsSHHyECqD3nZUe7"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1.5 text-muted hover:text-heading transition-colors"
+                    title="View location on Google Maps"
+                  >
+                    <Icon name="map-pin" size={14} />
+                    <span className="underline decoration-muted/40 underline-offset-2 hover:decoration-heading">
+                      {item.location}
+                    </span>
+                  </a>
+                </>
+              )}
             </div>
           </div>
 

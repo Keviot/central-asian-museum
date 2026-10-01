@@ -57,7 +57,7 @@ export async function POST(request: Request) {
         title,
         subtitle: subtitle || "",
         slug: slug.toLowerCase().replace(/[^a-z0-9-]/g, "-"),
-        category: category || "Special Exhibitions",
+        category: category || "",
         dateRange: dateRange || "TBA",
         location: location || "Main Gallery",
         imageSrc: imageSrc || "/images/exhibitions/silk-road-transformed.png",
@@ -70,7 +70,7 @@ export async function POST(request: Request) {
         status: status || "Current",
         badgeLabel: badgeLabel || "Featured Exhibition",
         featuredOnHome: featuredOnHome ?? true,
-        seoKeywords: [category, title, "Central Asian Museum"],
+        seoKeywords: [title, "Central Asian Museum"].filter(Boolean),
         highlights: {
           create: highlights.map((h: any) => ({
             title: h.title,

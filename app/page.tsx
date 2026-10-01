@@ -2,9 +2,9 @@ import { Header } from "@/components/layout/Header";
 import { Hero } from "@/components/home/Hero";
 import { HeroInfoBar } from "@/components/home/HeroInfoBar";
 import { AboutSection } from "@/components/home/AboutSection";
-import { CollectionsSection } from "@/components/home/CollectionsSection";
-import { ExhibitionsSection } from "@/components/home/ExhibitionsSection";
-import { NewsEventsSection } from "@/components/home/NewsEventsSection";
+import { FloorsSlider } from "@/components/home/FloorsSlider";
+import { CurrentExhibitionSection } from "@/components/home/CurrentExhibitionSection";
+import { NewsSection } from "@/components/home/NewsSection";
 import { SupportSection } from "@/components/home/SupportSection";
 import { Footer } from "@/components/layout/Footer";
 
@@ -16,9 +16,9 @@ export default function Home() {
         <Hero />
         <HeroInfoBar />
         <AboutSection />
-        <CollectionsSection />
-        <ExhibitionsSection />
-        <NewsEventsSection />
+        <FloorsSlider />
+        <CurrentExhibitionSection />
+        <NewsSection />
         <SupportSection />
       </main>
       <Footer />

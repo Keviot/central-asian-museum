@@ -18,45 +18,45 @@ export type AboutSectionProps = {
   buttonHref?: string;
   imageSrc?: string;
   imageAlt?: string;
-  badgeLabel?: string;
-  badgeSublabel?: string;
+  imageCaption?: string;
+  imageTag?: string;
   highlights?: AboutHighlight[];
 };
 
 const defaultHighlights: AboutHighlight[] = [
   {
-    icon: "landmark",
-    title: "Architectural Marvels",
-    description: "Centuries of glazed tile mastery, azure domes, and madrasa craft.",
+    icon: "mountain",
+    title: "Ladakh Section",
+    description: "Everyday life, craftsmanship and material culture of Ladakh.",
   },
   {
-    icon: "sparkles",
-    title: "Silk Road Textiles",
-    description: "Exquisite hand-dyed Suzani tapestries, silks, and nomadic regalia.",
+    icon: "route",
+    title: "Central Asian Section",
+    description: "Objects that travelled the trade routes across the Karakoram.",
   },
   {
-    icon: "book-open",
-    title: "Preserved Manuscripts",
-    description: "Rare astronomical charts, trade route maps, and poetic codices.",
+    icon: "lotus",
+    title: "Tibetan Section",
+    description: "Shared Buddhist traditions, pilgrimage and artistic exchange.",
   },
 ];
 
 export function AboutSection({
-  kicker = "About The Museum",
-  title = "A Living Sanctuary of Silk Road Art & Heritage",
-  description = "Nestled at the historic crossroads of East and West, the Central Asian Museum preserves and illuminates over two millennia of creative genius. From the monumental azure-tiled architecture of Samarkand and Bukhara to delicate Suzani embroideries and intricate nomadic jewelry, our galleries celebrate the vibrant cultures shaped by the Silk Road.",
-  secondaryDescription = "Through immersive exhibitions, scholarly research, and hands-on conservation programs, we invite visitors to explore the stories, craftsmanship, and enduring traditions that continue to inspire our world today.",
+  kicker = "About the Museum",
+  title = "Leh, at the Heart of a Wider World",
+  description = "The Central Asian Museum in Leh is dedicated to documenting and presenting the historical connections between Ladakh and the wider Central Asian world. For centuries, Leh occupied an important position within networks of trade, travel and cultural exchange that connected the Indian subcontinent with Central Asia, Tibet, Kashmir and other regions of the Himalayan and trans-Himalayan world.",
+  secondaryDescription = "The museum seeks to make these connections accessible to contemporary audiences by bringing together objects and stories that illustrate Ladakh's place within this larger historical landscape.",
   buttonLabel = "Learn More",
   buttonHref = "/about",
-  imageSrc = "/images/about/museum-about-gallery.jpg",
-  imageAlt = "Illuminated galleries of the Central Asian Museum featuring ceramics and Suzani textiles",
-  badgeLabel = "Permanent Collection",
-  badgeSublabel = "Over 10,000 Rare Artifacts",
+  imageSrc = "/images/tower-exterior-stairs.webp",
+  imageAlt = "The museum's stone tower with its timber gallery and external stairway",
+  imageCaption = "The museum tower, Tsas Soma Garden",
+  imageTag = "Leh",
   highlights = defaultHighlights,
 }: AboutSectionProps) {
   return (
-    <section className="relative overflow-hidden bg-bg py-20 sm:py-24 md:py-28 lg:py-32 border-b border-border-subtle">
-      {/* Subtle architectural background texture accent */}
+    <section id="about" className="relative overflow-hidden bg-bg py-20 sm:py-24 md:py-28 lg:py-32 border-b border-border-subtle">
+      {/* Ambient background glows */}
       <div
         className="pointer-events-none absolute -top-40 right-0 h-96 w-96 rounded-full bg-palette-sand/25 blur-3xl"
         aria-hidden="true"
@@ -69,8 +69,8 @@ export function AboutSection({
       <Container className="relative z-10">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16 xl:gap-20">
           {/* Left Column: Content */}
-          <div className="flex flex-col items-start lg:col-span-6 xl:col-span-6">
-            {/* Section Kicker */}
+          <div className="flex flex-col items-start lg:col-span-7 xl:col-span-6">
+            {/* Section Eyebrow */}
             <div className="mb-4 inline-flex items-center gap-3">
               <span
                 className="h-px w-8 bg-primary"
@@ -121,52 +121,54 @@ export function AboutSection({
             </div>
           </div>
 
-          {/* Right Column: Museum Gallery Image */}
-          <div className="lg:col-span-6 xl:col-span-6">
-            <div className="relative mx-auto w-full max-w-145 lg:max-w-none">
-              {/* Outer decorative museum frame */}
+          {/* Right Column: Portrait Museum Tower Image (un-cropped 2:3 ratio) */}
+          <div className="lg:col-span-5 lg:col-start-8">
+            <figure className="relative mx-auto w-full max-w-110 lg:max-w-none">
+              {/* Outer decorative frame */}
               <div
                 className="absolute -inset-3 rounded-md border border-palette-sand/60 bg-bg-secondary/50 sm:-inset-4"
                 aria-hidden="true"
               />
 
-              {/* Main Image Card */}
-              <div className="relative aspect-4/3 w-full overflow-hidden rounded-[3px] border border-border bg-bg-secondary shadow-[0_16px_40px_-12px_rgba(40,36,33,0.12)]">
-                <Image
-                  src={imageSrc}
-                  alt={imageAlt}
-                  fill
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 600px)"
-                  className="object-cover object-center transition-transform duration-700 hover:scale-105"
-                />
+              {/* Tower Image */}
+              <Image
+                src={imageSrc}
+                alt={imageAlt}
+                width={1023}
+                height={1537}
+                className="relative block w-full rounded-[3px] border border-border shadow-lg h-auto aspect-1023/1537 object-contain"
+              />
 
-                {/* Subtle gradient overlay at base for badge contrast */}
-                <div
-                  className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent pointer-events-none"
-                  aria-hidden="true"
-                />
-
-                {/* Floating Aesthetic Museum Badge */}
-                <div className="absolute bottom-4 left-4 right-4 sm:bottom-6 sm:left-6 sm:right-auto">
-                  <div className="flex items-center gap-3 rounded-[3px] border border-white/20 bg-surface-dark/90 px-4 py-3 text-white backdrop-blur-md shadow-lg sm:px-5 sm:py-3.5">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-palette-amber text-white">
-                      <Icon name="compass" size={20} />
-                    </div>
-                    <div>
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-palette-sand">
-                        {badgeLabel}
-                      </p>
-                      <p className="font-heading text-[16px] font-medium text-white sm:text-[18px]">
-                        {badgeSublabel}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+              {/* Caption & Tag */}
+              {imageCaption && (
+                <figcaption className="relative mt-4 flex items-center justify-between text-[12px] text-muted">
+                  <a
+                    href="https://maps.app.goo.gl/CHsSHHyECqD3nZUe7"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-heading transition-colors"
+                    title="View on Google Maps"
+                  >
+                    {imageCaption}
+                  </a>
+                  {imageTag && (
+                    <a
+                      href="https://maps.app.goo.gl/CHsSHHyECqD3nZUe7"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-palette-amber font-medium hover:underline"
+                      title="View on Google Maps"
+                    >
+                      {imageTag}
+                    </a>
+                  )}
+                </figcaption>
+              )}
+            </figure>
           </div>
         </div>
       </Container>
     </section>
   );
 }
+

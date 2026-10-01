@@ -32,28 +32,37 @@ This document contains the foundational design and architectural guidelines for 
   - **NEVER** use raw hex colors or arbitrary tailwind color values (e.g. `#54333B` or `bg-[#54333B]`) in TSX components.
   - Always reference the CSS variables defined in `app/globals.css` (e.g., `var(--museum-btn-bg)` or `bg-museum-wine` / `text-museum-primary`).
 
-### Official Color Palette Tokens (from Project Swatch)
+### Official Color Palette Tokens (from Project Swatch & CAM design tokens)
 | CSS Variable | Hex Code | Swatch Name | Role |
 | :--- | :--- | :--- | :--- |
-| `--palette-sand` | `#D6C9B3` | Silver / Sand | Warm stone, secondary background, delicate borders |
+| `--palette-sand` | `#D6C9B3` | Silver / Sand | Warm stone, background tints, fine lines |
 | `--palette-rose` | `#D3A7A8` | Tan / Dusty Rose | Desert clay accent, subtle badges, decorative elements |
-| `--palette-sage` | `#AFA990` | Dark Gray / Sage | **Official Base Color**: Headers, secondary accents, borders |
+| `--palette-sage` | `#AFA99C` | Dark Gray / Sage | **Official Base Color**: Eyebrows, secondary accents, borders |
 | `--palette-moss` | `#8F917B` | Gray / Muted Moss | Earthy foliage, antique accents, muted borders |
-| `--palette-amber` | `#D28541` | Peru / Amber | Silk Road gold/terracotta highlight, star elements |
-| `--palette-lapis` | `#35638E` | Dark Slate Blue | Samarkand lapis tile blue, rich cultural accent |
-| `--palette-wine` | `#54333B` | Saddle Brown / Wine | **Official Button Color**: Primary CTAs, high-contrast badges |
+| `--palette-amber` | `#D28541` | Peru / Amber | Silk Road gold/terracotta highlight, active states, timeline dots |
+| `--palette-lapis` | `#35638F` | Dark Slate Blue | Samarkand lapis tile blue, rich cultural accent |
+| `--palette-wine` | `#54333F` | Saddle Brown / Wine | **Official Button & Surface Dark Color**: Primary CTAs, header, footer |
 
 ### Semantic CSS Tokens
-- `--museum-base`: Base theme tone (`#AFA990`)
-- `--museum-btn-bg`: Button background (`#54333B`)
-- `--museum-btn-hover`: Button hover background (`#3D232A`)
+- `--museum-base`: Base theme tone (`#AFA99C`)
+- `--museum-btn-bg`: Button background (`#54333F`)
+- `--museum-btn-hover`: Button hover background (`#3F262F`)
 - `--museum-btn-text`: Button text (`#FFFFFF`)
+- `--museum-btn-secondary-bg`: Button secondary background (`#D28541` / Peru)
+- `--museum-btn-secondary-hover`: Button secondary hover (`#B97539`)
 - `--museum-bg`: Main canvas background (`#FAF8F5`)
+- `--museum-bg-secondary`: Alternating section background (`#F3EFE8`)
 - `--museum-surface`: Elevated card surface (`#FFFFFF`)
-- `--museum-heading`: Heading typography color (`#282421`)
-- `--museum-body`: Body text color (`#514C47`)
-- `--museum-muted`: Secondary/caption text color (`#7E776F`)
-- `--museum-border`: Border line color (`rgba(175, 169, 144, 0.28)`)
+- `--museum-surface-dark`: Header, footer, dark bands (`#54333F` / Saddle Brown)
+- `--museum-heading`: Heading typography color (`#26171C`)
+- `--museum-body`: Body text color (`#4F393F`)
+- `--museum-muted`: Secondary/caption text color (`#786264`)
+- `--museum-light-text`: Text on dark surfaces (`#F7F4F0`)
+- `--museum-border`: Border line color (`#AFA99C61`)
+- `--museum-border-subtle`: Subtle border line color (`#D6C9B373`)
+- `--museum-border-strong`: Strong border line color (`#54333F47`)
+- `--ink-rgb`: Heading ink components for photo shadows & overlays (`38, 23, 28`)
+- `--accent-active`: Active/current indicator (`#D28541` / Peru)
 
 ---
 

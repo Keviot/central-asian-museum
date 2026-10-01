@@ -574,7 +574,7 @@ export function BlockContentEditor({ value, onChange }: BlockContentEditorProps)
 
         {/* COLLAPSIBLE DROPDOWN OPTIONS DRAWER */}
         {isAddMenuOpen && (
-          <div className="p-6 bg-[#F3EFE8] border-t border-palette-sand/70 space-y-4 animate-in fade-in duration-200">
+          <div className="p-6 bg-bg-secondary border-t border-palette-sand/70 space-y-4 animate-in fade-in duration-200">
             <p className="text-[13.5px] text-body font-heading text-lg">
               Click any block button below to append a new content section to the bottom of the curatorial essay.
             </p>
@@ -594,7 +594,7 @@ export function BlockContentEditor({ value, onChange }: BlockContentEditorProps)
               <button
                 type="button"
                 onClick={addHeading}
-                className="px-4 py-3 text-[13px] font-mono uppercase tracking-wider font-bold rounded-xs bg-[#D3A7A8] text-white hover:bg-[#c49697] border border-[#b8898a] shadow-md hover:scale-[1.03] active:scale-[0.97] transition-all duration-200 flex items-center gap-2 cursor-pointer"
+                className="px-4 py-3 text-[13px] font-mono uppercase tracking-wider font-bold rounded-xs bg-palette-rose text-white hover:bg-palette-rose/90 border border-palette-rose/80 shadow-md hover:scale-[1.03] active:scale-[0.97] transition-all duration-200 flex items-center gap-2 cursor-pointer"
               >
                 <span>+ Subheading</span>
               </button>

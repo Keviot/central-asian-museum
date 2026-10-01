@@ -1,6 +1,8 @@
 import type { ComponentProps } from "react";
 
 export type IconName =
+  | "arrow"
+  | "arrow-left"
   | "arrow-right"
   | "arrow-up-right"
   | "chevron-right"
@@ -12,6 +14,8 @@ export type IconName =
   | "calendar"
   | "clock"
   | "map-pin"
+  | "pin"
+  | "ticket"
   | "check"
   | "menu"
   | "close"
@@ -20,11 +24,19 @@ export type IconName =
   | "trash"
   | "upload"
   | "mail"
+  | "inbox"
+  | "phone"
   | "external-link"
   | "edit"
   | "image"
   | "video"
-  | "grid";
+  | "grid"
+  | "mountain"
+  | "route"
+  | "lotus"
+  | "users"
+  | "sun"
+  | "snowflake";
 
 export type IconProps = ComponentProps<"svg"> & {
   name: IconName;
@@ -55,10 +67,16 @@ export function Icon({
       {...props}
     >
       {title && <title>{title}</title>}
-      {name === "arrow-right" && (
+      {(name === "arrow-right" || name === "arrow") && (
         <>
           <path d="M5 12h14" />
           <path d="m12 5 7 7-7 7" />
+        </>
+      )}
+      {name === "arrow-left" && (
+        <>
+          <path d="m12 19-7-7 7-7" />
+          <path d="M19 12H5" />
         </>
       )}
       {name === "arrow-up-right" && (
@@ -105,10 +123,18 @@ export function Icon({
           <polyline points="12 6 12 12 16 14" />
         </>
       )}
-      {name === "map-pin" && (
+      {(name === "map-pin" || name === "pin") && (
         <>
           <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0" />
           <circle cx="12" cy="10" r="3" />
+        </>
+      )}
+      {name === "ticket" && (
+        <>
+          <path d="M2 9a3 3 0 0 1 0 6v2a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-2a3 3 0 0 1 0-6V7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
+          <path d="M13 5v2" />
+          <path d="M13 17v2" />
+          <path d="M13 11v2" />
         </>
       )}
       {name === "check" && <polyline points="20 6 9 17 4 12" />}
@@ -159,6 +185,15 @@ export function Icon({
           <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
         </>
       )}
+      {name === "inbox" && (
+        <>
+          <polyline points="22 12 16 12 14 15 10 15 8 12 2 12" />
+          <path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z" />
+        </>
+      )}
+      {name === "phone" && (
+        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
+      )}
       {name === "external-link" && (
         <>
           <path d="M15 3h6v6" />
@@ -191,6 +226,48 @@ export function Icon({
           <rect width="7" height="7" x="14" y="3" rx="1" />
           <rect width="7" height="7" x="14" y="14" rx="1" />
           <rect width="7" height="7" x="3" y="14" rx="1" />
+        </>
+      )}
+      {name === "mountain" && <path d="m8 3 4 8 5-5 5 15H2L8 3z" />}
+      {name === "route" && (
+        <>
+          <circle cx="6" cy="19" r="3" />
+          <path d="M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15" />
+          <circle cx="18" cy="5" r="3" />
+        </>
+      )}
+      {name === "lotus" && (
+        <path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3z" />
+      )}
+      {name === "users" && (
+        <>
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+          <circle cx="9" cy="7" r="4" />
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
+          <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+        </>
+      )}
+      {name === "sun" && (
+        <>
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2" />
+          <path d="M12 20v2" />
+          <path d="m4.93 4.93 1.41 1.41" />
+          <path d="m17.66 17.66 1.41 1.41" />
+          <path d="M2 12h2" />
+          <path d="M20 12h2" />
+          <path d="m6.34 17.66-1.41 1.41" />
+          <path d="m19.07 4.93-1.41 1.41" />
+        </>
+      )}
+      {name === "snowflake" && (
+        <>
+          <line x1="2" x2="22" y1="12" y2="12" />
+          <line x1="12" x2="12" y1="2" y2="22" />
+          <path d="m20 16-4-4 4-4" />
+          <path d="m4 8 4 4-4 4" />
+          <path d="m16 4-4 4-4-4" />
+          <path d="m8 20 4-4 4 4" />
         </>
       )}
     </svg>

@@ -1,179 +1,163 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
-import { ExhibitionCard } from "./ExhibitionCard";
-import {
-  exhibitionsData,
-  type ExhibitionItem,
-} from "@/lib/exhibitions";
+import { exhibitionsData, type ExhibitionItem } from "@/lib/exhibitionsData";
 
-export function ExhibitionsExplorer() {
-  const [items, setItems] = useState<ExhibitionItem[]>(exhibitionsData);
-  const [selectedCategory, setSelectedCategory] = useState<string>("All");
+interface ExhibitionsExplorerProps {
+  initialItems?: ExhibitionItem[];
+}
+
+export function ExhibitionsExplorer({
+  initialItems = exhibitionsData.items,
+}: ExhibitionsExplorerProps) {
+  const router = useRouter();
   const [searchQuery, setSearchQuery] = useState("");
 
-  useEffect(() => {
-    async function loadLiveExhibitions() {
-      try {
-        const res = await fetch("/api/exhibitions");
-        const data = await res.json();
-        if (res.ok && data.exhibitions?.length > 0) {
-          setItems(data.exhibitions);
-        }
-      } catch (e) {
-        // Fallback to static data
-      }
-    }
-    loadLiveExhibitions();
-  }, []);
-
-  // Dynamically compute ONLY categories that have available exhibitions
-  const availableCategories = useMemo(() => {
-    const categoriesSet = new Set<string>();
-    items.forEach((item) => {
-      if (item.category) categoriesSet.add(item.category);
-    });
-
-    const categories = Array.from(categoriesSet);
-    return ["All", "Current", "Upcoming", ...categories];
-  }, [items]);
-
   const filteredItems = useMemo(() => {
-    return items.filter((item) => {
-      const matchesCategory =
-        selectedCategory === "All"
-          ? true
-          : selectedCategory === "Current"
-          ? item.status === "Current"
-          : selectedCategory === "Upcoming"
-          ? item.status === "Upcoming"
-          : item.category === selectedCategory;
-
-      const query = searchQuery.trim().toLowerCase();
-      const matchesSearch =
-        query === "" ||
-        item.title.toLowerCase().includes(query) ||
-        item.subtitle.toLowerCase().includes(query) ||
-        item.category.toLowerCase().includes(query) ||
-        item.location.toLowerCase().includes(query) ||
-        item.description.toLowerCase().includes(query);
-
-      return matchesCategory && matchesSearch;
+    const q = searchQuery.trim().toLowerCase();
+    if (!q) return initialItems;
+    return initialItems.filter((it) => {
+      const searchStr = `${it.title} ${it.excerpt} ${(it.body || []).join(" ")} ${it.dates} ${it.where || ""} ${it.curator || ""}`.toLowerCase();
+      return searchStr.includes(q);
     });
-  }, [items, selectedCategory, searchQuery]);
+  }, [searchQuery, initialItems]);
 
   return (
-    <div className="w-full">
-      {/* Filter Bar: Category/Status Pills & Live Search Input */}
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between border-b border-border-subtle pb-8">
-        {/* Category & Status Tabs - ONLY SHOW AVAILABLE OPTIONS */}
-        <div className="flex flex-wrap items-center gap-2">
-          {availableCategories.map((category) => {
-            const isActive = selectedCategory === category;
+    <>
+      {/* Search Header Row */}
+      <div className="flex flex-col gap-6 border-b border-border-subtle pb-8 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-[13px] text-muted" aria-live="polite">
+          Showing{" "}
+          <span className="font-semibold text-heading">
+            {filteredItems.length}
+          </span>{" "}
+          <span>
+            {filteredItems.length === 1 ? "exhibition" : "exhibitions"}
+          </span>
+        </p>
+
+        <label className="relative w-full max-w-xs shrink-0">
+          <span className="sr-only">Search exhibitions</span>
+          <span className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted">
+            <Icon name="search" size={16} />
+          </span>
+          <input
+            type="search"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Search exhibitions…"
+            className="w-full rounded-[3px] border border-border bg-surface py-2 pl-9 pr-4 text-[13px] text-heading placeholder:text-muted focus:border-btn-bg focus:outline-none transition-colors"
+          />
+        </label>
+      </div>
+
+      {/* Exhibitions List Grid (Loquet style) */}
+      {filteredItems.length > 0 ? (
+        <div className="exlist" data-list-grid>
+          {filteredItems.map((it, idx) => {
+            const slug = it.slug || it.id;
+            const href = `/exhibitions/${slug}`;
+
             return (
-              <button
-                key={category}
-                type="button"
-                onClick={() => setSelectedCategory(category)}
-                className={`px-4 py-2 text-[12px] font-medium uppercase tracking-widest rounded-[3px] transition-all duration-300 select-none ${
-                  isActive
-                    ? "bg-btn-bg text-white shadow-sm font-bold"
-                    : "bg-surface text-body border border-border hover:border-btn-bg hover:text-btn-bg"
-                }`}
+              <article
+                key={it.id}
+                className="exlist__item group cursor-pointer"
+                data-post={it.id}
+                onClick={() => router.push(href)}
               >
-                {category}
-              </button>
+                <Link href={href} className="exlist__media block">
+                  <Image
+                    src={it.image}
+                    alt={it.alt}
+                    fill
+                    priority={idx === 0}
+                    loading={idx === 0 ? "eager" : "lazy"}
+                    sizes="(max-width: 1024px) 100vw, 1120px"
+                    className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
+                  {it.now && (
+                    <span className="exlist__now">
+                      <i aria-hidden="true" />
+                      {it.status}
+                    </span>
+                  )}
+                </Link>
+
+                <div className="exlist__text">
+                  <p className={`exlist__label ${it.now ? "is-now" : ""}`}>
+                    {it.status}
+                  </p>
+                  <h2 className="exlist__title">
+                    <Link
+                      href={href}
+                      className="hover:text-palette-amber transition-colors"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {it.title}
+                    </Link>
+                  </h2>
+                  <p className="exlist__excerpt">{it.excerpt}</p>
+                  <div className="exlist__meta">
+                    {it.dates && (
+                      <span>
+                        <Icon name="calendar" size={15} />
+                        {it.dates}
+                      </span>
+                    )}
+                    {it.where && (
+                      <span>
+                        <Icon name="pin" size={15} />
+                        {it.where}
+                      </span>
+                    )}
+                    {it.curator && (
+                      <span>
+                        <Icon name="users" size={15} />
+                        {it.curator}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="mt-6 pt-4 border-t border-border-subtle/50 flex items-center justify-between">
+                    <Button
+                      href={href}
+                      variant="primary"
+                      size="sm"
+                      icon="arrow-right"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Explore Exhibition
+                    </Button>
+                  </div>
+                </div>
+              </article>
             );
           })}
         </div>
-
-        {/* Search Input Box */}
-        <div className="relative w-full max-w-xs shrink-0">
-          <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-muted">
-            <Icon name="search" size={16} />
-          </div>
-          <input
-            type="text"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search exhibitions, galleries, dates..."
-            className="w-full rounded-[3px] border border-border bg-surface py-2 pl-9 pr-4 text-[13px] text-heading placeholder:text-muted focus:border-btn-bg focus:outline-none transition-colors"
-          />
-          {searchQuery && (
-            <button
-              type="button"
-              onClick={() => setSearchQuery("")}
-              className="absolute inset-y-0 right-0 flex items-center pr-3 text-muted hover:text-heading"
-              aria-label="Clear search"
-            >
-              <Icon name="close" size={14} />
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Filter Status Bar */}
-      <div className="mt-6 flex items-center justify-between text-[13px] text-muted">
-        <p>
-          Showing <span className="font-semibold text-heading">{filteredItems.length}</span>{" "}
-          {filteredItems.length === 1 ? "exhibition" : "exhibitions"}
-          {selectedCategory !== "All" && (
-            <span> in <strong className="text-primary">{selectedCategory}</strong></span>
-          )}
-        </p>
-
-        {(selectedCategory !== "All" || searchQuery) && (
-          <button
-            type="button"
-            onClick={() => {
-              setSelectedCategory("All");
-              setSearchQuery("");
-            }}
-            className="text-[12px] uppercase tracking-[0.08em] font-medium text-btn-bg hover:underline"
-          >
-            Reset Filters
-          </button>
-        )}
-      </div>
-
-      {/* Exhibitions Grid */}
-      {filteredItems.length > 0 ? (
-        <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-14">
-          {filteredItems.map((exhibition) => (
-            <ExhibitionCard
-              key={exhibition.id}
-              exhibition={exhibition}
-            />
-          ))}
-        </div>
       ) : (
-        /* Empty State */
-        <div className="mt-16 rounded-sm border border-border bg-surface p-12 text-center">
-          <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-bg-secondary text-primary">
-            <Icon name="search" size={24} />
-          </div>
-          <h3 className="mt-4 font-heading text-[24px] font-medium text-heading">
-            No Exhibitions Found
-          </h3>
-          <p className="mx-auto mt-2 max-w-md text-[14px] text-muted">
-            We couldn&apos;t find any exhibition matching your search query or filter selection. Try a different search term or reset your filter.
+        <div className="news-empty" data-list-empty>
+          <h2 className="font-heading text-[26px] font-medium text-heading">
+            No exhibitions found
+          </h2>
+          <p className="mt-2 text-[14px] text-body">
+            Nothing matches your search. Try another word.
           </p>
-          <div className="mt-6">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                setSelectedCategory("All");
-                setSearchQuery("");
-              }}
-            >
-              Show All Exhibitions
-            </Button>
-          </div>
+          <Button
+            type="button"
+            variant="outline"
+            size="md"
+            className="mt-6"
+            onClick={() => setSearchQuery("")}
+          >
+            Show All Exhibitions
+          </Button>
         </div>
       )}
-    </div>
+    </>
   );
 }

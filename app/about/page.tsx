@@ -5,59 +5,19 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
-import { Icon, type IconName } from "@/components/ui/Icon";
+import { Icon } from "@/components/ui/Icon";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import {
+  timelineEntries,
+  missionData,
+  peopleGroups,
+} from "@/lib/aboutData";
 
 export const metadata: Metadata = {
-  title: "About Us | Central Asian Museum",
+  title: "About the Museum | Central Asian Museum, Leh",
   description:
-    "Learn about the mission, history, and curatorial vision of the Central Asian Museum, preserving two millennia of Silk Road art, architecture, and craftsmanship.",
+    "The Central Asian Museum in Leh documents and presents the historical connections between Ladakh and the wider Central Asian world.",
 };
-
-type PillarItem = {
-  icon: IconName;
-  title: string;
-  subtitle: string;
-  description: string;
-};
-
-const pillars: PillarItem[] = [
-  {
-    icon: "landmark",
-    title: "Monumental Architecture",
-    subtitle: "Tilecraft & Dome Engineering",
-    description:
-      "Documenting and preserving the intricate geometric tilework, muqarnas vaults, and azure domes that defined the grand madrasas of Samarkand, Bukhara, and Khiva.",
-  },
-  {
-    icon: "sparkles",
-    title: "Suzani & Nomadic Textiles",
-    subtitle: "Fiber Arts & Natural Dyes",
-    description:
-      "A world-renowned archive of hand-embroidered wedding tapestries, nomadic saddlecloths, ikat silks, and ceremonial robes woven across the Fergana Valley and steppe.",
-  },
-  {
-    icon: "compass",
-    title: "Ceramics & Metallurgy",
-    subtitle: "Bronze, Lapis & Glazed Pottery",
-    description:
-      "Centuries of ceramic ingenuity featuring vibrant cobalt slips, turquoise glazes, engraved bronze astrolabes, and filigree gold jewelry from ancient Sogdiana.",
-  },
-  {
-    icon: "book-open",
-    title: "Manuscripts & Scholarly Lore",
-    subtitle: "Astronomy, Poetry & Cartography",
-    description:
-      "Safeguarding illuminated manuscripts, Ulug Beg observatory calculations, medical treaties by Ibn Sina, and trade route maps inscribed along the caravan routes.",
-  },
-];
-
-const stats = [
-  { value: "10,000+", label: "Preserved Artifacts", note: "Spanning 2,200 years of history" },
-  { value: "12", label: "Permanent Galleries", note: "Curated with modern immersion" },
-  { value: "45+", label: "Global Partner Institutions", note: "Collaborative research & loans" },
-  { value: "250K+", label: "Annual Visitors", note: "Scholars, students, and travelers" },
-];
 
 export default function AboutPage() {
   return (
@@ -65,7 +25,7 @@ export default function AboutPage() {
       <Header variant="solid" />
 
       <main className="flex-1">
-        {/* About Hero / Breadcrumb Section */}
+        {/* about.hero */}
         <section className="relative overflow-hidden border-b border-border-subtle bg-bg-secondary py-16 md:py-24">
           <div
             className="pointer-events-none absolute -right-24 top-0 h-96 w-96 rounded-full bg-palette-sand/40 blur-3xl"
@@ -73,8 +33,11 @@ export default function AboutPage() {
           />
 
           <Container className="relative z-10">
-            {/* Breadcrumb */}
-            <nav className="mb-6 flex items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-muted" aria-label="Breadcrumb">
+            {/* Breadcrumbs */}
+            <nav
+              className="mb-6 flex items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-muted"
+              aria-label="Breadcrumb"
+            >
               <Link href="/" className="hover:text-heading transition-colors">
                 Home
               </Link>
@@ -84,70 +47,62 @@ export default function AboutPage() {
 
             <div className="max-w-200">
               <div className="mb-4 inline-flex items-center gap-3">
-                <span className="h-px w-8 bg-primary" aria-hidden="true" />
+                <span aria-hidden="true" className="h-px w-8 bg-primary" />
                 <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary md:text-[12px]">
-                  Established 1994
+                  About the Museum
                 </p>
               </div>
 
               <h1 className="font-heading text-[38px] font-medium leading-[1.1] tracking-[-0.01em] text-heading sm:text-[48px] md:text-[58px] lg:text-[66px]">
-                Guardians of Silk Road Heritage & Creative Legacy
+                A Museum at the Crossroads of Central Asia and Ladakh
               </h1>
 
               <p className="mt-6 text-[16px] font-normal leading-relaxed text-body md:text-[18px]">
-                The Central Asian Museum exists to preserve, study, and celebrate the rich mosaic of civilizations that flourished at the historic crossroads of Asia, Europe, and the Middle East.
+                The Central Asian Museum in Leh is dedicated to documenting and presenting the historical connections between Ladakh and the wider Central Asian world.
               </p>
             </div>
           </Container>
         </section>
 
-        {/* Narrative & Visual Story Section */}
-        <section className="py-20 md:py-28">
+        {/* about.intro */}
+        <section id="intro" className="py-20 md:py-28">
           <Container>
             <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-16">
-              {/* Left narrative */}
               <div className="lg:col-span-6">
                 <SectionHeading
-                  kicker="Our Founding Vision"
-                  title="Where Trade Routes Sparked Enduring Artistry"
-                  description="For centuries, the Silk Road was not simply a conduit of precious trade; it was a grand cultural crucible where ideas, aesthetic philosophies, and artisanal secrets coalesced."
+                  kicker="Who We Are"
+                  title="Ladakh's Place in a Larger World"
                 />
-
                 <div className="mt-6 space-y-4 text-[15px] leading-relaxed text-body md:text-[16px]">
                   <p>
-                    Founded through a coalition of Central Asian historians, master craftsmen, and international heritage organizations, our museum opened its doors to provide a permanent home for treasures scattered across caravanserais, madrasas, and remote mountain vaults.
+                    For centuries, Leh occupied an important position within networks of trade, travel and cultural exchange that connected the Indian subcontinent with Central Asia, Tibet, Kashmir and other regions of the Himalayan and trans-Himalayan world.
                   </p>
                   <p>
-                    Today, our curators work in close partnership with regional restoration guilds, ensuring that ancient techniques in cobalt pottery glazing, natural indigo dying, and wood carving are not merely displayed behind glass, but kept vibrantly alive for future generations.
+                    Merchants, pilgrims, travellers and artisans moved through these routes, bringing with them goods, ideas, languages, beliefs, artistic traditions and material cultures. Leh developed as an important trading centre within these networks, and the town's architecture, communities and material culture continue to reflect this layered history.
                   </p>
-                </div>
-
-                <div className="mt-8 flex items-center gap-4 border-l-2 border-palette-amber pl-5">
-                  <p className="font-heading italic text-[18px] text-heading md:text-[20px]">
-                    &ldquo;To understand Central Asia is to witness how the convergence of diverse peoples produces timeless beauty.&rdquo;
+                  <p>
+                    The museum seeks to make these connections accessible to contemporary audiences by bringing together objects and stories that illustrate Ladakh's place within this larger historical landscape.
                   </p>
                 </div>
               </div>
-
-              {/* Right image with museum framing */}
               <div className="lg:col-span-6">
                 <div className="relative mx-auto w-full max-w-155 lg:max-w-none">
                   <div
-                    className="absolute -inset-3 rounded-md border border-palette-sand/60 bg-bg-secondary/50 sm:-inset-4"
                     aria-hidden="true"
+                    className="absolute -inset-3 rounded-md border border-palette-sand/60 bg-bg-secondary/50 sm:-inset-4"
                   />
                   <div className="relative aspect-16/10 w-full overflow-hidden rounded-[3px] border border-border shadow-lg">
                     <Image
-                      src="/images/about/museum-about-hero.jpg"
-                      alt="Curated Central Asian ceramics and blue tilework exhibition hall"
+                      src="/images/museum-garden-exterior.webp"
+                      alt="The Central Asian Museum tower in the Tsas Soma Garden"
                       fill
                       sizes="(max-width: 1024px) 100vw, 50vw"
                       className="object-cover object-center"
                     />
                   </div>
-                  <div className="mt-4 flex items-center justify-between text-[12px] text-muted">
-                    <span>Gallery VI: Ceramic Masters of Bukhara & Samarkand</span>
-                    <span className="text-palette-amber font-medium">Permanent Hall</span>
+                  <div className="relative mt-4 flex items-center justify-between text-[12px] text-muted">
+                    <span>The Central Asian Museum, Tsas Soma Garden, Leh</span>
+                    <span className="text-palette-amber font-medium">The Museum</span>
                   </div>
                 </div>
               </div>
@@ -155,101 +110,322 @@ export default function AboutPage() {
           </Container>
         </section>
 
-        {/* Four Curatorial Pillars */}
-        <section className="border-t border-border-subtle bg-bg-secondary py-20 md:py-28">
+        {/* about.connection */}
+        <section
+          id="connection"
+          className="border-t border-border-subtle bg-bg-secondary py-20 md:py-28"
+        >
+          <Container>
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+              <div className="lg:col-span-5">
+                <SectionHeading
+                  kicker="Leh and the Central Asian Connection"
+                  title="Where the Routes Met"
+                />
+                <div className="mt-8 flex items-center gap-4 border-l-2 border-palette-amber pl-5">
+                  <p className="font-heading italic text-[18px] text-heading md:text-[20px]">
+                    Leh not as an isolated Himalayan settlement, but as part of a much wider network of movement and exchange.
+                  </p>
+                </div>
+              </div>
+              <div className="lg:col-span-7 space-y-4 text-[15px] leading-relaxed text-body md:text-[16px]">
+                <p>
+                  Leh's location at the intersection of several historic routes played an important role in shaping the town. The town was connected through routes leading towards Kashmir and the plains of the Indian subcontinent, across the Karakoram towards Central Asia, and eastwards towards Tibet.
+                </p>
+                <p>
+                  The historic trade in pashmina, wool, textiles, carpets, spices, tea, precious stones and other commodities brought merchants and travellers from different regions to Leh. These encounters also resulted in exchanges of artistic techniques, architectural traditions, foodways, clothing, languages and religious practices.
+                </p>
+                <p>
+                  The Central Asian Museum provides a space to explore this history and to understand Leh not as an isolated Himalayan settlement, but as part of a much wider network of movement and exchange.
+                </p>
+              </div>
+            </div>
+          </Container>
+        </section>
+
+        {/* about.site-history */}
+        <section id="site-history" className="py-20 md:py-28">
+          <Container>
+            <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-16">
+              <div className="lg:col-span-7 lg:col-start-6 lg:order-2">
+                <SectionHeading
+                  kicker="The History of the Site"
+                  title="Where the Caravans Once Rested"
+                />
+                <div className="mt-6 space-y-4 text-[15px] leading-relaxed text-body md:text-[16px]">
+                  <p>
+                    The museum is located in the Tsas Soma Garden, within the historic urban fabric of Leh, where the oldest mosque of Leh town is also situated.
+                  </p>
+                  <p>
+                    The site on which the museum stands has its own history. Before becoming a museum, the property was the resting ground of the trade caravans. Its location within the historic town is significant, as it places the museum within the same landscape through which merchants and travellers once moved.
+                  </p>
+                </div>
+              </div>
+              <div className="lg:col-span-4 lg:order-1">
+                <figure className="relative mx-auto w-full max-w-110 lg:max-w-none">
+                  <div
+                    aria-hidden="true"
+                    className="absolute -inset-3 rounded-md border border-palette-sand/60 bg-bg-secondary/50 sm:-inset-4"
+                  />
+                  <Image
+                    src="/images/tower-exterior-stairs.webp"
+                    alt="The museum tower with its stone stairway"
+                    width={1023}
+                    height={1537}
+                    className="portrait-full relative block w-full rounded-[3px] border border-border shadow-lg h-auto aspect-1023/1537 object-contain"
+                  />
+                  <figcaption className="relative mt-4 flex items-center justify-between text-[12px] text-muted">
+                    <span>The museum tower and stairway</span>
+                    <a
+                      href="https://maps.app.goo.gl/CHsSHHyECqD3nZUe7"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-palette-amber font-medium hover:underline"
+                      title="View Tsas Soma Garden on Google Maps"
+                    >
+                      Tsas Soma Garden
+                    </a>
+                  </figcaption>
+                </figure>
+              </div>
+            </div>
+          </Container>
+        </section>
+
+        {/* about.timeline */}
+        <section
+          id="timeline"
+          className="border-t border-border-subtle bg-bg-secondary py-20 md:py-28"
+        >
+          <Container>
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+              <div className="lg:col-span-5">
+                <SectionHeading
+                  kicker="How the Museum Came to Be"
+                  title="From Caravan Ground to Museum"
+                />
+                <p className="mt-6 text-[15px] leading-relaxed text-body md:text-[16px]">
+                  For centuries, Ladakh has been an important crossroads of Central Asian caravan trade. Like few other regions, Ladakh's culture has been shaped by the transmission of goods and ideas from such disparate regions as Tibet, Yarkand, Kashmir, Afghanistan and city states like Samarkand and Bukhara, connected by the various branches of the Silk Road.
+                </p>
+              </div>
+              <div className="lg:col-span-7">
+                <ol className="timeline">
+                  {timelineEntries.map((e, idx) => (
+                    <li key={idx}>
+                      <p className="font-heading text-[20px] font-medium text-palette-wine md:text-[22px]">
+                        {e.isTbdDate ? (
+                          <mark className="tbd">{e.date}</mark>
+                        ) : (
+                          e.date
+                        )}
+                      </p>
+                      <p className="mt-1 text-[15px] leading-relaxed text-body md:mt-0 md:text-[16px]">
+                        {e.text}
+                      </p>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            </div>
+          </Container>
+        </section>
+
+        {/* about.ethos */}
+        <section id="ethos" className="scroll-mt-24 py-20 md:py-28">
+          <Container className="text-center">
+            <div className="mx-auto max-w-180">
+              <div className="mb-3.5 inline-flex items-center justify-center gap-2.5">
+                <span aria-hidden="true" className="h-px w-6 bg-primary" />
+                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary md:text-[12px]">
+                  Our Ethos
+                </p>
+                <span aria-hidden="true" className="h-px w-6 bg-primary" />
+              </div>
+              <p className="mt-4 font-heading italic text-[26px] leading-[1.22] font-normal text-heading sm:text-[32px] sm:leading-[1.2] md:text-[38px] md:leading-[1.18]">
+                “Heritage is not simply a collection of old<br className="hidden sm:inline" />{" "}
+                objects. It is a living record of the people,<br className="hidden sm:inline" />{" "}
+                communities, journeys and exchanges that have<br className="hidden sm:inline" />{" "}
+                shaped a place.”
+              </p>
+              <p className="mt-8 text-[15px] leading-relaxed text-body md:text-[17px]">
+                The museum therefore seeks to connect objects with the stories behind them: who made them, who used them, where they travelled from, how they reached Ladakh and what they tell us about the historical relationships between different communities and regions.
+              </p>
+            </div>
+          </Container>
+        </section>
+
+        {/* about.mission */}
+        <section
+          id="mission"
+          className="border-t border-border-subtle bg-bg-secondary py-20 md:py-28"
+        >
           <Container>
             <SectionHeading
-              kicker="Curatorial Pillars"
-              title="Four Realms of Cultural Mastery"
-              description="Our permanent collections are organized into four dedicated galleries, each reflecting a pinnacle of Central Asian craftsmanship."
+              kicker="Vision & Mission"
+              title="What the Museum Aims to Do"
               align="center"
-              className="mx-auto"
             />
-
+            <p className="mt-6 text-center text-[15px] text-body md:text-[17px]">
+              <span className="font-semibold text-heading">Vision:</span>{" "}
+              {missionData.vision}
+            </p>
             <div className="mt-14 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-              {pillars.map((pillar) => (
+              {missionData.aims.map((aim, idx) => (
                 <div
-                  key={pillar.title}
-                  className="group flex flex-col justify-between rounded-sm border border-border bg-surface p-7 transition-all duration-300 hover:-translate-y-1 hover:border-btn-bg hover:shadow-md"
+                  key={idx}
+                  className="rounded-sm border border-border bg-surface p-7 transition-all duration-300 hover:-translate-y-1 hover:border-btn-bg hover:shadow-md"
                 >
-                  <div>
-                    <div className="flex h-12 w-12 items-center justify-center rounded-[3px] bg-palette-sand/40 text-palette-wine transition-colors group-hover:bg-btn-bg group-hover:text-white">
-                      <Icon name={pillar.icon} size={24} />
-                    </div>
-
-                    <h3 className="mt-6 font-heading text-[22px] font-medium text-heading">
-                      {pillar.title}
-                    </h3>
-                    <p className="mt-1 text-[12px] font-semibold uppercase tracking-[0.14em] text-palette-amber">
-                      {pillar.subtitle}
-                    </p>
-
-                    <p className="mt-4 text-[14px] leading-relaxed text-body">
-                      {pillar.description}
-                    </p>
-                  </div>
-
-                  <div className="mt-6 pt-5 border-t border-border-subtle">
-                    <span className="inline-flex items-center gap-2 text-[12px] font-medium uppercase tracking-[0.08em] text-btn-bg transition-colors group-hover:underline">
-                      <span>Explore Gallery</span>
-                      <Icon name="arrow-right" size={14} />
-                    </span>
-                  </div>
+                  <p className="font-heading text-[40px] font-medium leading-none text-palette-sand">
+                    {String(idx + 1).padStart(2, "0")}
+                  </p>
+                  <p className="mt-4 text-[14px] leading-relaxed text-body">
+                    {aim}
+                  </p>
                 </div>
               ))}
             </div>
           </Container>
         </section>
 
-        {/* Stats & Preservation Impact */}
-        <section className="bg-surface-dark py-18 text-white md:py-24">
+        {/* about.building-teaser — dark band */}
+        <section id="building" className="bg-surface-dark py-18 text-white md:py-24">
           <Container>
-            <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
-              {stats.map((stat) => (
-                <div
-                  key={stat.label}
-                  className="flex flex-col border-l border-white/15 pl-6"
-                >
-                  <p className="font-heading text-[44px] font-medium tracking-tight text-palette-sand sm:text-[52px]">
-                    {stat.value}
-                  </p>
-                  <p className="mt-1 font-heading text-[18px] font-medium text-white">
-                    {stat.label}
-                  </p>
-                  <p className="mt-2 text-[13px] text-white/60">
-                    {stat.note}
+            <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
+              <div className="lg:col-span-6">
+                <div className="relative aspect-4/3 w-full overflow-hidden rounded-[3px] border border-white/15 shadow-lg">
+                  <Image
+                    src="/images/thf/carpenters-lifting-beam.webp"
+                    alt="Ladakhi carpenters lifting a carved timber beam into place inside the tower's stone walls"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                    className="object-cover object-center"
+                  />
+                </div>
+              </div>
+              <div className="lg:col-span-6">
+                <div className="mb-3.5 inline-flex items-center gap-2.5">
+                  <span aria-hidden="true" className="h-px w-6 bg-palette-sand" />
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-palette-sand md:text-[12px]">
+                    The Building
                   </p>
                 </div>
-              ))}
+                <h2 className="font-heading text-[32px] font-medium leading-[1.12] tracking-[-0.01em] text-white sm:text-[40px] md:text-[46px]">
+                  A Fortress Tower, Built by Hand
+                </h2>
+                <p className="mt-5 text-[15px] leading-relaxed text-white/75 md:text-[17px]">
+                  Designed by André Alexander in the shape of a Tibetan-Ladakhi fortress tower with a contemporary edge, the museum was built entirely by hand from local stone, timber and mud, around a carved wooden lantern that connects all four levels.
+                </p>
+                <div className="mt-9">
+                  <Button
+                    href="/about/building"
+                    variant="primary"
+                    size="md"
+                    icon="arrow-right"
+                    className="hover:brightness-110"
+                  >
+                    Explore the Building
+                  </Button>
+                </div>
+              </div>
             </div>
           </Container>
         </section>
 
-        {/* Visit & Exploration CTA */}
-        <section className="border-t border-border bg-bg py-20 md:py-28">
+        {/* about.people */}
+        <section id="people" className="py-20 md:py-28">
+          <Container>
+            <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
+              <div className="lg:col-span-5">
+                <SectionHeading kicker="People" title="How the Museum Is Run" />
+              </div>
+              <div className="lg:col-span-7 space-y-4 text-[15px] leading-relaxed text-body md:text-[16px]">
+                <p>
+                  The Central Asian Museum is a property of the Anjuman Moin-ul-Islam, which has entrusted its management to a dedicated museum committee responsible for overseeing its functioning, administration and long-term development.
+                </p>
+                <p>
+                  The museum is managed through a collaborative structure that brings together members of the governing committee, advisors and the museum's day-to-day staff. This structure allows the museum to maintain its collections, welcome visitors, organise programmes and exhibitions, and work towards its broader mission of preserving and interpreting the cultural heritage of Ladakh and its connections with Central Asia.
+                </p>
+                <p>
+                  The museum committee provides overall guidance and institutional oversight, while the museum staff are responsible for its daily operations and visitor services.
+                </p>
+              </div>
+            </div>
+
+            {peopleGroups.map((group) => (
+              <div key={group.name} className="mt-16">
+                <div className="flex flex-col justify-between gap-2 border-b border-border-subtle pb-4 md:flex-row md:items-baseline">
+                  <h3 className="font-heading text-[26px] font-medium text-heading md:text-[30px]">
+                    {group.name}
+                  </h3>
+                  {group.intro && (
+                    <p className="text-[14px] text-muted">{group.intro}</p>
+                  )}
+                </div>
+                <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+                  {group.roles.map((r, idx) => (
+                    <div
+                      key={idx}
+                      className="flex flex-col rounded-sm border border-border bg-surface p-7"
+                    >
+                      <div className="flex h-12 w-12 items-center justify-center rounded-[3px] bg-palette-sand/40 text-palette-wine">
+                        <Icon name="users" size={20} />
+                      </div>
+                      <h4 className="mt-6 font-heading text-[22px] font-medium text-heading">
+                        {r.role}
+                      </h4>
+                      {r.name && (
+                        <p className="mt-1 text-[12px] font-semibold tracking-[0.06em] text-palette-amber">
+                          {r.name}
+                        </p>
+                      )}
+                      <p className="mt-4 text-[14px] leading-relaxed text-body">
+                        {r.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+            <div className="mt-16 max-w-200 space-y-4 text-[15px] leading-relaxed text-body md:text-[16px]">
+              <p>
+                Together, the committee and staff work to ensure that the Central Asian Museum remains a well-managed and accessible cultural institution. While each person has a defined role, the functioning of the museum depends on collaboration between the governing committee, professional advisors and the staff who engage with the museum and its visitors every day.
+              </p>
+              <p>
+                The museum's people are central to its identity. Their collective work enables the museum not only to care for its collections, but also to remain connected to the community and to create a welcoming space for learning, research and engagement with Ladakh's rich cultural heritage.
+              </p>
+            </div>
+          </Container>
+        </section>
+
+        {/* about.living-museum */}
+        <section
+          id="living-museum"
+          className="border-t border-border bg-bg-secondary py-20 md:py-28"
+        >
           <Container className="text-center">
             <div className="mx-auto max-w-180">
               <div className="mb-4 inline-flex items-center justify-center gap-3">
-                <span className="h-px w-8 bg-primary" aria-hidden="true" />
+                <span aria-hidden="true" className="h-px w-8 bg-primary" />
                 <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary md:text-[12px]">
-                  Plan Your Experience
+                  A Living Museum
                 </p>
-                <span className="h-px w-8 bg-primary" aria-hidden="true" />
+                <span aria-hidden="true" className="h-px w-8 bg-primary" />
               </div>
-
               <h2 className="font-heading text-[34px] font-medium text-heading sm:text-[44px] md:text-[50px]">
-                Witness Two Millennia of Silk Road Wonders
+                A Space for Conversations About Ladakh's Past, Present and Future
               </h2>
-
               <p className="mt-5 text-[15px] leading-relaxed text-body md:text-[17px]">
-                Whether you are exploring our world-renowned Suzani textiles, attending a scholarly colloquium, or admiring our architectural scale models, an unforgettable journey awaits.
+                The Central Asian Museum is not only a place to look at objects from the past. Through exhibitions, educational programmes, workshops, talks, research and community engagement, the museum seeks to create a space where heritage can be understood as something living and continually evolving.
               </p>
-
+              <p className="mt-4 text-[15px] leading-relaxed text-body md:text-[17px]">
+                Situated in the heart of Leh, the museum invites visitors to explore the historical connections that have shaped the region and to consider how the movement of people, objects and ideas across mountains and borders continues to influence Ladakh today.
+              </p>
               <div className="mt-9 flex flex-wrap items-center justify-center gap-4">
                 <Button href="/collections" variant="primary" icon="arrow-right">
-                  Explore Collections
+                  Explore the Collection
                 </Button>
-                <Button href="/contact" variant="outline">
+                <Button href="/contact#visit" variant="outline">
                   Plan Your Visit
                 </Button>
               </div>

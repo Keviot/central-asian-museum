@@ -35,9 +35,9 @@ export async function POST(request: Request) {
       status,
     } = body;
 
-    if (!title || !slug || !summary) {
+    if (!title || !slug) {
       return NextResponse.json(
-        { error: "Title, slug, and summary are required" },
+        { error: "Title and slug are required" },
         { status: 400 }
       );
     }
@@ -49,13 +49,13 @@ export async function POST(request: Request) {
         category: category || "Lecture & Symposium",
         date: date || "Upcoming",
         readTime: readTime || "5 min read",
-        location: location || "Museum Main Auditorium",
+        location: location || "",
         imageSrc: imageSrc || "/images/events_and_news/symposium-silk-road-preservation.png",
         imageAlt: imageAlt || title,
-        summary,
-        content: content || summary,
+        summary: summary || "",
+        content: content || "",
         status: status || "Published",
-        seoKeywords: [category, title, "Central Asian Museum"],
+        seoKeywords: [category, title, "Central Asian Museum"].filter(Boolean),
       },
     });
 

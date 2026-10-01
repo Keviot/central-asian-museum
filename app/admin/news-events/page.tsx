@@ -76,8 +76,7 @@ export default function AdminNewsEventsPage() {
       const matchesSearch =
         searchQuery === "" ||
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.summary.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.location.toLowerCase().includes(searchQuery.toLowerCase());
+        item.category.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     });
   }, [items, categoryFilter, searchQuery]);
@@ -157,7 +156,7 @@ export default function AdminNewsEventsPage() {
                 <tr>
                   <th className="py-3.5 px-5 font-bold">Image & Article Title</th>
                   <th className="py-3.5 px-4 font-bold">Category</th>
-                  <th className="py-3.5 px-4 font-bold">Date & Location</th>
+                  <th className="py-3.5 px-4 font-bold">Date</th>
                   <th className="py-3.5 px-4 font-bold">Status</th>
                   <th className="py-3.5 px-5 text-right font-bold">Actions</th>
                 </tr>
@@ -184,7 +183,6 @@ export default function AdminNewsEventsPage() {
                           >
                             {item.title}
                           </Link>
-                          <p className="text-[12px] text-muted line-clamp-1">{item.summary}</p>
                         </div>
                       </div>
                     </td>
@@ -194,10 +192,9 @@ export default function AdminNewsEventsPage() {
                       {item.category}
                     </td>
 
-                    {/* Date & Location */}
+                    {/* Date */}
                     <td className="py-4 px-4 text-[12.5px] text-body">
                       <p className="font-semibold text-heading">{item.date}</p>
-                      <p className="text-[11.5px] text-muted">{item.location}</p>
                     </td>
 
                     {/* Status */}

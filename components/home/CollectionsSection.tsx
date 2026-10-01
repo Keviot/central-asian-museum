@@ -1,8 +1,6 @@
-import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { Button } from "@/components/ui/Button";
-import { Icon } from "@/components/ui/Icon";
 import { CollectionCard } from "@/components/collections/CollectionCard";
 import { collectionsData } from "@/lib/collections";
 
@@ -113,36 +111,7 @@ export function CollectionsSection() {
           )}
         </div>
 
-        {/* Bottom Educational / Archive Discovery Banner */}
-        <div className="mt-14 rounded-sm border border-border bg-surface p-8 sm:p-10 md:p-12 shadow-sm transition-all duration-300">
-          <div className="flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
-            <div className="max-w-180">
-              <div className="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-palette-amber">
-                <Icon name="landmark" size={16} />
-                <span>Global Museum Archives</span>
-              </div>
-              <h3 className="mt-2 font-heading text-[26px] font-medium text-heading sm:text-[32px]">
-                Over 10,000 Catalogued Relics & Digital Facsimiles
-              </h3>
-              <p className="mt-2 text-[14px] leading-relaxed text-body sm:text-[15px]">
-                Search through two millennia of Central Asian provenance records, high-resolution scans, and scholarly curatorial essays.
-              </p>
-            </div>
 
-            <div className="flex flex-wrap items-center gap-4 shrink-0">
-              <Button href="/collections" variant="primary" icon="arrow-right" size="lg">
-                Explore Digital Archives
-              </Button>
-              <Link
-                href="/contact"
-                className="inline-flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-primary hover:text-heading transition-colors"
-              >
-                <span>Curator Inquiries</span>
-                <Icon name="arrow-up-right" size={14} />
-              </Link>
-            </div>
-          </div>
-        </div>
       </Container>
     </section>
   );

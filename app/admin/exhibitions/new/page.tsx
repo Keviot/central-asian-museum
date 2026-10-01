@@ -9,24 +9,11 @@ import { Button } from "@/components/ui/Button";
 import { BlockContentEditor } from "@/components/admin/BlockContentEditor";
 import { formatDateToDDMMYYYY } from "@/lib/exhibitions";
 
-interface CategoryItem {
-  name: string;
-  count: number;
-  isUsed: boolean;
-}
-
 export default function NewExhibitionPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  const [categoriesList, setCategoriesList] = useState<CategoryItem[]>([]);
-  const [isAddingCategory, setIsAddingCategory] = useState(false);
-  const [newCategoryName, setNewCategoryName] = useState("");
-  const [isRemovingCategory, setIsRemovingCategory] = useState(false);
-  const [selectedCategoriesToRemove, setSelectedCategoriesToRemove] = useState<string[]>([]);
-  const [categoryNotice, setCategoryNotice] = useState<string | null>(null);
 
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
@@ -35,7 +22,7 @@ export default function NewExhibitionPage() {
     title: "",
     subtitle: "",
     slug: "",
-    category: "Special Exhibitions",
+    category: "",
     status: "Current",
     dateRange: "",
     location: "",
@@ -49,37 +36,6 @@ export default function NewExhibitionPage() {
     curatorialEssay: "",
     featuredOnHome: true,
   });
-
-  useEffect(() => {
-    async function loadCategories() {
-      try {
-        const catRes = await fetch("/api/admin/categories?type=exhibition");
-        if (catRes.ok) {
-          const catData = await catRes.json();
-          if (catData.categories) {
-            setCategoriesList(catData.categories);
-          }
-        }
-      } catch (err) {
-        console.error("Failed to load categories:", err);
-      }
-    }
-    loadCategories();
-  }, []);
-
-  const uniqueCategories = useMemo(() => {
-    const map = new Map<string, CategoryItem>();
-    categoriesList.forEach((cat) => {
-      map.set(cat.name.toLowerCase(), cat);
-    });
-    if (formData.category) {
-      const key = formData.category.toLowerCase();
-      if (!map.has(key)) {
-        map.set(key, { name: formData.category, count: 1, isUsed: true });
-      }
-    }
-    return Array.from(map.values());
-  }, [categoriesList, formData.category]);
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const title = e.target.value;
@@ -109,79 +65,8 @@ export default function NewExhibitionPage() {
     }
   };
 
-  const handleAddCategory = async () => {
-    const trimmed = newCategoryName.trim();
-    if (trimmed) {
-      try {
-        const res = await fetch("/api/admin/categories", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ type: "exhibition", name: trimmed }),
-        });
-        const data = await res.json();
-        if (res.ok && data.categories) {
-          setCategoriesList(data.categories);
-        } else {
-          setCategoriesList((prev) => [
-            ...prev,
-            { name: trimmed, count: 0, isUsed: false },
-          ]);
-        }
-      } catch {
-        setCategoriesList((prev) => [
-          ...prev,
-          { name: trimmed, count: 0, isUsed: false },
-        ]);
-      }
-      setFormData((prev) => ({ ...prev, category: trimmed }));
-      setCategoryNotice(null);
-    }
-    setNewCategoryName("");
-    setIsAddingCategory(false);
-  };
-
-  const handleConfirmRemoveCategories = async () => {
-    if (selectedCategoriesToRemove.length === 0) return;
-    const targets = selectedCategoriesToRemove.map((c) => c.toLowerCase());
-
-    try {
-      const res = await fetch("/api/admin/categories", {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          type: "exhibition",
-          categories: selectedCategoriesToRemove,
-        }),
-      });
-      const data = await res.json();
-      if (res.ok && data.categories) {
-        setCategoriesList(data.categories);
-      } else {
-        setCategoriesList((prev) =>
-          prev.filter((c) => !targets.includes(c.name.toLowerCase()))
-        );
-      }
-    } catch {
-      setCategoriesList((prev) =>
-        prev.filter((c) => !targets.includes(c.name.toLowerCase()))
-      );
-    }
-
-    if (targets.includes(formData.category.toLowerCase())) {
-      setFormData((prev) => ({ ...prev, category: "" }));
-      setCategoryNotice("Category removed. Please select an existing category or add a new one.");
-    }
-
-    setSelectedCategoriesToRemove([]);
-    setIsRemovingCategory(false);
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.category.trim()) {
-      setError("Category is required. Please select or add a category.");
-      return;
-    }
     setIsSubmitting(true);
     setError(null);
 
@@ -272,184 +157,7 @@ export default function NewExhibitionPage() {
           </div>
           */}
 
-          {/* Dynamic Category with Add Category Feature */}
-          <div className="space-y-1.5 sm:col-span-2">
-            <div className="flex items-center justify-between">
-              <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
-                Category
-              </label>
-              <div className="flex items-center gap-3">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsRemovingCategory(!isRemovingCategory);
-                    setIsAddingCategory(false);
-                    if (isRemovingCategory) {
-                      setSelectedCategoriesToRemove([]);
-                    }
-                  }}
-                  className="text-[11px] font-mono uppercase tracking-wider font-bold text-red-600 hover:underline flex items-center gap-1"
-                >
-                  <span>- Remove Category</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsAddingCategory(!isAddingCategory);
-                    setIsRemovingCategory(false);
-                  }}
-                  className="text-[11px] font-mono uppercase tracking-wider font-bold text-palette-wine hover:underline flex items-center gap-1"
-                >
-                  <span>+ Add Category</span>
-                </button>
-              </div>
-            </div>
-
-            {isAddingCategory ? (
-              <div className="flex items-center gap-2">
-                <input
-                  type="text"
-                  value={newCategoryName}
-                  onChange={(e) => setNewCategoryName(e.target.value)}
-                  placeholder="Enter custom category name..."
-                  className="flex-1 rounded-xs border border-palette-amber bg-white px-3 py-2 text-[13.5px] text-heading focus:outline-none"
-                />
-                <button
-                  type="button"
-                  onClick={handleAddCategory}
-                  className="px-3 py-2 rounded-xs bg-palette-wine text-white text-[12px] font-mono uppercase tracking-wider font-bold"
-                >
-                  Save
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setIsAddingCategory(false)}
-                  className="px-3 py-2 rounded-xs border border-palette-sand/80 bg-white text-heading text-[12px] font-mono uppercase tracking-wider"
-                >
-                  Cancel
-                </button>
-              </div>
-            ) : isRemovingCategory ? (
-              <div className="space-y-2 p-3 rounded-xs border border-red-200 bg-red-50/30">
-                <div className="flex items-center justify-between">
-                  <p className="text-[11px] font-mono font-bold uppercase tracking-wider text-red-700">
-                    Check Categories to Remove:
-                  </p>
-                  <span className="text-[11px] font-mono text-muted">
-                    {selectedCategoriesToRemove.length} selected
-                  </span>
-                </div>
-                <div className="max-h-48 overflow-y-auto space-y-1.5 rounded-xs border border-palette-sand/60 bg-white p-2">
-                  {uniqueCategories.map((cat) => {
-                    const isUsedByOthers = cat.count > 0;
-                    return (
-                      <label
-                        key={cat.name}
-                        className={`flex items-center justify-between px-2.5 py-1.5 rounded-xs text-[13px] ${
-                          isUsedByOthers
-                            ? "bg-gray-50 opacity-80 cursor-not-allowed border border-gray-200/60"
-                            : "hover:bg-red-50/60 cursor-pointer"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2.5">
-                          <input
-                            type="checkbox"
-                            disabled={isUsedByOthers}
-                            checked={selectedCategoriesToRemove.includes(cat.name.toLowerCase())}
-                            onChange={(e) => {
-                              const val = cat.name.toLowerCase();
-                              if (e.target.checked) {
-                                setSelectedCategoriesToRemove((prev) => [...prev, val]);
-                              } else {
-                                setSelectedCategoriesToRemove((prev) => prev.filter((c) => c !== val));
-                              }
-                            }}
-                            className="h-4 w-4 rounded border-palette-sand text-red-600 focus:ring-red-500 disabled:opacity-40"
-                          />
-                          <span className={isUsedByOthers ? "text-heading font-medium" : "text-heading"}>
-                            {cat.name}
-                          </span>
-                        </div>
-                        {isUsedByOthers ? (
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-red-100/80 text-red-800 font-bold border border-red-200">
-                            In Use ({cat.count} {cat.count === 1 ? "item" : "items"})
-                          </span>
-                        ) : (
-                          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
-                            Unused
-                          </span>
-                        )}
-                      </label>
-                    );
-                  })}
-                </div>
-                <div className="flex items-center gap-2 pt-1">
-                  <button
-                    type="button"
-                    onClick={handleConfirmRemoveCategories}
-                    disabled={selectedCategoriesToRemove.length === 0}
-                    className="px-3 py-1.5 rounded-xs bg-red-700 text-white text-[11px] font-mono uppercase tracking-wider font-bold hover:bg-red-800 disabled:opacity-50 disabled:cursor-not-allowed"
-                  >
-                    Confirm Delete ({selectedCategoriesToRemove.length})
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setIsRemovingCategory(false);
-                      setSelectedCategoriesToRemove([]);
-                    }}
-                    className="px-3 py-1.5 rounded-xs border border-palette-sand/80 bg-white text-heading text-[11px] font-mono uppercase tracking-wider"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="space-y-1">
-                <select
-                  value={formData.category}
-                  onChange={(e) => {
-                    setFormData({ ...formData, category: e.target.value });
-                    setCategoryNotice(null);
-                  }}
-                  className={`w-full rounded-xs border px-4 py-2.5 text-[13.5px] text-heading focus:border-palette-amber focus:outline-none ${
-                    !formData.category ? "border-red-500 bg-red-50/20" : "border-palette-sand/70 bg-bg-secondary"
-                  }`}
-                >
-                  <option value="" disabled>
-                    -- Select a Category --
-                  </option>
-                  {uniqueCategories.map((cat) => (
-                    <option key={cat.name} value={cat.name}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
-                {categoryNotice && (
-                  <p className="text-[12px] font-mono text-red-600 font-medium">{categoryNotice}</p>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* Status */}
-          <div className="space-y-1.5">
-            <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
-              Status
-            </label>
-            <select
-              value={formData.status}
-              onChange={(e) => setFormData({ ...formData, status: e.target.value as any })}
-              className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary px-4 py-2.5 text-[13.5px] text-heading focus:border-palette-amber focus:outline-none"
-            >
-              <option value="Current">Current</option>
-              <option value="Upcoming">Upcoming</option>
-              <option value="Special">Special</option>
-              <option value="Permanent">Permanent</option>
-            </select>
-          </div>
-
-          {/* Location */}
+          {/* Gallery Location */}
           <div className="space-y-1.5">
             <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
               Gallery Location
@@ -459,6 +167,20 @@ export default function NewExhibitionPage() {
               value={formData.location}
               onChange={(e) => setFormData({ ...formData, location: e.target.value })}
               placeholder="e.g. Main Exhibition Hall A"
+              className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary px-4 py-2.5 text-[13.5px] text-heading focus:border-palette-amber focus:outline-none"
+            />
+          </div>
+
+          {/* Lead Curator */}
+          <div className="space-y-1.5">
+            <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
+              Lead Curator
+            </label>
+            <input
+              type="text"
+              value={formData.curator}
+              onChange={(e) => setFormData({ ...formData, curator: e.target.value })}
+              placeholder="e.g. Dr. Alisher Narzullaev"
               className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary px-4 py-2.5 text-[13.5px] text-heading focus:border-palette-amber focus:outline-none"
             />
           </div>
@@ -490,22 +212,8 @@ export default function NewExhibitionPage() {
             </div>
           </div>
 
-          {/* Lead Curator */}
-          <div className="space-y-1.5">
-            <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
-              Lead Curator
-            </label>
-            <input
-              type="text"
-              value={formData.curator}
-              onChange={(e) => setFormData({ ...formData, curator: e.target.value })}
-              placeholder="e.g. Dr. Alisher Narzullaev"
-              className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary px-4 py-2.5 text-[13.5px] text-heading focus:border-palette-amber focus:outline-none"
-            />
-          </div>
-
           {/* Cover Image Upload */}
-          <div className="space-y-1.5">
+          <div className="sm:col-span-2 space-y-1.5">
             <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
               Exhibition Cover Image *
             </label>

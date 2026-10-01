@@ -38,6 +38,12 @@ export function SectionHeading({
           <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary md:text-[12px]">
             {kicker}
           </p>
+          {align === "center" && (
+            <span
+              className="h-px w-6 bg-primary"
+              aria-hidden="true"
+            />
+          )}
         </div>
       )}
 

@@ -25,7 +25,6 @@ type Exhibition = {
 export default function AdminExhibitionsPage() {
   const [exhibitions, setExhibitions] = useState<Exhibition[]>([]);
   const [loading, setLoading] = useState(true);
-  const [statusFilter, setStatusFilter] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
 
   const fetchExhibitions = async () => {
@@ -65,26 +64,16 @@ export default function AdminExhibitionsPage() {
     }
   };
 
-  // Dynamically compute ONLY status options that exist in current dataset
-  const availableStatuses = useMemo(() => {
-    const statusSet = new Set<string>();
-    exhibitions.forEach((e) => {
-      if (e.status) statusSet.add(e.status);
-    });
-    return ["All", ...Array.from(statusSet)];
-  }, [exhibitions]);
-
   const filteredExhibitions = useMemo(() => {
     return exhibitions.filter((item) => {
-      const matchesStatus = statusFilter === "All" || item.status === statusFilter;
       const matchesSearch =
         searchQuery === "" ||
         item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.location.toLowerCase().includes(searchQuery.toLowerCase());
-      return matchesStatus && matchesSearch;
+        (item.curator && item.curator.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        (item.location && item.location.toLowerCase().includes(searchQuery.toLowerCase()));
+      return matchesSearch;
     });
-  }, [exhibitions, statusFilter, searchQuery]);
+  }, [exhibitions, searchQuery]);
 
   return (
     <div className="p-6 sm:p-10 max-w-7xl mx-auto space-y-8">
@@ -98,7 +87,7 @@ export default function AdminExhibitionsPage() {
             Exhibitions Manager
           </h1>
           <p className="text-[14px] text-body mt-1">
-            Manage permanent and special gallery exhibitions, curatorial narrative essays, and artifact highlights.
+            Manage gallery exhibitions, curatorial narrative essays, and artifact highlights.
           </p>
         </div>
 
@@ -115,23 +104,10 @@ export default function AdminExhibitionsPage() {
 
       {/* Filter & Search Bar */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        {/* Dynamic Status Pills - SHOWING ONLY AVAILABLE STATUSES */}
-        <div className="flex flex-wrap items-center gap-2">
-          {availableStatuses.map((status) => (
-            <button
-              key={status}
-              type="button"
-              onClick={() => setStatusFilter(status)}
-              className={`px-3.5 py-1.5 text-[11.5px] font-mono uppercase tracking-wider rounded-xs transition-colors ${
-                statusFilter === status
-                  ? "bg-palette-wine text-white font-bold shadow-2xs"
-                  : "bg-bg-secondary text-body border border-palette-sand/60 hover:border-palette-wine"
-              }`}
-            >
-              {status}
-            </button>
-          ))}
-        </div>
+        <p className="text-[13px] text-muted">
+          Showing <span className="font-semibold text-heading">{filteredExhibitions.length}</span>{" "}
+          {filteredExhibitions.length === 1 ? "exhibition" : "exhibitions"}
+        </p>
 
         {/* Search Input */}
         <div className="relative w-full max-w-xs">
@@ -160,8 +136,6 @@ export default function AdminExhibitionsPage() {
               <thead className="bg-bg-secondary font-mono text-[10.5px] uppercase tracking-[0.18em] text-palette-amber border-b border-palette-sand/70">
                 <tr>
                   <th className="py-3.5 px-5 font-bold">Cover & Exhibition Title</th>
-                  <th className="py-3.5 px-4 font-bold">Category</th>
-                  <th className="py-3.5 px-4 font-bold">Status</th>
                   <th className="py-3.5 px-4 font-bold">Location & Dates</th>
                   <th className="py-3.5 px-5 text-right font-bold">Actions</th>
                 </tr>
@@ -191,25 +165,6 @@ export default function AdminExhibitionsPage() {
                           <p className="text-[12px] text-muted line-clamp-1">{item.curator}</p>
                         </div>
                       </div>
-                    </td>
-
-                    {/* Category */}
-                    <td className="py-4 px-4 font-medium text-body text-[13px]">
-                      {item.category}
-                    </td>
-
-                    {/* Status Badge */}
-                    <td className="py-4 px-4">
-                      <span className={`inline-flex items-center gap-1.5 rounded-xs px-2.5 py-0.5 text-[10px] font-mono font-bold uppercase tracking-wider border ${
-                        item.status === "Current"
-                          ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-700"
-                          : item.status === "Upcoming"
-                          ? "bg-amber-500/15 border-amber-500/30 text-amber-700"
-                          : "bg-palette-sand/30 border-palette-sand/60 text-heading"
-                      }`}>
-                        <span className={`h-1.5 w-1.5 rounded-full ${item.status === "Current" ? "bg-emerald-500 animate-pulse" : "bg-amber-500"}`} />
-                        <span>{item.status}</span>
-                      </span>
                     </td>
 
                     {/* Location & Date */}

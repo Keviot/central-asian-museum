@@ -43,7 +43,7 @@ function AdminLoginForm() {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-[#FAF8F5] text-heading p-6 overflow-hidden">
+    <div className="relative flex min-h-screen items-center justify-center bg-bg text-heading p-6 overflow-hidden">
       <div className="pointer-events-none absolute -left-20 -top-20 h-96 w-96 rounded-full bg-palette-sand/40 blur-3xl" />
       <div className="pointer-events-none absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-palette-rose/30 blur-3xl" />
 
@@ -85,7 +85,7 @@ function AdminLoginForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="admin@centralasianmuseum.org"
-              className="w-full rounded-xs border border-palette-sand/80 bg-[#F3EFE8]/70 px-4 py-3 text-[14px] text-heading placeholder:text-muted/60 focus:border-palette-amber focus:bg-white focus:outline-none transition-colors"
+              className="w-full rounded-xs border border-palette-sand/80 bg-bg-secondary/70 px-4 py-3 text-[14px] text-heading placeholder:text-muted/60 focus:border-palette-amber focus:bg-white focus:outline-none transition-colors"
             />
           </div>
 
@@ -102,7 +102,7 @@ function AdminLoginForm() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••••••"
-              className="w-full rounded-xs border border-palette-sand/80 bg-[#F3EFE8]/70 px-4 py-3 text-[14px] text-heading placeholder:text-muted/60 focus:border-palette-amber focus:bg-white focus:outline-none transition-colors"
+              className="w-full rounded-xs border border-palette-sand/80 bg-bg-secondary/70 px-4 py-3 text-[14px] text-heading placeholder:text-muted/60 focus:border-palette-amber focus:bg-white focus:outline-none transition-colors"
             />
           </div>
 
@@ -131,7 +131,7 @@ function AdminLoginForm() {
 
 function AdminLoginFallback() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FAF8F5] p-6">
+    <div className="flex min-h-screen items-center justify-center bg-bg p-6">
       <div className="w-full max-w-md rounded-xs border border-palette-sand/80 bg-white p-8 sm:p-10 shadow-xl text-center">
         <p className="font-mono text-[12px] uppercase tracking-[0.18em] text-muted">
           Loading login portal...

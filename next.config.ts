@@ -18,4 +18,4 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-
+// updated for prisma client reload

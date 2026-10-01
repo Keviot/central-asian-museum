@@ -56,7 +56,7 @@ async function getCategoryListAndUsage(type: "exhibition" | "news") {
     console.error("Failed to fetch master categories from DB:", err);
   }
 
-  let items: { category: string }[] = [];
+  let items: { category: string | null }[] = [];
   if (type === "news") {
     try {
       const dbItems = await prisma.newsEvent.findMany({ select: { category: true } });

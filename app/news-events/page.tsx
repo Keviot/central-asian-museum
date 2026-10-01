@@ -4,15 +4,49 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { Container } from "@/components/ui/Container";
 import { Icon } from "@/components/ui/Icon";
-import { NewsEventsExplorer } from "@/components/news-events/NewsEventsExplorer";
+import { NewsExplorer } from "@/components/news/NewsExplorer";
+
+import { prisma } from "@/lib/prisma";
+import { newsData, type NewsPost } from "@/lib/newsData";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "News & Events | Central Asian Museum",
   description:
-    "Discover international symposiums, artisan masterclass workshops, curatorial provenance announcements, and seasonal cultural galas.",
+    "News, milestones and events at the Central Asian Museum, Tsas Soma Garden, Leh.",
 };
 
-export default function NewsEventsPage() {
+export default async function NewsEventsPage() {
+  let posts: NewsPost[] = newsData.posts;
+
+  try {
+    const dbItems = await prisma.newsEvent.findMany({
+      orderBy: { createdAt: "asc" },
+    });
+
+    if (dbItems.length > 0) {
+      posts = dbItems.map((item) => {
+        const bodyParagraphs = item.content
+          ? item.content.split("\n\n").map((p) => p.trim()).filter(Boolean)
+          : [];
+        return {
+          id: item.slug || item.id,
+          title: item.title,
+          date: item.date,
+          image: item.imageSrc,
+          alt: item.imageAlt || item.title,
+          excerpt:
+            item.summary ||
+            (bodyParagraphs[0] ? bodyParagraphs[0].slice(0, 160) + (bodyParagraphs[0].length > 160 ? "..." : "") : ""),
+          body: bodyParagraphs,
+        };
+      });
+    }
+  } catch (error) {
+    console.error("Failed to fetch news events from database:", error);
+  }
   return (
     <div className="flex min-h-screen flex-col bg-bg">
       <Header variant="solid" />
@@ -43,28 +77,21 @@ export default function NewsEventsPage() {
             </nav>
 
             <div className="max-w-200">
-              <div className="mb-4 inline-flex items-center gap-3">
-                <span className="h-px w-8 bg-primary" aria-hidden="true" />
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary md:text-[12px]">
-                  Curatorial Happenings & Announcements
-                </p>
-              </div>
-
               <h1 className="font-heading text-[38px] font-medium leading-[1.1] tracking-[-0.01em] text-heading sm:text-[48px] md:text-[58px] lg:text-[66px]">
                 Museum News & Events
               </h1>
 
               <p className="mt-6 text-[16px] font-normal leading-relaxed text-body md:text-[18px]">
-                Stay connected with international symposiums, living craft masterclasses, curatorial provenance news, and annual cultural galas.
+                Milestones in the museum&apos;s story, and the programmes and events that bring the Tsas Soma Garden to life.
               </p>
             </div>
           </Container>
         </section>
 
-        {/* Dynamic Grid & Filter Section */}
-        <section className="py-16 md:py-24">
+        {/* Dynamic Grid & Search Section */}
+        <section id="list" className="py-16 md:py-24">
           <Container>
-            <NewsEventsExplorer />
+            <NewsExplorer initialPosts={posts} />
           </Container>
         </section>
       </main>

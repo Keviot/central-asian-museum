@@ -32,7 +32,7 @@ export default function NewNewsEventPage() {
     category: "Lecture & Symposium",
     date: "",
     readTime: "5 min read",
-    location: "Main Auditorium & Virtual Stream",
+    location: "",
     imageSrc: "/images/events_and_news/symposium-silk-road-preservation.png",
     imageAlt: "",
     summary: "",
@@ -410,20 +410,6 @@ export default function NewNewsEventPage() {
             />
           </div>
 
-          {/* Location */}
-          <div className="space-y-1.5">
-            <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
-              Event Location
-            </label>
-            <input
-              type="text"
-              value={formData.location}
-              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
-              placeholder="e.g. Main Auditorium & Virtual Stream"
-              className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary px-4 py-2.5 text-[13.5px] text-heading focus:border-palette-amber focus:outline-none"
-            />
-          </div>
-
           {/* Cover Image Upload */}
           <div className="space-y-1.5">
             <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
@@ -516,20 +502,6 @@ export default function NewNewsEventPage() {
                 />
               </label>
             )}
-          </div>
-
-          {/* Summary */}
-          <div className="sm:col-span-2 space-y-1.5">
-            <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
-              Article Summary / Teaser *
-            </label>
-            <textarea
-              required
-              rows={3}
-              value={formData.summary}
-              onChange={(e) => setFormData({ ...formData, summary: e.target.value })}
-              className="w-full rounded-xs border border-palette-sand/70 bg-bg-secondary p-4 text-[14px] text-heading focus:border-palette-amber focus:outline-none"
-            />
           </div>
 
           {/* Full Content */}

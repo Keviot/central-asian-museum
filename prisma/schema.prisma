@@ -36,7 +36,7 @@ model Exhibition {
   slug            String              @unique
   title           String
   subtitle        String
-  category        String
+  category        String?             @default("")
   dateRange       String
   location        String
   imageSrc        String
@@ -46,7 +46,7 @@ model Exhibition {
   curatorialEssayHeading  String?             @default("Curatorial Narrative & Historical Context")
   curatorialEssay         String              @db.Text
   curator         String
-  status          ExhibitionStatus    @default(Current)
+  status          ExhibitionStatus?   @default(Current)
   badgeLabel      String
   featuredOnHome  Boolean             @default(false)
   seoKeywords     String[]
@@ -77,10 +77,10 @@ model NewsEvent {
   category    String
   date        String
   readTime    String
-  location    String
+  location    String?  @default("")
   imageSrc    String
   imageAlt    String
-  summary     String   @db.Text
+  summary     String?  @default("") @db.Text
   content     String   @db.Text
   status      String   @default("Published")
   seoKeywords String[]
@@ -94,6 +94,7 @@ model ContactInquiry {
   email     String
   phone     String?
   subject   String
+  intent    String?       @default("general")
   message   String        @db.Text
   status    InquiryStatus @default(UNREAD)
   createdAt DateTime      @default(now())
