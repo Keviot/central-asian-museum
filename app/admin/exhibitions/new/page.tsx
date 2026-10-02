@@ -92,12 +92,20 @@ export default function NewExhibitionPage() {
   return (
     <div className="p-6 sm:p-10 max-w-4xl mx-auto space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-palette-sand/70 pb-6">
+      <div className="flex items-center gap-3.5 border-b border-palette-sand/70 pb-6">
+        <Link
+          href="/admin/exhibitions"
+          aria-label="Back to Exhibitions"
+          title="Back to Exhibitions Manager"
+          className="flex h-9.5 w-9.5 shrink-0 items-center justify-center rounded-xs border border-palette-sand/80 bg-white hover:bg-bg-secondary hover:border-palette-amber text-heading transition-colors shadow-2xs group cursor-pointer"
+        >
+          <Icon name="arrow-left" size={17} className="text-palette-amber group-hover:-translate-x-0.5 transition-transform" />
+        </Link>
         <div>
-          <Link href="/admin/exhibitions" className="font-mono text-[11px] uppercase tracking-wider text-palette-amber font-bold hover:underline flex items-center gap-1 mb-1">
-            ← Back to Exhibitions
-          </Link>
-          <h1 className="font-heading text-[32px] font-semibold text-heading">
+          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-palette-amber font-bold">
+            Curatorial CMS • Exhibitions
+          </span>
+          <h1 className="font-heading text-[32px] font-semibold text-heading mt-0.5">
             Create New Exhibition
           </h1>
         </div>

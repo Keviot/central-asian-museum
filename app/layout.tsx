@@ -17,10 +17,21 @@ const manrope = Manrope({
   display: "swap",
 });
 
+import { BackToTop } from "@/components/common/BackToTop";
+
 export const metadata: Metadata = {
   title: "Central Asian Museum",
   description:
     "Explore centuries of art, culture, craftsmanship and stories shaped by the Silk Road.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+  },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
@@ -29,7 +40,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${cormorant.variable} ${manrope.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans">{children}</body>
+      <body className="min-h-full flex flex-col font-sans">
+        {children}
+        <BackToTop />
+      </body>
     </html>
   );
 }

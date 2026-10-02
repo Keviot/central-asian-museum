@@ -73,9 +73,6 @@ export default function AdminDashboardPage() {
           <h2 className="font-heading text-[28px] sm:text-[32px] font-semibold text-heading">
             Welcome back, {user?.name || "Curator"}
           </h2>
-          <p className="text-[14px] text-body mt-1 max-w-2xl">
-            You are authenticated with full administrator privileges to manage museum exhibitions, news &amp; events, press releases, and visitor enquiries.
-          </p>
         </div>
 
         <Button href="/" variant="outline" size="sm" icon="arrow-right" className="shrink-0">
@@ -86,10 +83,13 @@ export default function AdminDashboardPage() {
       {/* Management Module Grid - 3 Modules */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {/* Module 1: Exhibitions Manager */}
-        <div className="p-7 rounded-xs border border-palette-sand/80 bg-white flex flex-col justify-between hover:border-palette-amber transition-colors shadow-2xs group">
+        <Link
+          href="/admin/exhibitions"
+          className="p-7 rounded-xs border border-palette-sand/80 bg-white flex flex-col justify-between hover:border-palette-amber hover:shadow-xs transition-all duration-200 shadow-2xs group cursor-pointer"
+        >
           <div>
             <div className="flex items-center justify-between mb-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xs bg-palette-amber/15 text-palette-amber">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xs bg-palette-amber/15 text-palette-amber group-hover:bg-palette-amber/25 transition-colors">
                 <Icon name="sparkles" size={24} />
               </div>
               <span className="font-mono text-[10px] uppercase tracking-widest text-palette-amber font-bold bg-palette-amber/10 px-2.5 py-1 rounded-xs">
@@ -100,23 +100,26 @@ export default function AdminDashboardPage() {
               Exhibitions Manager
             </h3>
             <p className="text-[13.5px] text-body leading-relaxed mt-2">
-              Create, edit, toggle status, and manage curatorial essays and key artifact highlights for all museum galleries.
+              Manage gallery exhibitions and artifact highlights.
             </p>
           </div>
 
           <div className="mt-6 pt-4 border-t border-palette-sand/50">
-            <Link href="/admin/exhibitions" className="font-mono text-[12px] uppercase tracking-wider text-palette-wine font-bold hover:underline flex items-center gap-1">
+            <div className="font-mono text-[12px] uppercase tracking-wider text-palette-wine font-bold group-hover:underline flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
               <span>Manage Exhibitions</span>
               <Icon name="arrow-right" size={14} />
-            </Link>
+            </div>
           </div>
-        </div>
+        </Link>
 
         {/* Module 2: News & Events Manager */}
-        <div className="p-7 rounded-xs border border-palette-sand/80 bg-white flex flex-col justify-between hover:border-palette-amber transition-colors shadow-2xs group">
+        <Link
+          href="/admin/news-events"
+          className="p-7 rounded-xs border border-palette-sand/80 bg-white flex flex-col justify-between hover:border-palette-amber hover:shadow-xs transition-all duration-200 shadow-2xs group cursor-pointer"
+        >
           <div>
             <div className="flex items-center justify-between mb-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xs bg-palette-amber/15 text-palette-amber">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xs bg-palette-amber/15 text-palette-amber group-hover:bg-palette-amber/25 transition-colors">
                 <Icon name="calendar" size={24} />
               </div>
               <span className="font-mono text-[10px] uppercase tracking-widest text-palette-amber font-bold bg-palette-amber/10 px-2.5 py-1 rounded-xs">
@@ -127,23 +130,26 @@ export default function AdminDashboardPage() {
               News &amp; Events CMS
             </h3>
             <p className="text-[13.5px] text-body leading-relaxed mt-2">
-              Publish upcoming lectures, archaeological announcements, press releases, and research symposiums.
+              Publish museum events, lectures, and announcements.
             </p>
           </div>
 
           <div className="mt-6 pt-4 border-t border-palette-sand/50">
-            <Link href="/admin/news-events" className="font-mono text-[12px] uppercase tracking-wider text-palette-wine font-bold hover:underline flex items-center gap-1">
+            <div className="font-mono text-[12px] uppercase tracking-wider text-palette-wine font-bold group-hover:underline flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
               <span>Manage News &amp; Events</span>
               <Icon name="arrow-right" size={14} />
-            </Link>
+            </div>
           </div>
-        </div>
+        </Link>
 
         {/* Module 3: Leads Portal (Contact Enquiries) */}
-        <div className="p-7 rounded-xs border border-palette-sand/80 bg-white flex flex-col justify-between hover:border-palette-amber transition-colors shadow-2xs group">
+        <Link
+          href="/admin/leads"
+          className="p-7 rounded-xs border border-palette-sand/80 bg-white flex flex-col justify-between hover:border-palette-amber hover:shadow-xs transition-all duration-200 shadow-2xs group cursor-pointer"
+        >
           <div>
             <div className="flex items-center justify-between mb-4">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xs bg-palette-amber/15 text-palette-amber">
+              <div className="flex h-12 w-12 items-center justify-center rounded-xs bg-palette-amber/15 text-palette-amber group-hover:bg-palette-amber/25 transition-colors">
                 <Icon name="inbox" size={24} />
               </div>
               <span className="font-mono text-[10px] uppercase tracking-widest text-palette-amber font-bold bg-palette-amber/10 px-2.5 py-1 rounded-xs">
@@ -154,17 +160,17 @@ export default function AdminDashboardPage() {
               Leads Portal
             </h3>
             <p className="text-[13.5px] text-body leading-relaxed mt-2">
-              Review and manage enquiries sent from the website&apos;s Contact form. Filter by visits, research, donation, and general enquiries.
+              Review and respond to visitor contact enquiries.
             </p>
           </div>
 
           <div className="mt-6 pt-4 border-t border-palette-sand/50">
-            <Link href="/admin/leads" className="font-mono text-[12px] uppercase tracking-wider text-palette-wine font-bold hover:underline flex items-center gap-1">
+            <div className="font-mono text-[12px] uppercase tracking-wider text-palette-wine font-bold group-hover:underline flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
               <span>Manage Leads</span>
               <Icon name="arrow-right" size={14} />
-            </Link>
+            </div>
           </div>
-        </div>
+        </Link>
       </div>
     </div>
   );

@@ -213,26 +213,38 @@ export default function EditNewsEventPage({ params }: Props) {
   return (
     <div className="p-6 sm:p-10 max-w-4xl mx-auto space-y-8">
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-palette-sand/70 pb-6">
-        <div>
-          <Link href="/admin/news-events" className="font-mono text-[11px] uppercase tracking-wider text-palette-amber font-bold hover:underline flex items-center gap-1 mb-1">
-            ← Back to News & Events
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-palette-sand/70 pb-6">
+        <div className="flex items-center gap-3.5">
+          <Link
+            href="/admin/news-events"
+            aria-label="Back to News & Events"
+            title="Back to News & Events Manager"
+            className="flex h-9.5 w-9.5 shrink-0 items-center justify-center rounded-xs border border-palette-sand/80 bg-white hover:bg-bg-secondary hover:border-palette-amber text-heading transition-colors shadow-2xs group cursor-pointer"
+          >
+            <Icon name="arrow-left" size={17} className="text-palette-amber group-hover:-translate-x-0.5 transition-transform" />
           </Link>
-          <h1 className="font-heading text-[32px] font-semibold text-heading">
-            Edit News Event Article
-          </h1>
+          <div>
+            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-palette-amber font-bold">
+              Curatorial CMS • News &amp; Events
+            </span>
+            <h1 className="font-heading text-[32px] font-semibold text-heading mt-0.5">
+              Edit News Event Article
+            </h1>
+          </div>
         </div>
 
-        {formData.slug && (
-          <Link
-            href={`/news-events/${formData.slug}`}
-            target="_blank"
-            className="inline-flex items-center gap-2 text-[12px] font-mono uppercase tracking-wider text-palette-wine hover:underline"
-          >
-            <span>View Live Article</span>
-            <Icon name="external-link" size={14} />
-          </Link>
-        )}
+        <div className="flex items-center gap-3">
+          {formData.slug && (
+            <Link
+              href={`/news-events/${formData.slug}`}
+              target="_blank"
+              className="inline-flex items-center gap-2 rounded-xs border border-palette-sand/80 bg-white px-3.5 py-1.5 text-[11.5px] font-mono uppercase tracking-wider text-palette-wine hover:border-palette-amber hover:bg-bg-secondary transition-colors shadow-2xs font-semibold"
+            >
+              <span>View Live Article</span>
+              <Icon name="external-link" size={13} />
+            </Link>
+          )}
+        </div>
       </div>
 
       {error && (

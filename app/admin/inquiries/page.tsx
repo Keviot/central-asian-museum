@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { Icon } from "@/components/ui/Icon";
 
 type Inquiry = {
@@ -104,16 +105,28 @@ export default function AdminInquiriesPage() {
   return (
     <div className="p-6 sm:p-10 max-w-7xl mx-auto space-y-8">
       {/* Header */}
-      <div className="border-b border-palette-sand/70 pb-6">
-        <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-palette-amber font-bold">
-          Curatorial CMS • Inquiries
-        </span>
-        <h1 className="font-heading text-[32px] sm:text-[36px] font-semibold text-heading mt-0.5">
-          Visitor Inquiries Inbox
-        </h1>
-        <p className="text-[14px] text-body mt-1">
-          Review, filter, and respond to incoming contact submissions, research access requests, and group tours.
-        </p>
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 border-b border-palette-sand/70 pb-6">
+        <div className="flex items-start gap-3.5">
+          <Link
+            href="/admin/dashboard"
+            aria-label="Back to Dashboard"
+            title="Back to Dashboard"
+            className="mt-1 flex h-9.5 w-9.5 shrink-0 items-center justify-center rounded-xs border border-palette-sand/80 bg-white hover:bg-bg-secondary hover:border-palette-amber text-heading transition-colors shadow-2xs group cursor-pointer"
+          >
+            <Icon name="arrow-left" size={17} className="text-palette-amber group-hover:-translate-x-0.5 transition-transform" />
+          </Link>
+          <div>
+            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-palette-amber font-bold">
+              Curatorial CMS • Inquiries
+            </span>
+            <h1 className="font-heading text-[32px] sm:text-[36px] font-semibold text-heading mt-0.5">
+              Visitor Inquiries Inbox
+            </h1>
+            <p className="text-[14px] text-body mt-1">
+              Review, filter, and respond to incoming contact submissions, research access requests, and group tours.
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Dynamic Status Tabs - ONLY SHOWING AVAILABLE TABS WITH LIVE COUNTS */}

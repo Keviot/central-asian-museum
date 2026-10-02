@@ -43,7 +43,7 @@ export function SupportSection({
   return (
     <section
       id="support"
-      className="relative overflow-hidden border-b border-border-subtle bg-bg py-20 sm:py-24 md:py-28 lg:py-32"
+      className="relative overflow-hidden border-b border-border-subtle bg-bg pt-10 lg:pt-13 pb-14 sm:pb-16 md:pb-18 lg:pb-20"
     >
       {/* Subtle Archival Glow Accents */}
       <div
@@ -57,7 +57,7 @@ export function SupportSection({
 
       <Container className="relative z-10">
         {/* Section Header: Left Title + Right TBD Badge */}
-        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-baseline border-b border-border-subtle/60 pb-8 mb-12">
+        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-baseline border-b border-border-subtle/60 pb-5 mb-8">
           <h2 className="font-heading text-[38px] font-medium text-heading sm:text-[48px] md:text-[54px] leading-none tracking-[-0.01em]">
             {title}
           </h2>
@@ -89,7 +89,7 @@ export function SupportSection({
                 >
                   <div>
                     {/* Category Kicker */}
-                    <span className="font-mono text-[11.5px] font-medium uppercase tracking-[0.2em] text-palette-amber block">
+                    <span className="font-mono text-[12px] font-medium uppercase tracking-[0.2em] text-palette-amber block">
                       {c.kicker}
                     </span>
 

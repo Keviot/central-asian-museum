@@ -10,8 +10,8 @@ function AdminLoginForm() {
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("from") || "/admin/dashboard";
 
-  const [email, setEmail] = useState("admin@centralasianmuseum.org");
-  const [password, setPassword] = useState("MuseumAdmin2026!");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -43,10 +43,12 @@ function AdminLoginForm() {
   };
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-bg text-heading p-6 overflow-hidden">
-      <div className="pointer-events-none absolute -left-20 -top-20 h-96 w-96 rounded-full bg-palette-sand/40 blur-3xl" />
-      <div className="pointer-events-none absolute -right-20 -bottom-20 h-96 w-96 rounded-full bg-palette-rose/30 blur-3xl" />
-
+    <div
+      className="relative flex min-h-screen items-center justify-center text-heading p-6 overflow-hidden"
+      style={{
+        background: "linear-gradient(rgba(38,23,28,.10), rgba(38,23,28,.10)), url(/images/login-wall.webp) center / cover no-repeat",
+      }}
+    >
       <div className="relative z-10 w-full max-w-md space-y-8 rounded-xs border border-palette-sand/80 bg-white p-8 sm:p-10 shadow-xl">
         <div className="text-center space-y-3">
           <Link href="/" className="inline-flex h-14 w-14 items-center justify-center rounded-full bg-palette-wine text-white hover:scale-105 transition-transform shadow-md">
@@ -54,7 +56,7 @@ function AdminLoginForm() {
           </Link>
 
           <div>
-            <span className="font-mono text-[11px] uppercase tracking-[0.24em] text-palette-amber font-bold block">
+            <span className="font-mono text-[12px] uppercase tracking-[0.24em] text-palette-amber font-bold block">
               Central Asian Museum Leh
             </span>
             <h1 className="font-heading text-[32px] sm:text-[36px] font-semibold text-heading tracking-tight mt-1">
@@ -75,7 +77,7 @@ function AdminLoginForm() {
 
         <form onSubmit={handleLogin} className="space-y-6">
           <div className="space-y-1.5">
-            <label htmlFor="email" className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-palette-amber">
+            <label htmlFor="email" className="block font-mono text-[12px] font-bold uppercase tracking-[0.18em] text-palette-amber">
               Curator Email Address
             </label>
             <input
@@ -84,14 +86,14 @@ function AdminLoginForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="admin@centralasianmuseum.org"
+              placeholder="centralasianmuseum26@gmail.com"
               className="w-full rounded-xs border border-palette-sand/80 bg-bg-secondary/70 px-4 py-3 text-[14px] text-heading placeholder:text-muted/60 focus:border-palette-amber focus:bg-white focus:outline-none transition-colors"
             />
           </div>
 
           <div className="space-y-1.5">
             <div className="flex items-center justify-between">
-              <label htmlFor="password" className="block font-mono text-[11px] font-bold uppercase tracking-[0.18em] text-palette-amber">
+              <label htmlFor="password" className="block font-mono text-[12px] font-bold uppercase tracking-[0.18em] text-palette-amber">
                 Password
               </label>
             </div>
@@ -111,7 +113,7 @@ function AdminLoginForm() {
             disabled={loading}
             className="w-full rounded-xs bg-palette-wine hover:bg-palette-wine/90 border border-palette-wine/30 py-3.5 text-[12.5px] font-mono font-bold uppercase tracking-[0.18em] text-white shadow-md hover:scale-[1.01] active:scale-[0.99] transition-all cursor-pointer flex items-center justify-center gap-2"
           >
-            <span>{loading ? "Logining..." : "Sign In"}</span>
+            <span>{loading ? "Logging in..." : "Sign In"}</span>
             <Icon name="arrow-right" size={16} className="text-white" />
           </button>
         </form>
@@ -119,7 +121,7 @@ function AdminLoginForm() {
         <div className="pt-4 border-t border-palette-sand/60 text-center">
           <Link
             href="/"
-            className="inline-flex items-center gap-1.5 font-mono text-[11.5px] uppercase tracking-wider text-body hover:text-palette-wine transition-colors"
+            className="inline-flex items-center gap-1.5 font-mono text-[12px] uppercase tracking-wider text-body hover:text-palette-wine transition-colors"
           >
             <span>← Return to Website</span>
           </Link>

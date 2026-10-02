@@ -160,8 +160,8 @@ export function ExhibitionDetailViewer({ exhibition }: ExhibitionDetailViewerPro
                 </div>
                 <p className="text-[13px] leading-relaxed text-body">
                   For high-res press images, scholarly citations, or private viewing appointments, contact{" "}
-                  <a href="mailto:curatorial@centralasianmuseum.org" className="text-palette-wine underline font-medium">
-                    curatorial@centralasianmuseum.org
+                  <a href="mailto:centralasianmuseum26@gmail.com" className="text-palette-wine underline font-medium">
+                    centralasianmuseum26@gmail.com
                   </a>
                 </p>
               </div>

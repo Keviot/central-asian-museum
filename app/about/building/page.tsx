@@ -28,33 +28,13 @@ export default function BuildingPage() {
 
       <main className="flex-1">
         {/* building.hero */}
-        <section className="relative overflow-hidden border-b border-border-subtle bg-bg-secondary py-16 md:py-24">
+        <section className="relative overflow-hidden border-b border-border-subtle bg-bg-secondary py-12 sm:py-16 md:py-18 lg:py-20">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -right-24 top-0 h-96 w-96 rounded-full bg-palette-sand/40 blur-3xl"
           />
           <Container className="relative z-10">
-            <nav
-              aria-label="Breadcrumb"
-              className="mb-6 flex items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-muted"
-            >
-              <Link href="/" className="hover:text-heading transition-colors">
-                Home
-              </Link>
-              <Icon name="chevron-right" size={12} className="text-palette-sage" />
-              <Link href="/about" className="hover:text-heading transition-colors">
-                About
-              </Link>
-              <Icon name="chevron-right" size={12} className="text-palette-sage" />
-              <span className="text-heading font-medium">The Building</span>
-            </nav>
-            <div className="max-w-200">
-              <div className="mb-4 inline-flex items-center gap-3">
-                <span aria-hidden="true" className="h-px w-8 bg-primary" />
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary md:text-[12px]">
-                  The Building
-                </p>
-              </div>
+            <div>
               <h1 className="font-heading text-[38px] font-medium leading-[1.1] tracking-[-0.01em] text-heading sm:text-[48px] md:text-[58px] lg:text-[66px]">
                 A Tibetan-Ladakhi Fortress Tower with a Contemporary Edge
               </h1>
@@ -66,7 +46,7 @@ export default function BuildingPage() {
         </section>
 
         {/* building.design */}
-        <section id="design" className="py-20 md:py-28">
+        <section id="design" className="py-14 sm:py-16 md:py-18 lg:py-20">
           <Container>
             <div className="grid grid-cols-1 items-start gap-14 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-7">
@@ -119,7 +99,7 @@ export default function BuildingPage() {
         </section>
 
         {/* building.drawings */}
-        <section id="drawings" className="border-t border-border-subtle bg-bg-secondary py-20 md:py-28">
+        <section id="drawings" className="border-t border-border-subtle bg-bg-secondary py-14 sm:py-16 md:py-18 lg:py-20">
           <Container>
             <SectionHeading
               kicker="Plans & Drawings"
@@ -140,7 +120,7 @@ export default function BuildingPage() {
         </section>
 
         {/* building.materials */}
-        <section id="materials" className="py-20 md:py-28">
+        <section id="materials" className="py-14 sm:py-16 md:py-18 lg:py-20">
           <Container>
             <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-7 lg:col-start-6 lg:order-2">
@@ -188,7 +168,7 @@ export default function BuildingPage() {
         </section>
 
         {/* building.details */}
-        <section id="details" className="border-t border-border-subtle bg-bg-secondary py-20 md:py-28">
+        <section id="details" className="border-t border-border-subtle bg-bg-secondary py-14 sm:py-16 md:py-18 lg:py-20">
           <Container>
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-5">
@@ -234,7 +214,7 @@ export default function BuildingPage() {
         </section>
 
         {/* building.construction */}
-        <section id="construction" className="py-20 md:py-28">
+        <section id="construction" className="py-14 sm:py-16 md:py-18 lg:py-20">
           <Container>
             <SectionHeading
               kicker="Construction"
@@ -254,7 +234,7 @@ export default function BuildingPage() {
         </section>
 
         {/* building.floors */}
-        <section id="floors" className="border-t border-border-subtle bg-bg-secondary py-20 md:py-28">
+        <section id="floors" className="border-t border-border-subtle bg-bg-secondary py-14 sm:py-16 md:py-18 lg:py-20">
           <Container>
             <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-7">
@@ -347,7 +327,7 @@ export default function BuildingPage() {
         </section>
 
         {/* building.complex */}
-        <section id="complex" className="py-20 md:py-28">
+        <section id="complex" className="py-14 sm:py-16 md:py-18 lg:py-20">
           <Container>
             <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-5">
@@ -387,7 +367,7 @@ export default function BuildingPage() {
         </section>
 
         {/* building.cta */}
-        <section className="border-t border-border bg-bg-secondary py-20 md:py-28">
+        <section className="border-t border-border bg-bg-secondary py-14 sm:py-16 md:py-18 lg:py-20">
           <Container className="text-center">
             <div className="mx-auto max-w-180">
               <h2 className="font-heading text-[34px] font-medium text-heading sm:text-[44px] md:text-[50px]">

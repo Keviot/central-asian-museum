@@ -22,10 +22,6 @@ export const timelineEntries: TimelineEntry[] = [
     text: "The idea for a museum was launched by Saleem Beg, Director of J&K Tourism, and the eminent Ladakhi historian Abdul Ghani Sheikh, to commemorate this facet of Ladakh's history and to educate the public about it. The project was mainly sponsored by the Ministry of Culture and Tourism, Jammu & Kashmir State.",
   },
   {
-    date: "2026",
-    text: "A committee was formed to run the museum, registered as the Society for the Preservation of Trans-Himalayan Art and Culture. THF/LOTI were asked to design and build the museum.",
-  },
-  {
     date: "22 August 2008",
     text: "The foundation stone was laid and construction began. Ladakh's building season runs from April to October.",
   },
@@ -40,6 +36,10 @@ export const timelineEntries: TimelineEntry[] = [
   {
     date: "7 October 2015",
     text: "A completion ceremony marked the finished museum complex.",
+  },
+  {
+    date: "2026",
+    text: "A committee was formed to run the museum, registered as the Society for the Preservation of Trans-Himalayan Art and Culture. THF/LOTI were asked to design and build the museum.",
   },
 ];
 
@@ -64,7 +64,7 @@ export const missionData: MissionData = {
 
 export type RoleItem = {
   role: string;
-  name: string | null;
+  name: string | string[] | null;
   description: string;
 };
 
@@ -87,7 +87,11 @@ export const peopleGroups: PeopleGroup[] = [
       },
       {
         role: "Advisors",
-        name: "Shri Ghulam Mustafa (Sr. Advisor) · Dr Noor Mohd. · Shri Ghulam Mohd Kakpori",
+        name: [
+          "Shri Ghulam Mustafa (Sr. Advisor)",
+          "Dr Noor Mohd.",
+          "Shri Ghulam Mohd Kakpori",
+        ],
         description:
           "Provide guidance and expertise on matters relating to the museum's collections, heritage, exhibitions, research, conservation and future initiatives.",
       },
@@ -107,8 +111,7 @@ export const peopleGroups: PeopleGroup[] = [
   },
   {
     name: "Museum Staff",
-    intro:
-      "The committee is supported by a dedicated team responsible for the day-to-day functioning of the museum.",
+    intro: null,
     roles: [
       {
         role: "Museum Assistant",

@@ -38,29 +38,13 @@ export default function CollectionsPage() {
 
       <main className="flex-1">
         {/* collections.hero */}
-        <section className="relative overflow-hidden border-b border-border-subtle bg-bg-secondary py-16 md:py-24">
+        <section className="relative overflow-hidden border-b border-border-subtle bg-bg-secondary py-12 sm:py-16 md:py-18 lg:py-20">
           <div
             aria-hidden="true"
             className="pointer-events-none absolute -right-24 top-0 h-96 w-96 rounded-full bg-palette-sand/40 blur-3xl"
           />
           <Container className="relative z-10">
-            <nav
-              aria-label="Breadcrumb"
-              className="mb-6 flex items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-muted"
-            >
-              <Link href="/" className="hover:text-heading transition-colors">
-                Home
-              </Link>
-              <Icon name="chevron-right" size={12} className="text-palette-sage" />
-              <span className="text-heading font-medium">Collections</span>
-            </nav>
-            <div className="max-w-200">
-              <div className="mb-4 inline-flex items-center gap-3">
-                <span aria-hidden="true" className="h-px w-8 bg-primary" />
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary md:text-[12px]">
-                  The Collection
-                </p>
-              </div>
+            <div>
               <h1 className="font-heading text-[38px] font-medium leading-[1.1] tracking-[-0.01em] text-heading sm:text-[48px] md:text-[58px] lg:text-[66px]">
                 Objects That Carry the Story of Exchange
               </h1>
@@ -72,7 +56,7 @@ export default function CollectionsPage() {
         </section>
 
         {/* collections.intro */}
-        <section id="intro" className="py-20 md:py-28">
+        <section id="intro" className="py-14 sm:py-16 md:py-18 lg:py-20">
           <Container>
             <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-6 space-y-4 text-[15px] leading-relaxed text-body md:text-[17px]">
@@ -83,7 +67,7 @@ export default function CollectionsPage() {
                   Many objects carry evidence of exchange. Materials, techniques, forms and motifs travelled across geographical and cultural boundaries, demonstrating the close relationships that existed between Ladakh and the regions beyond its borders.
                 </p>
                 <div className="mt-8 border-l-2 border-palette-amber pl-5">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-palette-amber">
+                  <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-palette-amber">
                     The Lantern
                   </p>
                   <p className="mt-2">
@@ -100,10 +84,17 @@ export default function CollectionsPage() {
                   <div className="relative aspect-4/5 w-full overflow-hidden rounded-[3px] border border-border shadow-lg">
                     <img
                       alt="Ground floor gallery with a large brass basin on a stone plinth beneath a hanging metal lamp, a carved wooden lattice screen and stone walls"
-                      className="object-cover object-center"
+                      className="object-cover object-top"
                       loading="lazy"
                       src="/images/gallery-ground-basin-lamp.webp"
-                      style={{ position: "absolute", height: "100%", width: "100%", inset: 0 }}
+                      style={{
+                        position: "absolute",
+                        height: "100%",
+                        width: "100%",
+                        inset: 0,
+                        transform: "scale(1.18)",
+                        transformOrigin: "top center",
+                      }}
                     />
                   </div>
                   <div className="relative mt-4 flex items-center justify-between text-[12px] text-muted">
@@ -191,7 +182,7 @@ export default function CollectionsPage() {
         </section>
 
         {/* collections.provenance */}
-        <section id="provenance" className="border-t border-border-subtle bg-bg-secondary py-20 md:py-28">
+        <section id="provenance" className="border-t border-border-subtle bg-bg-secondary py-14 sm:py-16 md:py-18 lg:py-20">
           <Container>
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-5">

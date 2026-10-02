@@ -6,7 +6,6 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { mainNavItems, type NavItem } from "@/lib/navigation";
 import { Icon } from "@/components/ui/Icon";
-import { Button } from "@/components/ui/Button";
 
 type HeaderProps = {
   items?: NavItem[];
@@ -68,7 +67,7 @@ export function Header({
                 key={item.href}
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
-                className={`relative text-[12px] uppercase tracking-[0.14em] transition-colors duration-200 py-1 ${
+                className={`relative text-[14px] uppercase tracking-[0.14em] transition-colors duration-200 py-1 ${
                   isActive
                     ? "text-white font-semibold after:absolute after:bottom-0 after:inset-x-0 after:h-0.5 after:bg-palette-amber"
                     : "text-white/80 font-medium hover:text-white"
@@ -79,17 +78,6 @@ export function Header({
             );
           })}
         </nav>
-
-        <div className="hidden items-center gap-4 lg:flex">
-          <Button
-            href="/contact"
-            variant="outline"
-            size="sm"
-            className="border-white/30 text-white hover:border-white hover:bg-white/10"
-          >
-            Contact
-          </Button>
-        </div>
 
         <button
           type="button"
@@ -125,17 +113,6 @@ export function Header({
                 </Link>
               );
             })}
-            <div className="mt-4 pt-4 border-t border-white/10">
-              <Button
-                href="/contact"
-                variant="primary"
-                size="md"
-                className="w-full justify-center"
-                onClick={() => setOpen(false)}
-              >
-                Contact
-              </Button>
-            </div>
           </nav>
         </div>
       )}

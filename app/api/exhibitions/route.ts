@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { exhibitionsData } from "@/lib/exhibitions";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -11,10 +10,6 @@ export async function GET() {
       include: { highlights: true },
       orderBy: { createdAt: "desc" },
     });
-
-    if (dbExhibitions.length === 0) {
-      return NextResponse.json({ exhibitions: exhibitionsData });
-    }
 
     const exhibitions = dbExhibitions.map((item) => ({
       id: item.id,
@@ -38,6 +33,9 @@ export async function GET() {
     return NextResponse.json({ exhibitions });
   } catch (error: any) {
     console.error("Public exhibitions fetch error:", error);
-    return NextResponse.json({ exhibitions: exhibitionsData });
+    return NextResponse.json(
+      { error: "Failed to fetch exhibitions" },
+      { status: 500 }
+    );
   }
 }

@@ -78,17 +78,27 @@ export default function AdminExhibitionsPage() {
   return (
     <div className="p-6 sm:p-10 max-w-7xl mx-auto space-y-8">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-palette-sand/70 pb-6">
-        <div>
-          <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-palette-amber font-bold">
-            Curatorial CMS • Exhibitions
-          </span>
-          <h1 className="font-heading text-[32px] sm:text-[36px] font-semibold text-heading mt-0.5">
-            Exhibitions Manager
-          </h1>
-          <p className="text-[14px] text-body mt-1">
-            Manage gallery exhibitions, curatorial narrative essays, and artifact highlights.
-          </p>
+      <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4 border-b border-palette-sand/70 pb-6">
+        <div className="flex items-start gap-3.5">
+          <Link
+            href="/admin/dashboard"
+            aria-label="Back to Dashboard"
+            title="Back to Dashboard"
+            className="mt-1 flex h-9.5 w-9.5 shrink-0 items-center justify-center rounded-xs border border-palette-sand/80 bg-white hover:bg-bg-secondary hover:border-palette-amber text-heading transition-colors shadow-2xs group cursor-pointer"
+          >
+            <Icon name="arrow-left" size={17} className="text-palette-amber group-hover:-translate-x-0.5 transition-transform" />
+          </Link>
+          <div>
+            <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-palette-amber font-bold">
+              Curatorial CMS • Exhibitions
+            </span>
+            <h1 className="font-heading text-[32px] sm:text-[36px] font-semibold text-heading mt-0.5">
+              Exhibitions Manager
+            </h1>
+            <p className="text-[14px] text-body mt-1">
+              Manage gallery exhibitions, curatorial narrative essays, and artifact highlights.
+            </p>
+          </div>
         </div>
 
         <Button
@@ -96,7 +106,7 @@ export default function AdminExhibitionsPage() {
           variant="primary"
           icon="sparkles"
           size="md"
-          className="shrink-0 bg-palette-wine hover:bg-palette-wine/90"
+          className="shrink-0 bg-palette-wine hover:bg-palette-wine/90 self-start sm:self-auto"
         >
           Create New Exhibition
         </Button>

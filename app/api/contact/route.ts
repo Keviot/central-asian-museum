@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { sendContactEmails } from "@/lib/mail";
 
 export async function POST(request: Request) {
   try {
@@ -34,6 +35,19 @@ export async function POST(request: Request) {
         status: "UNREAD",
       },
     });
+
+    // Send acknowledgement to visitor and notification to museum curator
+    try {
+      await sendContactEmails({
+        name,
+        email,
+        intent: resolvedIntent,
+        subject,
+        message,
+      });
+    } catch (mailError) {
+      console.error("POST /api/contact email dispatch error:", mailError);
+    }
 
     return NextResponse.json({
       success: true,

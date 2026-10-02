@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
+import Link from "next/link";
+import { Icon } from "@/components/ui/Icon";
 import type { LeadItem } from "@/lib/mockLeadsData";
 
 const SUBJECTS: Record<string, string> = {
@@ -46,6 +48,20 @@ function formatDate(dateStr: string): string {
   return `${t.getDate()} ${m} ${t.getFullYear()} at ${h}:${mins} ${ap}`;
 }
 
+function getIntentChipStyle(intent: string): string {
+  switch (intent?.toLowerCase()) {
+    case "visits":
+      return "bg-[#1c3f5e]/10 text-[#1c3f5e] border-[#1c3f5e]/25";
+    case "research":
+      return "bg-[#2d5038]/10 text-[#2d5038] border-[#2d5038]/25";
+    case "donation":
+      return "bg-[#8a6a12]/15 text-[#8a6a12] border-[#8a6a12]/30";
+    case "general":
+    default:
+      return "bg-[#54333b]/10 text-[#54333b] border-[#54333b]/25";
+  }
+}
+
 export default function LeadsPage() {
   const [leads, setLeads] = useState<LeadItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -55,6 +71,20 @@ export default function LeadsPage() {
   const [sortDir, setSortDir] = useState<1 | -1>(-1);
   const [page, setPage] = useState(1);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set());
+
+  const toggleExpand = (id: string, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setExpandedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) {
+        next.delete(id);
+      } else {
+        next.add(id);
+      }
+      return next;
+    });
+  };
 
   // Fetch leads on mount
   useEffect(() => {
@@ -174,63 +204,139 @@ export default function LeadsPage() {
     }
   };
 
-  const tabs: { key: string; label: string }[] = [
-    { key: "all", label: "All" },
-    { key: "unread", label: "Unread" },
-    { key: "visits", label: "Visits" },
-    { key: "research", label: "Research" },
-    { key: "donation", label: "Donation" },
-    { key: "general", label: "General" },
+  const tabs: {
+    key: string;
+    label: string;
+    activeClass: string;
+    badgeClass: string;
+    colorDot: string;
+  }[] = [
+    {
+      key: "all",
+      label: "All Leads",
+      activeClass: "bg-palette-wine text-white border-palette-wine shadow-xs font-semibold",
+      badgeClass: "bg-white/20 text-white",
+      colorDot: "bg-palette-wine",
+    },
+    {
+      key: "unread",
+      label: "Unread",
+      activeClass: "bg-palette-amber text-[#26171c] border-palette-amber shadow-xs font-bold",
+      badgeClass: "bg-[#26171c]/15 text-[#26171c]",
+      colorDot: "bg-palette-amber",
+    },
+    {
+      key: "visits",
+      label: "Visits",
+      activeClass: "bg-[#1c3f5e] text-white border-[#1c3f5e] shadow-xs font-semibold",
+      badgeClass: "bg-white/20 text-white",
+      colorDot: "bg-[#1c3f5e]",
+    },
+    {
+      key: "research",
+      label: "Research",
+      activeClass: "bg-[#2d5038] text-white border-[#2d5038] shadow-xs font-semibold",
+      badgeClass: "bg-white/20 text-white",
+      colorDot: "bg-[#2d5038]",
+    },
+    {
+      key: "donation",
+      label: "Donation",
+      activeClass: "bg-[#8a6a12] text-white border-[#8a6a12] shadow-xs font-semibold",
+      badgeClass: "bg-white/20 text-white",
+      colorDot: "bg-[#8a6a12]",
+    },
+    {
+      key: "general",
+      label: "General",
+      activeClass: "bg-[#54333b] text-white border-[#54333b] shadow-xs font-semibold",
+      badgeClass: "bg-white/20 text-white",
+      colorDot: "bg-[#54333b]",
+    },
   ];
 
   return (
     <div className="lp-main">
       {/* Title Area */}
-      <div className="lp-title">
-        <h1>Leads</h1>
+      <div className="lp-title flex items-center gap-3.5">
+        <Link
+          href="/admin/dashboard"
+          aria-label="Back to Dashboard"
+          title="Back to Dashboard"
+          className="flex h-9.5 w-9.5 shrink-0 items-center justify-center rounded-xs border border-palette-sand/80 bg-white hover:bg-bg-secondary hover:border-palette-amber text-heading transition-colors shadow-2xs group cursor-pointer"
+        >
+          <Icon name="arrow-left" size={17} className="text-palette-amber group-hover:-translate-x-0.5 transition-transform" />
+        </Link>
+        <h1 className="m-0">Leads</h1>
       </div>
       <p className="lp-intro">
         Enquiries sent from the website&apos;s Contact form. Opening a lead (click it) marks it as read. Hover over a lead to delete it.
       </p>
 
-      {/* Filter & Search Bar */}
-      <div className="lp-filterbar">
-        <ul className="lp-tabs" role="toolbar" aria-label="Filter leads">
-          {tabs.map((t) => (
-            <li key={t.key}>
+      {/* Modern Premium Filter & Search Bar */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 py-3 border-b border-palette-sand/70">
+        {/* Interactive Filter Pills */}
+        <div className="flex flex-wrap items-center gap-2">
+          {tabs.map((t) => {
+            const isActive = tab === t.key;
+            const count = counts[t.key as keyof typeof counts] ?? 0;
+            return (
               <button
+                key={t.key}
                 type="button"
-                data-tab={t.key}
-                aria-pressed={tab === t.key ? "true" : "false"}
+                aria-pressed={isActive}
                 onClick={() => {
                   setTab(t.key);
                   setPage(1);
                 }}
+                className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-[12.5px] font-mono tracking-wider transition-all duration-200 cursor-pointer border ${
+                  isActive
+                    ? t.activeClass
+                    : "bg-white text-heading border-palette-sand/80 shadow-2xs hover:border-palette-amber hover:bg-bg-secondary hover:-translate-y-0.5"
+                }`}
               >
-                {t.label}{" "}
-                <span className="n">
-                  ({counts[t.key as keyof typeof counts] ?? 0})
+                <span className={`h-2 w-2 rounded-full shrink-0 ${t.colorDot}`} />
+                <span>{t.label}</span>
+                <span
+                  className={`px-1.5 py-0.2 rounded-full text-[11px] font-bold ${
+                    isActive
+                      ? t.badgeClass
+                      : "bg-bg-secondary text-muted"
+                  }`}
+                >
+                  {count}
                 </span>
               </button>
-            </li>
-          ))}
-        </ul>
+            );
+          })}
+        </div>
 
-        <div className="lp-search">
-          <span className="lp-count">{filteredList.length} items</span>
-          <label className="sr-only" htmlFor="lp-search">
-            Search leads
-          </label>
+        {/* Search Bar */}
+        <div className="relative w-full md:w-72 shrink-0">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-muted">
+            <Icon name="search" size={15} />
+          </div>
           <input
             id="lp-search"
             type="search"
-            placeholder="Search leads…"
+            placeholder="Search leads, message..."
             value={query}
             onChange={(e) => {
               setQuery(e.target.value);
               setPage(1);
             }}
+            className="w-full pl-9 pr-8 py-2 rounded-xs border border-palette-sand/80 bg-white text-[13px] text-heading placeholder:text-muted/60 focus:border-palette-amber focus:outline-none shadow-2xs transition-colors"
           />
+          {query && (
+            <button
+              type="button"
+              onClick={() => setQuery("")}
+              className="absolute inset-y-0 right-0 pr-2.5 flex items-center text-muted hover:text-heading cursor-pointer"
+              title="Clear search"
+            >
+              <Icon name="close" size={13} />
+            </button>
+          )}
         </div>
       </div>
 
@@ -247,76 +353,126 @@ export default function LeadsPage() {
           <table className="lp-table">
             <thead>
               <tr>
-                <th>
-                  <button type="button" onClick={() => handleSort("name")}>
-                    Name <i>▲▼</i>
-                  </button>
-                </th>
-                <th>Message</th>
-                <th>
-                  <button type="button" onClick={() => handleSort("intent")}>
-                    Subject <i>▲▼</i>
-                  </button>
-                </th>
-                <th>
+                <th className="lp-th-date">
                   <button type="button" onClick={() => handleSort("date")}>
-                    Submitted on <i>▲▼</i>
+                    Submitted on <i>{sortKey === "date" ? (sortDir === 1 ? "▲" : "▼") : "▲▼"}</i>
                   </button>
+                </th>
+                <th className="lp-th-who">
+                  <button type="button" onClick={() => handleSort("name")}>
+                    Name <i>{sortKey === "name" ? (sortDir === 1 ? "▲" : "▼") : "▲▼"}</i>
+                  </button>
+                </th>
+                <th className="lp-th-msg">
+                  Message
                 </th>
               </tr>
             </thead>
             <tbody>
-              {pagedList.map((l) => (
-                <tr
-                  key={l.id}
-                  data-id={l.id}
-                  className={l.status === "unread" ? "is-unread" : ""}
-                  onClick={() => handleRowClick(l)}
-                >
-                  <td className="lp-who">
-                    <div className="lp-who__row">
-                      <span className="lp-avatar" aria-hidden="true">
-                        {initials(l.name)}
-                      </span>
-                      <div>
-                        <strong>{l.name}</strong>
-                        <a
-                          href={`mailto:${l.email}`}
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          {l.email}
-                        </a>
+              {pagedList.map((l) => {
+                const isExpanded = expandedIds.has(l.id);
+                const isLong = l.message.length > 160 || (l.message.match(/\n/g) || []).length >= 3;
+                return (
+                  <tr
+                    key={l.id}
+                    data-id={l.id}
+                    className={`transition-colors hover:bg-bg-secondary/35 ${l.status === "unread" ? "is-unread" : ""}`}
+                    onClick={() => handleRowClick(l)}
+                  >
+                    {/* 1. Submitted on */}
+                    <td className="lp-date">
+                      <div className="font-mono text-[12.5px] text-palette-wine/90 font-medium whitespace-nowrap">
+                        {formatDate(l.date)}
                       </div>
-                    </div>
-                  </td>
-                  <td className="lp-msg">
-                    {l.status === "unread" && (
-                      <span className="lp-badge">New</span>
-                    )}
-                    <p>{l.message}</p>
-                    <div className="lp-actions">
-                      <button
-                        type="button"
-                        data-act="delete"
-                        className="warn"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(l.id);
-                        }}
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  </td>
-                  <td className="lp-subject">
-                    <b>{SUBJECTS[l.intent] || l.intent}</b>
-                    <span className={`lp-chip lp-chip--${l.intent}`}>
-                      {l.intent}
-                    </span>
-                  </td>
-                  <td className="lp-date">{formatDate(l.date)}</td>
-                </tr>
-              ))}
+                    </td>
+
+                    {/* 2. Name (No Phone Number) */}
+                    <td className="lp-who">
+                      <div className="lp-who__row">
+                        <span className="lp-avatar shadow-2xs font-mono font-bold text-[14px]" aria-hidden="true">
+                          {initials(l.name)}
+                        </span>
+                        <div className="min-w-0">
+                          <strong className="truncate block font-semibold text-heading text-[14.5px]">{l.name}</strong>
+                          <a
+                            href={`mailto:${l.email}`}
+                            onClick={(e) => e.stopPropagation()}
+                            className="truncate block text-[12.5px] text-palette-wine hover:text-palette-amber hover:underline transition-colors mt-0.5"
+                          >
+                            {l.email}
+                          </a>
+                        </div>
+                      </div>
+                    </td>
+
+                    {/* 3. Message */}
+                    <td className="lp-msg">
+                      {/* Subject Tab in different color */}
+                      <div className="flex items-center gap-2 mb-2 flex-wrap">
+                        {l.status === "unread" && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full bg-palette-amber text-[#26171c] font-mono text-[10px] font-bold uppercase tracking-wider shadow-2xs">
+                            New
+                          </span>
+                        )}
+                        <span
+                          className={`inline-flex items-center px-2.5 py-0.5 rounded-full font-mono text-[11px] font-semibold uppercase tracking-wider border shadow-2xs ${getIntentChipStyle(
+                            l.intent
+                          )}`}
+                        >
+                          {SUBJECTS[l.intent] || l.intent}
+                        </span>
+                      </div>
+
+                      {/* Message Content: default 4 lines, click to expand accordion in place */}
+                      <div className="relative">
+                        <p
+                          className={`text-[13.5px] leading-relaxed text-heading cursor-pointer select-text transition-all ${
+                            isExpanded ? "whitespace-pre-wrap" : "line-clamp-4"
+                          }`}
+                          onClick={(e) => {
+                            if (isLong) {
+                              toggleExpand(l.id, e);
+                            }
+                          }}
+                          title={isLong ? (isExpanded ? "Click to collapse message" : "Click to read full message") : undefined}
+                        >
+                          {l.message}
+                        </p>
+
+                        {isLong && (
+                          <button
+                            type="button"
+                            onClick={(e) => toggleExpand(l.id, e)}
+                            className="mt-1.5 inline-flex items-center gap-1 font-mono text-[11.5px] text-palette-wine hover:text-palette-amber font-bold cursor-pointer transition-colors group/expand"
+                          >
+                            <span>{isExpanded ? "Show less" : "... Read full message"}</span>
+                            <Icon
+                              name={isExpanded ? "chevron-up" : "chevron-down"}
+                              size={12}
+                              className="transition-transform group-hover/expand:scale-110"
+                            />
+                          </button>
+                        )}
+                      </div>
+
+                      {/* Action buttons on hover */}
+                      <div className="lp-actions">
+                        <button
+                          type="button"
+                          data-act="delete"
+                          className="warn"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(l.id);
+                          }}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
 

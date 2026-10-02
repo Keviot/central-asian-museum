@@ -1,6 +1,4 @@
 import { PrismaClient, ExhibitionStatus } from "@prisma/client";
-import { hash } from "bcryptjs";
-import { newsEventsData } from "../lib/newsEvents";
 
 const prisma = new PrismaClient();
 
@@ -248,31 +246,18 @@ const exhibitions = [
 ];
 
 async function main() {
-  console.log("🌱 Starting Central Asian Museum Database Seeding...");
+  console.log("Seeding 12 exhibitions from CAM into database...");
 
-  // 1. Seed Default Admin User
-  const adminEmail = "centralasianmuseum26@gmail.com";
-  const existingAdmin = await prisma.adminUser.findUnique({
-    where: { email: adminEmail },
+  // Delete test records if any that don't belong
+  const allowedSlugs = exhibitions.map((e) => e.slug);
+  await prisma.exhibition.deleteMany({
+    where: {
+      slug: {
+        notIn: allowedSlugs,
+      },
+    },
   });
 
-  if (!existingAdmin) {
-    const passwordHash = await hash("MuseumAdmin2026!", 12);
-    await prisma.adminUser.create({
-      data: {
-        email: adminEmail,
-        passwordHash,
-        name: "Chief Curator",
-        role: "ADMIN",
-      },
-    });
-    console.log(`✅ Created Admin User: ${adminEmail}`);
-  } else {
-    console.log(`ℹ️ Admin User already exists: ${adminEmail}`);
-  }
-
-  // 2. Seed All 12 Exhibitions
-  console.log("🌱 Seeding 12 Exhibitions...");
   for (const ex of exhibitions) {
     await prisma.exhibition.upsert({
       where: { slug: ex.slug },
@@ -316,42 +301,16 @@ async function main() {
         createdAt: ex.createdAt,
       },
     });
-    console.log(`✅ Seeded Exhibition: ${ex.title}`);
+    console.log(`Upserted: ${ex.title} (${ex.slug})`);
   }
 
-  // 3. Seed News & Events
-  for (const news of newsEventsData) {
-    const existingNews = await prisma.newsEvent.findUnique({
-      where: { slug: news.slug },
-    });
-
-    if (!existingNews) {
-      await prisma.newsEvent.create({
-        data: {
-          slug: news.slug,
-          title: news.title,
-          category: news.category,
-          date: news.date,
-          readTime: "5 min read",
-          location: news.location,
-          imageSrc: news.imageSrc,
-          imageAlt: news.imageAlt,
-          summary: news.summary,
-          content: news.fullContent || news.summary,
-          status: "Published",
-          seoKeywords: [news.category, news.title, "Central Asian Museum"],
-        },
-      });
-      console.log(`✅ Seeded News Event: ${news.title}`);
-    }
-  }
-
-  console.log("🎉 Database Seeding Completed Successfully!");
+  const count = await prisma.exhibition.count();
+  console.log(`Finished! Total exhibitions in database: ${count}`);
 }
 
 main()
   .catch((e) => {
-    console.error("❌ Error Seeding Database:", e);
+    console.error(e);
     process.exit(1);
   })
   .finally(async () => {

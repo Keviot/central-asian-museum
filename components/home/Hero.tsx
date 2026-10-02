@@ -21,7 +21,7 @@ export function Hero({
   imageAlt = "The Central Asian Museum tower in the Tsas Soma Garden, Leh, with the mountains behind",
 }: HeroProps) {
   return (
-    <section className="relative flex min-h-screen w-full items-start overflow-hidden">
+    <section className="relative flex min-h-screen w-full items-stretch overflow-hidden">
       <Image
         src={imageSrc}
         alt={imageAlt}
@@ -36,15 +36,15 @@ export function Hero({
         aria-hidden
       />
 
-      <div className="relative z-10 mx-auto w-full max-w-360 px-6 pb-16 pt-32 sm:pt-36 md:px-10 md:pb-24 md:pt-40 lg:px-14 lg:pb-28 lg:pt-44">
+      <div className="relative z-10 mx-auto flex w-full max-w-360 flex-col justify-end px-6 pb-10 pt-32 sm:pt-36 md:px-10 md:pb-12 md:pt-40 lg:px-14 lg:pb-14 lg:pt-44">
         <div className="max-w-180 animate-[heroFade_1.05s_ease-out_both]">
           {label && (
-            <p className="mb-5 text-[11px] font-medium uppercase tracking-[0.28em] text-white/80 md:mb-6 md:text-[12px]">
+            <p className="mb-5 text-[12px] font-medium uppercase tracking-[0.28em] text-white/80 md:mb-6">
               {label}
             </p>
           )}
 
-          <h1 className="font-heading text-[42px] font-medium leading-[1.08] tracking-[-0.01em] text-white sm:text-[48px] md:text-[64px] lg:text-[88px]">
+          <h1 className="font-heading text-[37px] font-medium leading-[1.08] tracking-[-0.01em] text-white sm:text-[42px] md:text-[56px] lg:text-[76px]">
             {heading}
           </h1>
 

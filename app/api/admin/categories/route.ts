@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { exhibitionsData } from "@/lib/exhibitions";
 import { newsEventsData } from "@/lib/newsEvents";
 
 export const dynamic = "force-dynamic";
@@ -66,10 +65,9 @@ async function getCategoryListAndUsage(type: "exhibition" | "news") {
     }
   } else {
     try {
-      const dbItems = await prisma.exhibition.findMany({ select: { category: true } });
-      items = dbItems.length > 0 ? dbItems : exhibitionsData;
+      items = await prisma.exhibition.findMany({ select: { category: true } });
     } catch {
-      items = exhibitionsData;
+      items = [];
     }
   }
 

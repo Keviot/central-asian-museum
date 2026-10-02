@@ -11,7 +11,7 @@ interface NewsExplorerProps {
   initialPosts?: NewsPost[];
 }
 
-const ITEMS_PER_PAGE = 9;
+const ITEMS_PER_PAGE = 6;
 
 export function NewsExplorer({ initialPosts = newsData.posts }: NewsExplorerProps) {
   const [searchQuery, setSearchQuery] = useState("");

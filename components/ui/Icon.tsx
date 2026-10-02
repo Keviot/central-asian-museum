@@ -35,8 +35,12 @@ export type IconName =
   | "route"
   | "lotus"
   | "users"
+  | "user"
+  | "arrow-up"
   | "sun"
-  | "snowflake";
+  | "snowflake"
+  | "key"
+  | "log-out";
 
 export type IconProps = ComponentProps<"svg"> & {
   name: IconName;
@@ -247,6 +251,18 @@ export function Icon({
           <path d="M16 3.13a4 4 0 0 1 0 7.75" />
         </>
       )}
+      {name === "user" && (
+        <>
+          <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </>
+      )}
+      {name === "arrow-up" && (
+        <>
+          <path d="m5 12 7-7 7 7" />
+          <path d="M12 19V5" />
+        </>
+      )}
       {name === "sun" && (
         <>
           <circle cx="12" cy="12" r="4" />
@@ -268,6 +284,20 @@ export function Icon({
           <path d="m4 8 4 4-4 4" />
           <path d="m16 4-4 4-4-4" />
           <path d="m8 20 4-4 4 4" />
+        </>
+      )}
+      {name === "key" && (
+        <>
+          <circle cx="7.5" cy="15.5" r="5.5" />
+          <path d="m21 2-9.6 9.6" />
+          <path d="m15.5 7.5 3 3" />
+        </>
+      )}
+      {name === "log-out" && (
+        <>
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+          <polyline points="16 17 21 12 16 7" />
+          <line x1="21" y1="12" x2="9" y2="12" />
         </>
       )}
     </svg>

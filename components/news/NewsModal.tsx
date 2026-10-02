@@ -59,8 +59,8 @@ export function NewsModal({
         track.scrollLeft = targetLeft;
       }
 
-      // Reset scroll of the active slide text
-      const slideEls = track.querySelectorAll(".news-modal__text");
+      // Reset scroll of the active slide body
+      const slideEls = track.querySelectorAll(".news-modal__body");
       if (slideEls[validIndex]) {
         (slideEls[validIndex] as HTMLElement).scrollTop = 0;
       }

@@ -72,15 +72,17 @@ export default async function ExhibitionDetailPage({ params }: Props) {
     notFound();
   }
 
-  // Fetch the other exhibition so users can navigate between them
+  // Fetch the next exhibition in sequence so users can navigate between all 12
   let nextExhibition: { slug: string; title: string } | null = null;
   try {
-    const other = await prisma.exhibition.findFirst({
-      where: { NOT: { slug: exhibition.slug } },
+    const all = await prisma.exhibition.findMany({
+      orderBy: { createdAt: "desc" },
       select: { slug: true, title: true },
     });
-    if (other) {
-      nextExhibition = other;
+    const currentIndex = all.findIndex((e) => e.slug === exhibition.slug);
+    if (currentIndex !== -1 && all.length > 1) {
+      const nextIndex = (currentIndex + 1) % all.length;
+      nextExhibition = all[nextIndex];
     }
   } catch (e) {
     // ignore
@@ -255,10 +257,11 @@ export default async function ExhibitionDetailPage({ params }: Props) {
                 href="/exhibitions"
                 variant="outline"
                 size="md"
-                icon="arrow-right"
-                className="self-start rotate-180 inline-flex flex-row-reverse"
+                icon="arrow-left"
+                iconPosition="left"
+                className="self-start"
               >
-                <span>All Exhibitions</span>
+                All Exhibitions
               </Button>
 
               {nextExhibition && (

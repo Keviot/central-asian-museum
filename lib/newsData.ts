@@ -24,7 +24,7 @@ export interface NewsSectionData {
 export const newsData: NewsSectionData = {
   eyebrow: "Lectures, Workshops & Updates",
   heading: "Museum News & Events",
-  lead: "Milestones, programmes and events at the museum and around the Tsas Soma Garden.",
+  lead: "Milestones, programmes and events at the Central Asian Museum complex.",
   page_lead:
     "Milestones in the museum's story, and the programmes and events that bring the Tsas Soma Garden to life.",
   posts: [

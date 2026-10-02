@@ -35,7 +35,7 @@ export function SectionHeading({
             className="h-px w-6 bg-primary"
             aria-hidden="true"
           />
-          <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary md:text-[12px]">
+          <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-primary">
             {kicker}
           </p>
           {align === "center" && (

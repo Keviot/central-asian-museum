@@ -60,14 +60,12 @@ export type FloorsSliderProps = {
   slides?: FloorSlide[];
 };
 
-// Helper to generate responsive srcset (800w, 1280w, 1537w)
 function getSrcSet(image: string): string {
   const base = image.replace(/\.webp$/, "");
   return `${base}-800.webp 800w, ${base}-1280.webp 1280w, ${image} 1537w`;
 }
 
 // Inner edge of each square in the 320px level-logo artwork [left, top, right, bottom].
-// The "drawn" layer shows everything outside this hole; the hole shrinks as you go up, so squares appear outer to inner.
 const HOLES = [
   [43, 43, 275.5, 281],
   [61.5, 62, 257, 263],
@@ -87,11 +85,22 @@ function clamp(v: number, lo: number, hi: number): number {
   return Math.max(lo, Math.min(hi, v));
 }
 
+// Floor bands for the tower facade illustration in % of height [top, bottom]
+// 0: Ladakh (ground), 1: Central Asia (floor 1), 2: Tibet (floor 2), 3: Changing Exhibitions (floor 3)
+const FACADE_BANDS = [
+  [74.50, 100],
+  [53.68, 74.50],
+  [30.81, 53.68],
+  [0, 30.81],
+];
+
 export function FloorsSlider({
   slides = defaultFloorSlides,
 }: FloorsSliderProps) {
   // Desktop v2 DOM refs
   const flxRef = useRef<HTMLElement>(null);
+  const railRef = useRef<HTMLDivElement>(null);
+  const facadeRef = useRef<HTMLDivElement>(null);
   const slideEls = useRef<(HTMLElement | null)[]>([]);
   const imgEls = useRef<(HTMLImageElement | null)[]>([]);
   const dimEls = useRef<(HTMLDivElement | null)[]>([]);
@@ -102,6 +111,9 @@ export function FloorsSlider({
   const navBtnEls = useRef<(HTMLButtonElement | null)[]>([]);
   const lastIndexRef = useRef(-1);
   const rafRef = useRef<number>(0);
+
+  // Target and current facade highlight values for buttery smooth eased motion
+  const curFacadeRef = useRef({ t: FACADE_BANDS[0][0], b: FACADE_BANDS[0][1] });
 
   // Mobile compact slider state
   const mobileRef = useRef<HTMLElement>(null);
@@ -116,6 +128,13 @@ export function FloorsSlider({
     if (unit <= 0) return;
     const t = clamp(-root.getBoundingClientRect().top / unit, 0, n - 1);
 
+    // Sync facade height with rail height
+    if (railRef.current && facadeRef.current) {
+      facadeRef.current.style.setProperty("--facade-h", `${railRef.current.offsetHeight}px`);
+    }
+
+    // 1. Reveal slides with 220px soft feathering mask
+    const FEATHER = 220;
     slides.forEach((_, k) => {
       const s = slideEls.current[k];
       const img = imgEls.current[k];
@@ -125,7 +144,27 @@ export function FloorsSlider({
 
       const f = k === 0 ? 1 : clamp(t - (k - 1), 0, 1);
       const g = clamp(t - k, 0, 1);
-      s.style.clipPath = `inset(0 0 ${((1 - f) * 100).toFixed(3)}% 0)`;
+      const h = s.getBoundingClientRect().height || window.innerHeight;
+      const r = f * h;
+      const feather = Math.max(0, Math.min(FEATHER, 2 * r, 2 * (h - r)));
+
+      s.style.setProperty("--reveal", `${r.toFixed(1)}px`);
+      s.style.setProperty("--feather", `${feather.toFixed(1)}px`);
+
+      if (k === 0) {
+        s.style.clipPath = "none";
+        s.style.maskImage = "none";
+        s.style.webkitMaskImage = "none";
+      } else {
+        const clipBottom = Math.max(0, h - r - feather / 2);
+        s.style.clipPath = `inset(0 0 ${clipBottom.toFixed(1)}px 0)`;
+        const maskTop = (r - feather / 2).toFixed(1);
+        const maskBot = (r + feather / 2).toFixed(1);
+        const maskVal = `linear-gradient(to bottom, #000 ${maskTop}px, transparent ${maskBot}px)`;
+        s.style.maskImage = maskVal;
+        s.style.webkitMaskImage = maskVal;
+      }
+
       img.style.transform = `translate3d(0,${(-(1 - f) * 16 + g * 9).toFixed(3)}%,0) scale(1.08)`;
       dim.style.opacity = (g * 0.6).toFixed(3);
       const c = clamp(1 - Math.abs(t - k) * 1.8, 0, 1);
@@ -137,6 +176,29 @@ export function FloorsSlider({
       }
     });
 
+    // 2. Facade Building Highlight tracking current floor
+    if (facadeRef.current) {
+      const idx = Math.min(Math.floor(t), FACADE_BANDS.length - 2);
+      const frac = t - idx;
+      const a = FACADE_BANDS[idx];
+      const b = FACADE_BANDS[Math.min(idx + 1, FACADE_BANDS.length - 1)];
+      const targetT = a[0] + (b[0] - a[0]) * frac;
+      const targetB = a[1] + (b[1] - a[1]) * frac;
+
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (reduce) {
+        curFacadeRef.current = { t: targetT, b: targetB };
+      } else {
+        const ease = 0.2;
+        curFacadeRef.current.t += (targetT - curFacadeRef.current.t) * ease;
+        curFacadeRef.current.b += (targetB - curFacadeRef.current.b) * ease;
+      }
+
+      facadeRef.current.style.setProperty("--hl-top", `${curFacadeRef.current.t.toFixed(3)}%`);
+      facadeRef.current.style.setProperty("--hl-bot", `${curFacadeRef.current.b.toFixed(3)}%`);
+    }
+
+    // 3. Dynamic Level Logo Hole Animation
     const h = hole(t);
     const clip = `polygon(evenodd, 0% 0%, 100% 0%, 100% 100%, 0% 100%, 0% 0%, ${h[0]}% ${h[1]}%, ${h[0]}% ${h[3]}%, ${h[2]}% ${h[3]}%, ${h[2]}% ${h[1]}%, ${h[0]}% ${h[1]}%)`;
     drawnEls.current.forEach((d) => {
@@ -242,7 +304,8 @@ export function FloorsSlider({
     <>
       {/* =========================================================================
           Desktop (1024px+): Floors Slider v2
-          Scroll-linked reveal, CSS scroll-snap proximity, dynamic level logo
+          Scroll-linked reveal, CSS scroll-snap proximity, dynamic level logo,
+          tower facade highlight on the left, reverse floor navigation
           ========================================================================= */}
       <section
         id="floors"
@@ -258,6 +321,26 @@ export function FloorsSlider({
           ))}
         </div>
         <div className="flx__stage">
+          {/* Building Facade on Left mirroring Rail (#37) */}
+          <div
+            ref={facadeRef}
+            className="flx-facade"
+            aria-hidden="true"
+          >
+            <img
+              className="flx-facade__base"
+              src="/images/facade.webp"
+              alt=""
+              decoding="async"
+            />
+            <img
+              className="flx-facade__lit"
+              src="/images/facade.webp"
+              alt=""
+              decoding="async"
+            />
+          </div>
+
           {slides.map((slide, idx) => (
             <article
               key={slide.title}
@@ -323,7 +406,8 @@ export function FloorsSlider({
             </article>
           ))}
 
-          <div className="flx__rail">
+          {/* Right Side Rail with Level Mark and Floor List */}
+          <div ref={railRef} className="flx__rail">
             <div
               ref={logoEl}
               className="flx__logo"
@@ -359,6 +443,8 @@ export function FloorsSlider({
                 </span>
               ))}
             </div>
+
+            {/* Floor list rendered in reverse order (Ladakh ground floor at bottom) */}
             <ul className="flx__nav">
               {slides.map((slide, idx) => (
                 <li key={slide.title}>
@@ -382,7 +468,7 @@ export function FloorsSlider({
 
       {/* =========================================================================
           Phones & Tablets (<1024px): Compact Floors Slider
-          Compact top rail, stacked floor mark, responsive images
+          Floors slide down from top, top-down reveal with soft feathering
           ========================================================================= */}
       <div className="floors-compact">
         <section

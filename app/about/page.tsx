@@ -7,6 +7,7 @@ import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { SectionHeading } from "@/components/ui/SectionHeading";
+import { Timeline } from "@/components/about/Timeline";
 import {
   timelineEntries,
   missionData,
@@ -26,33 +27,14 @@ export default function AboutPage() {
 
       <main className="flex-1">
         {/* about.hero */}
-        <section className="relative overflow-hidden border-b border-border-subtle bg-bg-secondary py-16 md:py-24">
+        <section className="relative overflow-hidden border-b border-border-subtle bg-bg-secondary py-12 sm:py-16 md:py-18 lg:py-20">
           <div
             className="pointer-events-none absolute -right-24 top-0 h-96 w-96 rounded-full bg-palette-sand/40 blur-3xl"
             aria-hidden="true"
           />
 
           <Container className="relative z-10">
-            {/* Breadcrumbs */}
-            <nav
-              className="mb-6 flex items-center gap-2 text-[12px] uppercase tracking-[0.14em] text-muted"
-              aria-label="Breadcrumb"
-            >
-              <Link href="/" className="hover:text-heading transition-colors">
-                Home
-              </Link>
-              <Icon name="chevron-right" size={12} className="text-palette-sage" />
-              <span className="text-heading font-medium">About Us</span>
-            </nav>
-
-            <div className="max-w-200">
-              <div className="mb-4 inline-flex items-center gap-3">
-                <span aria-hidden="true" className="h-px w-8 bg-primary" />
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary md:text-[12px]">
-                  About the Museum
-                </p>
-              </div>
-
+            <div>
               <h1 className="font-heading text-[38px] font-medium leading-[1.1] tracking-[-0.01em] text-heading sm:text-[48px] md:text-[58px] lg:text-[66px]">
                 A Museum at the Crossroads of Central Asia and Ladakh
               </h1>
@@ -65,7 +47,7 @@ export default function AboutPage() {
         </section>
 
         {/* about.intro */}
-        <section id="intro" className="py-20 md:py-28">
+        <section id="intro" className="py-14 sm:py-16 md:py-18 lg:py-20">
           <Container>
             <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-6">
@@ -113,7 +95,7 @@ export default function AboutPage() {
         {/* about.connection */}
         <section
           id="connection"
-          className="border-t border-border-subtle bg-bg-secondary py-20 md:py-28"
+          className="border-t border-border-subtle bg-bg-secondary py-14 sm:py-16 md:py-18 lg:py-20"
         >
           <Container>
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
@@ -144,7 +126,7 @@ export default function AboutPage() {
         </section>
 
         {/* about.site-history */}
-        <section id="site-history" className="py-20 md:py-28">
+        <section id="site-history" className="py-14 sm:py-16 md:py-18 lg:py-20">
           <Container>
             <div className="grid grid-cols-1 items-center gap-14 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-7 lg:col-start-6 lg:order-2">
@@ -195,7 +177,7 @@ export default function AboutPage() {
         {/* about.timeline */}
         <section
           id="timeline"
-          className="border-t border-border-subtle bg-bg-secondary py-20 md:py-28"
+          className="border-t border-border-subtle bg-bg-secondary py-14 sm:py-16 md:py-18 lg:py-20"
         >
           <Container>
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
@@ -209,34 +191,19 @@ export default function AboutPage() {
                 </p>
               </div>
               <div className="lg:col-span-7">
-                <ol className="timeline">
-                  {timelineEntries.map((e, idx) => (
-                    <li key={idx}>
-                      <p className="font-heading text-[20px] font-medium text-palette-wine md:text-[22px]">
-                        {e.isTbdDate ? (
-                          <mark className="tbd">{e.date}</mark>
-                        ) : (
-                          e.date
-                        )}
-                      </p>
-                      <p className="mt-1 text-[15px] leading-relaxed text-body md:mt-0 md:text-[16px]">
-                        {e.text}
-                      </p>
-                    </li>
-                  ))}
-                </ol>
+                <Timeline entries={timelineEntries} />
               </div>
             </div>
           </Container>
         </section>
 
         {/* about.ethos */}
-        <section id="ethos" className="scroll-mt-24 py-20 md:py-28">
+        <section id="ethos" className="scroll-mt-24 py-14 sm:py-16 md:py-18 lg:py-20">
           <Container className="text-center">
             <div className="mx-auto max-w-180">
               <div className="mb-3.5 inline-flex items-center justify-center gap-2.5">
                 <span aria-hidden="true" className="h-px w-6 bg-primary" />
-                <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary md:text-[12px]">
+                <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-primary">
                   Our Ethos
                 </p>
                 <span aria-hidden="true" className="h-px w-6 bg-primary" />
@@ -257,7 +224,7 @@ export default function AboutPage() {
         {/* about.mission */}
         <section
           id="mission"
-          className="border-t border-border-subtle bg-bg-secondary py-20 md:py-28"
+          className="border-t border-border-subtle bg-bg-secondary py-14 sm:py-16 md:py-18 lg:py-20"
         >
           <Container>
             <SectionHeading
@@ -283,6 +250,15 @@ export default function AboutPage() {
                   </p>
                 </div>
               ))}
+              <div className="mission-cta">
+                <Link
+                  href="/contact#donate"
+                  className="mission-cta__btn"
+                >
+                  <span>Support our mission</span>
+                  <Icon name="arrow-right" size={16} />
+                </Link>
+              </div>
             </div>
           </Container>
         </section>
@@ -305,7 +281,7 @@ export default function AboutPage() {
               <div className="lg:col-span-6">
                 <div className="mb-3.5 inline-flex items-center gap-2.5">
                   <span aria-hidden="true" className="h-px w-6 bg-palette-sand" />
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-palette-sand md:text-[12px]">
+                  <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-palette-sand">
                     The Building
                   </p>
                 </div>
@@ -332,7 +308,7 @@ export default function AboutPage() {
         </section>
 
         {/* about.people */}
-        <section id="people" className="py-20 md:py-28">
+        <section id="people" className="py-14 sm:py-16 md:py-18 lg:py-20">
           <Container>
             <div className="grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-5">
@@ -362,32 +338,64 @@ export default function AboutPage() {
                   )}
                 </div>
                 <div className="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
-                  {group.roles.map((r, idx) => (
-                    <div
-                      key={idx}
-                      className="flex flex-col rounded-sm border border-border bg-surface p-7"
-                    >
-                      <div className="flex h-12 w-12 items-center justify-center rounded-[3px] bg-palette-sand/40 text-palette-wine">
-                        <Icon name="users" size={20} />
-                      </div>
-                      <h4 className="mt-6 font-heading text-[22px] font-medium text-heading">
-                        {r.role}
-                      </h4>
-                      {r.name && (
-                        <p className="mt-1 text-[12px] font-semibold tracking-[0.06em] text-palette-amber">
-                          {r.name}
+                  {group.roles.map((r, idx) => {
+                    const isSingle =
+                      r.role === "Director" ||
+                      r.role === "General Secretary" ||
+                      r.role === "Treasurer";
+                    const isDirector = r.role === "Director";
+
+                    const cardContent = (
+                      <div
+                        className="flex h-full flex-col rounded-sm border border-border bg-surface p-7"
+                      >
+                        <div className="flex h-12 w-12 items-center justify-center rounded-[3px] bg-palette-sand/40 text-palette-wine">
+                          <Icon name={isSingle ? "user" : "users"} size={20} />
+                        </div>
+                        <h4 className="mt-6 font-heading text-[22px] font-medium text-heading">
+                          {r.role}
+                        </h4>
+                        {Array.isArray(r.name) ? (
+                          <ul className="advisors-list">
+                            {r.name.map((n, i) => (
+                              <li key={i} className="text-[12px] font-semibold tracking-[0.06em] text-palette-amber">
+                                {n}
+                              </li>
+                            ))}
+                          </ul>
+                        ) : r.name ? (
+                          <p className="mt-1 text-[12px] font-semibold tracking-[0.06em] text-palette-amber">
+                            {r.name}
+                          </p>
+                        ) : null}
+                        <p className="mt-4 text-[14px] leading-relaxed text-body">
+                          {r.description}
                         </p>
-                      )}
-                      <p className="mt-4 text-[14px] leading-relaxed text-body">
-                        {r.description}
-                      </p>
-                    </div>
-                  ))}
+                      </div>
+                    );
+
+                    if (isDirector) {
+                      return (
+                        <a
+                          key={idx}
+                          href="https://www.linkedin.com/in/noor-jahan-5b709aa8/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          aria-label="Director: Dr Noor Jahan Chunka on LinkedIn"
+                          className="block transition-none"
+                        >
+                          {cardContent}
+                        </a>
+                      );
+                    }
+
+                    return <div key={idx}>{cardContent}</div>;
+                  })}
                 </div>
               </div>
             ))}
 
-            <div className="mt-16 max-w-200 space-y-4 text-[15px] leading-relaxed text-body md:text-[16px]">
+            <div className="mt-16 space-y-4 text-[15px] leading-relaxed text-body md:text-[16px]">
               <p>
                 Together, the committee and staff work to ensure that the Central Asian Museum remains a well-managed and accessible cultural institution. While each person has a defined role, the functioning of the museum depends on collaboration between the governing committee, professional advisors and the staff who engage with the museum and its visitors every day.
               </p>
@@ -401,13 +409,13 @@ export default function AboutPage() {
         {/* about.living-museum */}
         <section
           id="living-museum"
-          className="border-t border-border bg-bg-secondary py-20 md:py-28"
+          className="border-t border-border bg-bg-secondary py-14 sm:py-16 md:py-18 lg:py-20"
         >
           <Container className="text-center">
             <div className="mx-auto max-w-180">
               <div className="mb-4 inline-flex items-center justify-center gap-3">
                 <span aria-hidden="true" className="h-px w-8 bg-primary" />
-                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-primary md:text-[12px]">
+                <p className="text-[12px] font-semibold uppercase tracking-[0.24em] text-primary">
                   A Living Museum
                 </p>
                 <span aria-hidden="true" className="h-px w-8 bg-primary" />

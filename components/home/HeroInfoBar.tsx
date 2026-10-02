@@ -47,24 +47,24 @@ export function HeroInfoBar({
       <div className="mx-auto max-w-360 px-6 py-5 md:px-10 lg:px-14 lg:py-6">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-8">
           {/* Info Columns Wrapper */}
-          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:flex lg:flex-1 lg:items-center lg:gap-10 xl:gap-14">
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:flex lg:flex-1 lg:items-stretch lg:gap-10 xl:gap-14">
             
             {/* 1. Museum Hours Item with Summer / Winter Switch */}
-            <div className="group flex items-start gap-4" data-hours>
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-palette-amber/40 bg-palette-amber/15 text-palette-amber transition-colors duration-300 group-hover:bg-palette-amber/25">
+            <div className="group flex items-start gap-4 lg:flex-1" data-hours>
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-palette-amber/40 bg-palette-amber/15 text-palette-amber transition-colors duration-300 group-hover:bg-palette-amber/25 lg:self-center">
                 <Icon name="clock" size={20} />
               </div>
-              <div className="flex flex-col justify-center">
-                <span className="font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-palette-sand">
+              <div className="flex flex-col justify-start">
+                <span className="font-heading text-[12.5px] lg:text-[13px] font-bold uppercase tracking-[0.22em] text-palette-sand">
                   {hoursTitle}
                 </span>
-                <p className="hours-time mt-1 font-sans text-[14px] font-medium text-white sm:text-[15px]" aria-live="polite">
+                <div className="hours-time mt-1.5 font-sans text-[14px] font-medium text-white sm:text-[15px]" aria-live="polite">
                   <span
                     className={`hours-time__item ${activeSeason === "summer" ? "is-active" : ""}`}
                     data-season="summer"
                   >
                     10 am to 6 pm{" "}
-                    <small className="ml-1 text-[11px] font-normal text-white/55">
+                    <small className="ml-1 text-[12px] font-normal text-white/55">
                       May to October
                     </small>
                   </span>
@@ -73,11 +73,11 @@ export function HeroInfoBar({
                     data-season="winter"
                   >
                     10 am to 5 pm{" "}
-                    <small className="ml-1 text-[11px] font-normal text-white/55">
+                    <small className="ml-1 text-[12px] font-normal text-white/55">
                       Winter
                     </small>
                   </span>
-                </p>
+                </div>
                 <div
                   className={`hours-switch ${activeSeason === "winter" ? "is-winter" : ""}`}
                   role="group"
@@ -119,7 +119,7 @@ export function HeroInfoBar({
 
             {/* Vertical Gradient Separator */}
             <div
-              className="hidden h-10 w-px bg-linear-to-b from-transparent via-palette-sand/25 to-transparent lg:block"
+              className="hidden h-10 w-px bg-linear-to-b from-transparent via-palette-sand/25 to-transparent lg:block lg:self-center"
               aria-hidden="true"
             />
 
@@ -128,39 +128,42 @@ export function HeroInfoBar({
               href="https://maps.app.goo.gl/CHsSHHyECqD3nZUe7"
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-start gap-4 transition-opacity hover:opacity-90"
+              className="group flex items-start gap-4 transition-opacity hover:opacity-90 lg:flex-1"
               title="View Central Asian Museum on Google Maps"
             >
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-palette-lapis/40 bg-palette-lapis/20 text-palette-lapis transition-colors duration-300 group-hover:bg-palette-lapis/30">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-palette-lapis/40 bg-palette-lapis/20 text-palette-lapis transition-colors duration-300 group-hover:bg-palette-lapis/30 lg:self-center">
                 <Icon name="map-pin" size={20} />
               </div>
-              <div className="flex flex-col justify-center">
-                <span className="font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-palette-sand">
+              <div className="flex flex-col justify-start">
+                <span className="font-heading text-[12.5px] lg:text-[13px] font-bold uppercase tracking-[0.22em] text-palette-sand">
                   {locationTitle}
                 </span>
-                <div className="mt-1 font-sans text-[14px] font-medium text-white sm:text-[15px] leading-tight underline decoration-white/40 underline-offset-2 group-hover:decoration-white">
+                <div className="mt-1.5 font-sans text-[14px] font-medium text-white sm:text-[15px] leading-tight underline decoration-white/40 underline-offset-2 group-hover:decoration-white">
                   {locationDetail}
                 </div>
+                <p className="mt-1 text-[12px] font-normal text-white/55 tabular-nums">
+                  34.165226° N, 77.584781° E
+                </p>
               </div>
             </a>
 
             {/* Vertical Gradient Separator */}
             <div
-              className="hidden h-10 w-px bg-linear-to-b from-transparent via-palette-sand/25 to-transparent lg:block"
+              className="hidden h-10 w-px bg-linear-to-b from-transparent via-palette-sand/25 to-transparent lg:block lg:self-center"
               aria-hidden="true"
             />
 
             {/* 3. Entry Fees Item */}
-            <div className="group flex items-start gap-4">
-              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-palette-rose/40 bg-palette-rose/15 text-palette-rose transition-colors duration-300 group-hover:bg-palette-rose/25">
+            <div className="group flex items-start gap-4 lg:flex-1">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-palette-rose/40 bg-palette-rose/15 text-palette-rose transition-colors duration-300 group-hover:bg-palette-rose/25 lg:self-center">
                 <Icon name="ticket" size={20} />
               </div>
-              <div className="flex flex-col justify-center">
-                <span className="font-heading text-[11px] font-semibold uppercase tracking-[0.22em] text-palette-sand">
+              <div className="flex flex-col justify-start">
+                <span className="font-heading text-[12.5px] lg:text-[13px] font-bold uppercase tracking-[0.22em] text-palette-sand">
                   {entryFeeTitle}
                 </span>
-                <p className="mt-1 font-sans text-[14px] font-medium text-white sm:text-[15px]">
-                  <span aria-label="50 rupees">₹50</span>{" "}
+                <p className="mt-1.5 font-sans text-[14px] font-medium text-white sm:text-[15px]">
+                  <span aria-label="50 rupees" className="text-white/60">₹50</span>{" "}
                   <span className="text-[12px] font-normal text-white/60">
                     Indian nationals
                   </span>
@@ -191,4 +194,3 @@ export function HeroInfoBar({
     </section>
   );
 }
-
