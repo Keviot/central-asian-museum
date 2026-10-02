@@ -7,22 +7,16 @@ import { Icon } from "@/components/ui/Icon";
 import { footerNavItems } from "@/lib/navigation";
 
 export function Footer() {
-  const handleBackToTop = () => {
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
-  };
-
   return (
     <footer className="site-footer border-t border-border bg-surface-dark text-light-text">
       <Container className="site-footer__inner pt-16 pb-12 md:pt-20 md:pb-16">
         <div className="site-footer__grid grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
           {/* Col 1: Brand & Philosophy */}
           <div className="site-footer__brand lg:col-span-5">
-            <button
-              type="button"
-              className="footer-brand text-left"
-              aria-label="Back to top"
-              onClick={handleBackToTop}
+            <Link
+              href="/"
+              className="footer-brand inline-block text-left transition-opacity hover:opacity-90"
+              aria-label="Central Asian Museum, Leh: Home"
             >
               <Image
                 className="footer-brand__logo"
@@ -31,7 +25,7 @@ export function Footer() {
                 width={140}
                 height={136}
               />
-            </button>
+            </Link>
             <p className="site-footer__tagline mt-6 max-w-95 text-[14px] leading-relaxed text-white/75 md:text-[15px]">
               Documenting the historical connections between Ladakh and the wider Central Asian world.
             </p>

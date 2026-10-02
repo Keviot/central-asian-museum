@@ -713,46 +713,6 @@ img.floor-mark {
     width: 140px;
   }
 }
-/* Logo back-to-top hover arrow effect */
-.footer-brand::before {
-  content: "";
-  position: absolute;
-  left: 30.4%;
-  right: 26%;
-  top: 24.4%;
-  bottom: 29%;
-  background: var(--palette-wine, rgb(84, 51, 63));
-  opacity: 0;
-  transition: opacity 0.35s ease;
-  pointer-events: none;
-}
-.footer-brand::after {
-  content: "";
-  position: absolute;
-  left: 30.4%;
-  right: 26%;
-  top: 24.4%;
-  bottom: 29%;
-  background: #fff;
-  -webkit-mask: var(--up-arrow) center / 42% no-repeat;
-  mask: var(--up-arrow) center / 42% no-repeat;
-  opacity: 0;
-  transform: translateY(8px);
-  transition: opacity 0.35s ease 0.08s, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1) 0.08s;
-  pointer-events: none;
-  --up-arrow: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='1.75' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M12 19V5M5 12l7-7 7 7'/%3E%3C/svg%3E");
-}
-.footer-brand:hover::before,
-.footer-brand:focus-visible::before,
-.footer-brand.is-arrow::before {
-  opacity: 1;
-}
-.footer-brand:hover::after,
-.footer-brand:focus-visible::after,
-.footer-brand.is-arrow::after {
-  opacity: 1;
-  transform: none;
-}
 
 /* Phones: the whole footer fits on one screen. Logo beside the tagline, links in two columns, tighter rhythm. */
 @media (max-width: 639.98px) {
@@ -767,8 +727,20 @@ img.floor-mark {
   .site-footer__links a { font-size: 13px; }
   .site-footer__visit { margin-top: 12px; font-size: 13px; }
   .site-footer__visit > * + * { margin-top: 10px !important; }
-  .site-footer__visit p { text-align: left; }
-  .site-footer__bottom { margin-top: 26px; padding-top: 14px; gap: 4px; font-size: 12px; }
+  .site-footer__bottom {
+    margin-top: clamp(24px, 5vw, 32px);
+    padding-top: clamp(16px, 4vw, 22px);
+    padding-bottom: clamp(16px, 4vw, 24px);
+    padding-right: 56px;
+    gap: clamp(18px, 4.5vw, 26px);
+    font-size: 12px;
+  }
+  .site-footer__bottom [data-credit] {
+    margin-top: 4px;
+    min-height: 28px;
+    display: inline-flex;
+    align-items: center;
+  }
 }
 
 /* Mobile & tablet login link wraps to its own line above explore */
@@ -898,46 +870,61 @@ footer .hours-info__tip::after {
   justify-content: center;
   width: 48px;
   height: 48px;
-  border-radius: 999px;
-  background: var(--palette-wine, #54333f);
-  color: #fff;
+  border-radius: 9999px;
+  background: var(--palette-wine, #54333b);
+  color: #ffffff;
   cursor: pointer;
-  box-shadow: 0 8px 22px rgba(38, 23, 28, 0.28);
+  box-shadow: 0 8px 24px rgba(38, 23, 28, 0.38), 0 2px 6px rgba(0, 0, 0, 0.18);
+  border: 1.5px solid rgba(255, 255, 255, 0.28);
   opacity: 0;
-  transform: translateY(12px);
+  transform: translateY(16px);
   pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.3s ease, background-color 0.2s ease;
-  border: none;
+  transition: opacity 0.25s ease, transform 0.25s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .totop.is-shown {
   opacity: 1;
-  transform: none;
+  transform: translateY(0);
   pointer-events: auto;
 }
-.totop.is-shown:hover {
+.totop:hover {
   background: var(--palette-amber, #d28541);
-  color: #26171c;
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #ffffff;
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 12px 28px rgba(38, 23, 28, 0.45);
 }
-.totop.is-docking {
-  pointer-events: none;
-  transform: translate(var(--dx, 0px), var(--dy, 0px)) scale(var(--s, 0.3));
-  opacity: 0;
-  transition: transform 0.65s cubic-bezier(0.55, 0, 0.25, 1), opacity 0.3s ease 0.4s;
+.totop:active {
+  transform: translateY(-1px) scale(0.98);
 }
-.totop.no-anim {
-  transition: none !important;
+.totop__icon {
+  display: block;
+  width: 22px;
+  height: 22px;
+  stroke: #ffffff !important;
+  stroke-width: 2.5 !important;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+  transition: transform 0.2s ease;
 }
-@media (max-width: 39.99rem) {
+.totop:hover .totop__icon {
+  transform: translateY(-1.5px);
+}
+@media (max-width: 639.98px) {
   .totop {
-    right: 16px;
-    bottom: 16px;
+    right: 18px;
+    bottom: 18px;
     width: 44px;
     height: 44px;
+    box-shadow: 0 6px 20px rgba(38, 23, 28, 0.4);
+  }
+  .totop__icon {
+    width: 20px;
+    height: 20px;
+    stroke-width: 2.5 !important;
   }
 }
 @media print {
   .totop {
-    display: none;
+    display: none !important;
   }
 }
 

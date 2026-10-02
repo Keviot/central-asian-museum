@@ -57,7 +57,7 @@ export function Header({
           )}
         </Link>
 
-        <nav className="hidden items-center gap-5 xl:gap-8 lg:flex" aria-label="Primary">
+        <nav className="hidden items-center gap-4 xl:gap-7 lg:flex" aria-label="Primary">
           {items.map((item) => {
             const isActive =
               pathname === item.href ||
@@ -67,10 +67,10 @@ export function Header({
                 key={item.href}
                 href={item.href}
                 aria-current={isActive ? "page" : undefined}
-                className={`relative text-[14px] uppercase tracking-[0.14em] transition-colors duration-200 py-1 ${
+                className={`relative text-[16px] font-bold uppercase tracking-[0.12em] transition-colors duration-200 py-1 ${
                   isActive
-                    ? "text-white font-semibold after:absolute after:bottom-0 after:inset-x-0 after:h-0.5 after:bg-palette-amber"
-                    : "text-white/80 font-medium hover:text-white"
+                    ? "text-white after:absolute after:bottom-0 after:inset-x-0 after:h-0.5 after:bg-palette-amber"
+                    : "text-white/80 hover:text-white"
                 }`}
               >
                 {item.label}
@@ -102,10 +102,10 @@ export function Header({
                   key={item.href}
                   href={item.href}
                   aria-current={isActive ? "page" : undefined}
-                  className={`py-3 text-[13px] uppercase tracking-[0.14em] transition-colors ${
+                  className={`py-3 text-[15px] font-bold uppercase tracking-[0.12em] transition-colors ${
                     isActive
-                      ? "text-palette-amber font-bold border-l-2 border-palette-amber pl-3"
-                      : "text-white/90 font-medium hover:text-white"
+                      ? "text-palette-amber border-l-2 border-palette-amber pl-3"
+                      : "text-white/90 hover:text-white"
                   }`}
                   onClick={() => setOpen(false)}
                 >
