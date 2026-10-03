@@ -108,11 +108,13 @@ export default async function ExhibitionDetailPage({ params }: Props) {
   // Fetch adjacent exhibitions for continuous exploration
   let nextExhibition: { slug: string; title: string; imageSrc: string } | null = null;
   let prevExhibition: { slug: string; title: string; imageSrc: string } | null = null;
+  let isFeatured = false;
   try {
     const all = await prisma.exhibition.findMany({
       orderBy: { createdAt: "desc" },
       select: { slug: true, title: true, imageSrc: true },
     });
+    isFeatured = all.length > 0 && all[0].slug === exhibition.slug;
     const currentIndex = all.findIndex((e) => e.slug === exhibition.slug || e.slug === slug);
     if (currentIndex !== -1 && all.length > 1) {
       const nextIndex = (currentIndex + 1) % all.length;
@@ -201,15 +203,22 @@ export default async function ExhibitionDetailPage({ params }: Props) {
             <div className="max-w-4xl">
               {/* Badge & Category Row */}
               <div className="flex flex-wrap items-center gap-3 mb-4">
-                {exhibition.badgeLabel ? (
+                {isFeatured ? (
                   <div className="inline-flex items-center gap-2 rounded-xs border border-palette-wine/25 bg-palette-wine/10 px-3 py-1 text-[11px] font-mono font-bold uppercase tracking-[0.18em] text-palette-wine">
                     <span className="h-1.5 w-1.5 rounded-full bg-palette-wine animate-pulse" />
-                    <span>{exhibition.badgeLabel}</span>
+                    <span>Featured Exhibition</span>
                   </div>
                 ) : (
                   <div className="inline-flex items-center gap-2 rounded-xs border border-palette-amber/30 bg-palette-amber/10 px-3 py-1 text-[11px] font-mono font-bold uppercase tracking-[0.18em] text-palette-amber">
-                    <span className="h-1.5 w-1.5 rounded-full bg-palette-amber" />
-                    <span>{exhibition.status || "Special Exhibition"}</span>
+                    <span>
+                      {exhibition.status === "Upcoming"
+                        ? "Upcoming Exhibition"
+                        : exhibition.status === "Special"
+                          ? "Special Exhibition"
+                          : exhibition.status === "Permanent"
+                            ? "Permanent Collection"
+                            : "Past Exhibition"}
+                    </span>
                   </div>
                 )}
 
@@ -232,14 +241,8 @@ export default async function ExhibitionDetailPage({ params }: Props) {
                 </p>
               )}
 
-              {/* Action Bar with Share & Explore */}
+              {/* Action Bar: 1. Back Button, 2. Share Button, 3. Plan Your Visit */}
               <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
-                <ShareButton
-                  data={shareData}
-                  variant="hero"
-                  label="Share Exhibition"
-                />
-
                 <Button
                   href="/exhibitions"
                   variant="outline"
@@ -247,12 +250,18 @@ export default async function ExhibitionDetailPage({ params }: Props) {
                   icon="arrow-left"
                   iconPosition="left"
                 >
-                  All Exhibitions
+                  Back to Exhibitions
                 </Button>
+
+                <ShareButton
+                  data={shareData}
+                  variant="hero"
+                  label="Share Exhibition"
+                />
 
                 <Button
                   href="/contact?intent=visits"
-                  variant="ghost"
+                  variant="primary"
                   size="sm"
                   icon="calendar"
                   iconPosition="left"
@@ -322,7 +331,7 @@ export default async function ExhibitionDetailPage({ params }: Props) {
           <Container className="max-w-5xl">
             {/* Museum Cover Artwork Frame */}
             <div className="group relative w-full overflow-hidden rounded-xs border border-border bg-bg-secondary shadow-md">
-              <div className="relative aspect-16/10 sm:aspect-16/9 w-full overflow-hidden">
+              <div className="relative aspect-16/10 sm:aspect-video w-full overflow-hidden">
                 <Image
                   src={exhibition.imageSrc}
                   alt={exhibition.imageAlt || exhibition.title}
@@ -558,7 +567,7 @@ export default async function ExhibitionDetailPage({ params }: Props) {
                   <ShareButton
                     data={shareData}
                     variant="outline"
-                    className="!border-white !text-white hover:!bg-white hover:!text-surface-dark"
+                    className="border-white! text-white! hover:bg-white! hover:text-surface-dark!"
                     label="Open Sharing Options"
                   />
                   <Button

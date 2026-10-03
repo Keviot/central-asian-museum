@@ -23,25 +23,45 @@ export default async function ExhibitionsPage() {
       orderBy: { createdAt: "desc" },
     });
 
-    items = dbExhibitions.map((ex) => ({
-      id: ex.id,
-      slug: ex.slug,
-      status: ex.badgeLabel || (ex.status === "Current" ? "Now on" : "Past exhibition"),
-      title: ex.title,
-      dates: ex.dateRange,
-      where: ex.location,
-      curator: ex.curator,
-      image: ex.imageSrc,
-      alt: ex.imageAlt || ex.title,
-      excerpt: ex.subtitle || ex.description.slice(0, 140) + "...",
-      body: [ex.description, ex.curatorialEssay].filter(Boolean),
-      now:
-        ex.status === "Current" ||
-        (ex.badgeLabel
-          ? ex.badgeLabel.toLowerCase().includes("current") ||
-            ex.badgeLabel.toLowerCase().includes("now on")
-          : false),
-    }));
+    items = dbExhibitions.map((ex, idx) => {
+      // Only the last/latest exhibition (idx === 0, same one featured on home page) gets Featured Exhibition
+      const isFeatured = idx === 0;
+
+      let statusLabel = "Past Exhibition";
+      if (isFeatured) {
+        statusLabel = "Featured Exhibition";
+      } else if (ex.status === "Upcoming") {
+        statusLabel = "Upcoming Exhibition";
+      } else if (ex.status === "Special") {
+        statusLabel = "Special Exhibition";
+      } else if (ex.status === "Permanent") {
+        statusLabel = "Permanent Collection";
+      } else if (
+        ex.badgeLabel &&
+        !ex.badgeLabel.toLowerCase().includes("featured") &&
+        !ex.badgeLabel.toLowerCase().includes("now on") &&
+        !ex.badgeLabel.toLowerCase().includes("current")
+      ) {
+        statusLabel = ex.badgeLabel;
+      } else {
+        statusLabel = "Past Exhibition";
+      }
+
+      return {
+        id: ex.id,
+        slug: ex.slug,
+        status: statusLabel,
+        title: ex.title,
+        dates: ex.dateRange,
+        where: ex.location,
+        curator: ex.curator,
+        image: ex.imageSrc,
+        alt: ex.imageAlt || ex.title,
+        excerpt: ex.subtitle || ex.description.slice(0, 140) + "...",
+        body: [ex.description, ex.curatorialEssay].filter(Boolean),
+        now: isFeatured,
+      };
+    });
   } catch (error) {
     console.error("Failed to fetch exhibitions from DB:", error);
   }

@@ -54,9 +54,9 @@ export function ShareButton({
         <button
           type="button"
           onClick={handleClick}
-          className={`inline-flex items-center justify-center gap-2 rounded-xs border border-palette-wine/40 bg-surface px-4 py-2 text-[12.5px] font-mono uppercase tracking-[0.12em] font-bold text-palette-wine hover:bg-palette-wine hover:text-white transition-all cursor-pointer select-none shadow-xs hover:shadow-sm ${className}`}
+          className={`group inline-flex items-center justify-center gap-2 rounded-[3px] border border-border-strong bg-surface px-5 py-2.5 text-[12px] font-medium uppercase tracking-[0.06em] text-heading hover:border-palette-wine hover:text-palette-wine hover:bg-bg-secondary transition-all duration-300 cursor-pointer select-none ${className}`}
         >
-          <Icon name="share" size={15} className="shrink-0" />
+          <Icon name="share" size={14} className="shrink-0 transition-transform duration-300 group-hover:scale-110" />
           <span>{label || "Share Exhibition"}</span>
         </button>
       )}

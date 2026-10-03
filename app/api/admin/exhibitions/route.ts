@@ -52,6 +52,16 @@ export async function POST(request: Request) {
       );
     }
 
+    // Only the last/newest exhibition is featured; mark older ones as past
+    if (featuredOnHome ?? true) {
+      await prisma.exhibition.updateMany({
+        data: {
+          featuredOnHome: false,
+          badgeLabel: "Past Exhibition",
+        },
+      });
+    }
+
     const newExhibition = await prisma.exhibition.create({
       data: {
         title,
