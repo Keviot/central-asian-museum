@@ -23,7 +23,7 @@ export default async function NewsEventsPage() {
 
   try {
     const dbItems = await prisma.newsEvent.findMany({
-      orderBy: { createdAt: "asc" },
+      orderBy: { createdAt: "desc" },
     });
 
     if (dbItems.length > 0) {

@@ -9,29 +9,30 @@ import { SupportSection } from "@/components/home/SupportSection";
 import { Footer } from "@/components/layout/Footer";
 import { prisma } from "@/lib/prisma";
 import type { CurrentExhibition } from "@/lib/exhibitionData";
+import type { NewsPost } from "@/lib/newsData";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 
 export default async function Home() {
   let exhibition: CurrentExhibition | undefined = undefined;
+  let latestNewsPosts: NewsPost[] = [];
 
+  // Fetch lastly added exhibition
   try {
     const dbExhibition = await prisma.exhibition.findFirst({
-      where: {
-        OR: [
-          { status: "Current" },
-          { featuredOnHome: true },
-        ],
-      },
-      orderBy: { updatedAt: "desc" },
+      orderBy: { createdAt: "desc" },
     });
 
     if (dbExhibition) {
       exhibition = {
         id: dbExhibition.id,
-        eyebrow: "Current Exhibition",
-        status: dbExhibition.badgeLabel || "Now on",
+        eyebrow: "Featured Exhibition",
+        status:
+          dbExhibition.badgeLabel ||
+          (dbExhibition.status === "Current"
+            ? "Now on"
+            : `${dbExhibition.status || "Special"} Exhibition`),
         title: dbExhibition.title,
         subtitle: dbExhibition.subtitle,
         image: dbExhibition.imageSrc,
@@ -42,17 +43,17 @@ export default async function Home() {
           {
             icon: "calendar",
             label: "Dates",
-            value: dbExhibition.dateRange,
+            value: dbExhibition.dateRange || "Ongoing",
           },
           {
             icon: "pin",
             label: "Where",
-            value: dbExhibition.location,
+            value: dbExhibition.location || "Central Asian Museum",
           },
           {
             icon: "users",
             label: "Curated by",
-            value: dbExhibition.curator,
+            value: dbExhibition.curator || "The museum team",
           },
           {
             icon: "ticket",
@@ -67,15 +68,55 @@ export default async function Home() {
         ],
         buttons: [
           {
-            label: "Previous Exhibitions",
-            href: "/exhibitions",
+            label: "Explore Exhibition",
+            href: `/exhibitions/${dbExhibition.slug}`,
             style: "primary",
+          },
+          {
+            label: "All Exhibitions",
+            href: "/exhibitions",
+            style: "secondary",
           },
         ],
       };
     }
   } catch (error) {
-    console.error("Failed to fetch current exhibition from DB:", error);
+    console.error("Failed to fetch lastly added exhibition from DB:", error);
+  }
+
+  // Fetch lastly added news & events
+  try {
+    const dbNews = await prisma.newsEvent.findMany({
+      orderBy: { createdAt: "desc" },
+      take: 3,
+    });
+
+    if (dbNews.length > 0) {
+      latestNewsPosts = dbNews.map((item) => {
+        const bodyParagraphs = item.content
+          ? item.content.split("\n\n").map((p) => p.trim()).filter(Boolean)
+          : [];
+        return {
+          id: item.slug || item.id,
+          slug: item.slug,
+          title: item.title,
+          category: item.category,
+          date: item.date,
+          time: item.readTime,
+          location: item.location || "Tsas Soma Garden, Leh",
+          image: item.imageSrc,
+          alt: item.imageAlt || item.title,
+          excerpt:
+            item.summary ||
+            (bodyParagraphs[0]
+              ? bodyParagraphs[0].slice(0, 160) + (bodyParagraphs[0].length > 160 ? "..." : "")
+              : ""),
+          body: bodyParagraphs,
+        };
+      });
+    }
+  } catch (error) {
+    console.error("Failed to fetch lastly added news & events from DB:", error);
   }
 
   return (
@@ -87,7 +128,7 @@ export default async function Home() {
         <AboutSection />
         <FloorsSlider />
         <CurrentExhibitionSection exhibition={exhibition} />
-        <NewsSection />
+        <NewsSection initialPosts={latestNewsPosts} />
         <SupportSection />
       </main>
       <Footer />

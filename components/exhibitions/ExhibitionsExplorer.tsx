@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
+import { ShareButton } from "@/components/ui/ShareButton";
 import type { ExhibitionItem } from "@/lib/exhibitionsData";
 
 interface ExhibitionsExplorerProps {
@@ -164,14 +165,30 @@ export function ExhibitionsExplorer({
                       )}
                     </div>
                     <p className="exlist__excerpt">{it.excerpt}</p>
-                    <Link
-                      href={href}
-                      className="exlist__go"
-                      aria-label={`Open the exhibition: ${it.title}`}
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <Icon name="arrow-right" size={20} />
-                    </Link>
+                    <div className="exlist__actions">
+                      <ShareButton
+                        data={{
+                          id: it.id,
+                          slug: it.slug,
+                          title: it.title,
+                          excerpt: it.excerpt,
+                          image: it.image,
+                          dates: it.dates,
+                          where: it.where,
+                          curator: it.curator,
+                        }}
+                        variant="icon"
+                        className="w-11 h-11"
+                      />
+                      <Link
+                        href={href}
+                        className="exlist__go"
+                        aria-label={`Open the exhibition: ${it.title}`}
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Icon name="arrow-right" size={20} className="block m-auto" />
+                      </Link>
+                    </div>
                   </div>
                 </article>
               );

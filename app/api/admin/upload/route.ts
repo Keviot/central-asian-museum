@@ -11,6 +11,17 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "No file provided" }, { status: 400 });
     }
 
+    const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+    if (file.size > MAX_FILE_SIZE) {
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
+      return NextResponse.json(
+        {
+          error: `File size (${fileSizeMB}MB) exceeds the maximum upload limit of 10MB. Please choose an image smaller than 10MB.`,
+        },
+        { status: 400 }
+      );
+    }
+
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
 
@@ -25,10 +36,15 @@ export async function POST(request: Request) {
         cldFormData.append("file", blob, file.name);
         cldFormData.append("upload_preset", uploadPreset);
 
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+
         const cldRes = await fetch(`https://api.cloudinary.com/v1_1/${cloudName}/image/upload`, {
           method: "POST",
           body: cldFormData,
+          signal: controller.signal,
         });
+        clearTimeout(timeoutId);
 
         const cldData = await cldRes.json();
         if (cldRes.ok && cldData.secure_url) {

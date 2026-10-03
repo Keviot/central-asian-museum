@@ -3,10 +3,10 @@
 import { useEffect, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 import { Icon } from "@/components/ui/Icon";
 import { Button } from "@/components/ui/Button";
 import { BlockContentEditor } from "@/components/admin/BlockContentEditor";
+import { CoverImageUpload } from "@/components/admin/CoverImageUpload";
 import { formatDateToDDMMYYYY } from "@/lib/exhibitions";
 
 type Props = {
@@ -20,7 +20,6 @@ export default function EditExhibitionPage({ params }: Props) {
   const [id, setId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isUploadingImage, setIsUploadingImage] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const [startDate, setStartDate] = useState("");
@@ -297,98 +296,13 @@ export default function EditExhibitionPage({ params }: Props) {
           </div>
 
           {/* Cover Image Upload */}
-          <div className="sm:col-span-2 space-y-1.5">
-            <label className="block font-mono text-[11px] font-bold uppercase tracking-[0.16em] text-palette-amber">
-              Exhibition Cover Image *
-            </label>
-
-            {isUploadingImage ? (
-              <div className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-palette-amber/70 rounded-xs bg-palette-amber/5 text-center">
-                <div className="h-6 w-6 border-2 border-palette-wine border-t-transparent rounded-full animate-spin mb-2" />
-                <span className="text-[13px] font-mono font-bold text-palette-wine uppercase tracking-wider">
-                  Processing & Uploading Image...
-                </span>
-                <span className="text-[11px] text-muted font-mono mt-1">Please wait while the image is being processed</span>
-              </div>
-            ) : formData.imageSrc ? (
-              <div className="flex items-center justify-between gap-4 p-3 rounded-xs border border-palette-sand/70 bg-bg-secondary">
-                <div className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xs border border-palette-sand">
-                  <Image
-                    src={formData.imageSrc}
-                    alt="Cover preview"
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                <div className="flex items-center gap-2">
-                  <label className="px-3 py-1.5 rounded-xs border border-palette-sand/80 bg-white hover:border-palette-amber text-[11px] font-mono font-bold uppercase tracking-wider text-heading cursor-pointer shrink-0">
-                  <span>Change</span>
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={async (e) => {
-                      if (e.target.files?.[0]) {
-                        const file = e.target.files[0];
-                        const data = new FormData();
-                        data.append("file", file);
-                        setIsUploadingImage(true);
-                        try {
-                          const res = await fetch("/api/admin/upload", { method: "POST", body: data });
-                          const json = await res.json();
-                          if (res.ok && json.url) setFormData((prev) => ({ ...prev, imageSrc: json.url }));
-                        } catch (err) {
-                          console.error(err);
-                        } finally {
-                          setIsUploadingImage(false);
-                          e.target.value = "";
-                        }
-                      }
-                    }}
-                    className="hidden"
-                  />
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, imageSrc: "" })}
-                  className="px-3 py-1.5 rounded-xs border border-red-400/60 bg-red-500/10 text-red-600 hover:bg-red-500/20 text-[11px] font-mono font-bold uppercase tracking-wider shrink-0 flex items-center gap-1"
-                >
-                  <Icon name="trash" size={13} />
-                  <span>Remove</span>
-                </button>
-                </div>
-              </div>
-            ) : (
-              <label className="flex flex-col items-center justify-center p-6 border-2 border-dashed border-palette-sand/80 rounded-xs bg-bg-secondary/50 hover:bg-bg-secondary hover:border-palette-amber cursor-pointer transition-colors text-center">
-                <Icon name="upload" size={24} className="text-palette-amber mb-2" />
-                <span className="text-[13px] font-mono font-bold text-heading uppercase tracking-wider">
-                  Upload Cover Image
-                </span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={async (e) => {
-                    if (e.target.files?.[0]) {
-                      const file = e.target.files[0];
-                      const data = new FormData();
-                      data.append("file", file);
-                      setIsUploadingImage(true);
-                      try {
-                        const res = await fetch("/api/admin/upload", { method: "POST", body: data });
-                        const json = await res.json();
-                        if (res.ok && json.url) setFormData((prev) => ({ ...prev, imageSrc: json.url }));
-                      } catch (err) {
-                        console.error(err);
-                      } finally {
-                        setIsUploadingImage(false);
-                        e.target.value = "";
-                      }
-                    }
-                  }}
-                  className="hidden"
-                />
-              </label>
-            )}
-          </div>
+          <CoverImageUpload
+            label="Exhibition Cover Image"
+            required
+            value={formData.imageSrc}
+            onChange={(url) => setFormData((prev) => ({ ...prev, imageSrc: url }))}
+            className="sm:col-span-2"
+          />
 
           {/* Short Description Section (Part of top section) */}
           <div className="sm:col-span-2 space-y-4 rounded-xs border border-palette-sand/70 bg-bg-secondary/30 p-5 mt-2">

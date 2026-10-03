@@ -86,7 +86,7 @@ function AdminLoginForm() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="centralasianmuseum26@gmail.com"
+              placeholder="Enter your email"
               className="w-full rounded-xs border border-palette-sand/80 bg-bg-secondary/70 px-4 py-3 text-[14px] text-heading placeholder:text-muted/60 focus:border-palette-amber focus:bg-white focus:outline-none transition-colors"
             />
           </div>

@@ -10,10 +10,32 @@ import { NewsCard } from "@/components/news/NewsCard";
 import { NewsModal } from "@/components/news/NewsModal";
 import { newsData, type NewsPost } from "@/lib/newsData";
 
-export function NewsSection() {
+interface NewsSectionProps {
+  initialPosts?: NewsPost[];
+}
+
+export function NewsSection({ initialPosts }: NewsSectionProps = {}) {
   const [selectedPost, setSelectedPost] = useState<NewsPost | null>(null);
   const railRef = useRef<HTMLDivElement>(null);
-  const latestPosts = newsData.posts.slice(0, 3);
+
+  // If initialPosts are provided from DB, show the lastly added posts first.
+  // If fewer than 3, fill remaining slots with archival posts so the grid remains balanced.
+  let displayPosts: NewsPost[] = [];
+  if (initialPosts && initialPosts.length > 0) {
+    displayPosts = [...initialPosts];
+    if (displayPosts.length < 3) {
+      const existingIds = new Set(displayPosts.map((p) => p.id));
+      for (const p of newsData.posts) {
+        if (!existingIds.has(p.id) && displayPosts.length < 3) {
+          displayPosts.push(p);
+        }
+      }
+    }
+  } else {
+    displayPosts = newsData.posts.slice(0, 3);
+  }
+
+  const latestPosts = displayPosts.slice(0, 3);
 
   return (
     <>

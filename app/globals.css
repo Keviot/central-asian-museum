@@ -1536,7 +1536,16 @@ mark.tbd {
 .exlist__meta svg { color: var(--palette-amber); }
 
 /* Desktop Boxed Horizontal Cards (#38) */
-.exlist__go { display: none; }
+.exlist__actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; margin-top: 20px; }
+.exlist__go {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 46px; height: 46px; border-radius: 999px; border: 1px solid var(--palette-wine, #54333f); color: var(--palette-wine, #54333f);
+  padding: 0; line-height: 0; flex-shrink: 0;
+  transition: background-color .3s ease, color .3s ease, transform .3s ease;
+}
+.exlist__go svg { display: block; margin: 0 auto; transition: transform .3s ease; }
+.exlist__item:hover .exlist__go, .exlist__go:focus-visible { background: var(--palette-wine, #54333f); color: #fff; }
+.exlist__item:hover .exlist__go svg { transform: scale(1.08); }
 @media (min-width: 64rem) {
   .exlist { gap: 2.5rem; }
   .exlist__item {
@@ -1553,18 +1562,17 @@ mark.tbd {
   .exlist__meta { order: 2; justify-content: flex-start; gap: 6px; margin-top: 16px; padding-top: 0; border-top: 0; }
   .exlist__meta span { gap: 6px; padding: 5px 8px; border: 1px solid var(--museum-border-subtle, #d6c9b373); border-radius: 3px; background: var(--museum-bg, #faf8f5); }
   .exlist__text .exlist__excerpt { order: 3; margin-top: 20px; text-align: justify; text-align-last: left; }
+  .exlist__actions {
+    order: 4; display: flex; align-items: center; justify-content: flex-end; gap: 12px; align-self: flex-end; margin-top: auto;
+  }
   .exlist__go {
-    order: 4; display: inline-flex; align-items: center; justify-content: center; align-self: flex-end; margin-top: auto;
-    width: 52px; height: 52px; border-radius: 999px; border: 1px solid var(--palette-wine, #54333f); color: var(--palette-wine, #54333f);
-    transition: background-color .3s ease, color .3s ease, transform .3s ease;
+    width: 52px; height: 52px;
   }
   .exlist__text > :nth-last-child(2) { margin-bottom: 1.25rem; }
-  .exlist__item:hover .exlist__go, .exlist__go:focus-visible { background: var(--palette-wine, #54333f); color: #fff; }
-  .exlist__go svg { transition: transform .3s ease; }
-  .exlist__item:hover .exlist__go svg { transform: translateX(3px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .exlist__item:hover, .exlist__item:hover .exlist__media img { transform: none; }
+  .exlist__item:hover .exlist__go svg { transform: none; }
 }
 
 /* Exhibitions top gap reduction (#39) */

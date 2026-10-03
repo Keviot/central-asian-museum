@@ -133,9 +133,8 @@ export async function sendContactEmails(params: ContactEmailParams) {
   const { date, datetime } = getISTDateFormats(new Date());
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || "https://central-asian-museum.vercel.app";
-  const logoUrl = appUrl.includes("localhost")
-    ? "https://central-asian-museum.vercel.app/images/logo/cam-logo-dark.png"
-    : `${appUrl}/images/logo/cam-logo-dark.png`;
+  // High-contrast, crisp white & terracotta logo served via permanent CDN for 100% email client compatibility
+  const logoUrl = "https://res.cloudinary.com/dhckfe9kc/image/upload/v1791015308/cam-email-logo-v2.png";
   const leadsUrl = `${appUrl}/admin/leads`;
 
   const senderEmail = process.env.BREVO_SENDER_EMAIL || "centralasianmuseum26@gmail.com";
@@ -155,7 +154,9 @@ export async function sendContactEmails(params: ContactEmailParams) {
   <tr><td align="center" style="padding:32px 16px;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border:1px solid #e3d9c8;border-radius:4px;">
       <tr><td align="center" style="background:#54333f;padding:28px 24px;border-radius:4px 4px 0 0;">
-        <img src="${logoUrl}" width="72" height="70" alt="Central Asian Museum, Leh" style="display:block;border:0;">
+        <img src="${logoUrl}" width="80" height="78" alt="Central Asian Museum, Leh" style="display:block;margin:0 auto;border:0;width:80px;height:78px;max-width:80px;">
+        <span style="display:block;margin-top:12px;font-family:Georgia,serif;font-size:15px;letter-spacing:0.16em;text-transform:uppercase;color:#f7f4f0;font-weight:normal;">Central Asian Museum</span>
+        <span style="display:block;margin-top:3px;font-family:Arial,Helvetica,sans-serif;font-size:10.5px;letter-spacing:0.24em;text-transform:uppercase;color:#d6c9b3;">Leh, Ladakh</span>
       </td></tr>
       <tr><td style="padding:36px 36px 8px;font-family:Georgia,'Times New Roman',serif;color:#26171c;">
         <h1 style="margin:0 0 18px;font-size:26px;line-height:1.25;font-weight:normal;">Thank you, ${escapeHtml(firstName)}</h1>
@@ -219,7 +220,7 @@ This is an automatic confirmation that your message reached us.`;
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="max-width:560px;background:#ffffff;border:1px solid #e3d9c8;border-radius:4px;">
       <tr><td style="background:#54333f;padding:20px 28px;border-radius:4px 4px 0 0;">
         <table role="presentation" width="100%" cellpadding="0" cellspacing="0"><tr>
-          <td width="56" style="vertical-align:middle;"><img src="${logoUrl}" width="48" height="47" alt="" style="display:block;border:0;"></td>
+          <td width="56" style="vertical-align:middle;"><img src="${logoUrl}" width="48" height="47" alt="Central Asian Museum" style="display:block;border:0;width:48px;height:47px;max-width:48px;"></td>
           <td style="vertical-align:middle;padding-left:14px;font-family:Arial,Helvetica,sans-serif;font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:#d6c9b3;">Curatorial CMS · New lead</td>
         </tr></table>
       </td></tr>

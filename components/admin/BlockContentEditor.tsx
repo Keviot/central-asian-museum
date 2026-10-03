@@ -112,6 +112,16 @@ export function BlockContentEditor({ value, onChange }: BlockContentEditorProps)
   };
 
   const handleImageUpload = async (index: number, file: File) => {
+    const MAX_SIZE_MB = 10;
+    const MAX_BYTES = MAX_SIZE_MB * 1024 * 1024;
+    if (file.size > MAX_BYTES) {
+      const fileSizeMB = (file.size / (1024 * 1024)).toFixed(1);
+      alert(
+        `File size (${fileSizeMB}MB) exceeds the maximum upload limit of ${MAX_SIZE_MB}MB. Please select a smaller image under ${MAX_SIZE_MB}MB.`
+      );
+      return;
+    }
+
     setUploadingIndex(index);
     try {
       const formData = new FormData();
