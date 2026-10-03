@@ -18,7 +18,7 @@ type NewsEventsSectionProps = {
 };
 
 export function NewsEventsSection({
-  kicker = "Lectures, Workshops & Updates",
+  kicker = "",
   title = "Museum News & Events",
   description = "Join our curatorial lectures, artisan weaving masterclasses, press announcements, and seasonal cultural galas.",
   items: initialItems,

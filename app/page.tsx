@@ -27,7 +27,7 @@ export default async function Home() {
     if (dbExhibition) {
       exhibition = {
         id: dbExhibition.id,
-        eyebrow: "Featured Exhibition",
+        eyebrow: "",
         status:
           dbExhibition.badgeLabel ||
           (dbExhibition.status === "Current"

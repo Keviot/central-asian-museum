@@ -22,7 +22,7 @@ export interface NewsSectionData {
 }
 
 export const newsData: NewsSectionData = {
-  eyebrow: "Lectures, Workshops & Updates",
+  eyebrow: "",
   heading: "Museum News & Events",
   lead: "Milestones, programmes and events at the Central Asian Museum complex.",
   page_lead:

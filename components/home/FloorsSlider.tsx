@@ -117,6 +117,8 @@ export function FloorsSlider({
 
   // Mobile compact slider state
   const mobileRef = useRef<HTMLElement>(null);
+  const mobileFacadeRef = useRef<HTMLDivElement>(null);
+  const curMobileFacadeRef = useRef({ t: FACADE_BANDS[0][0], b: FACADE_BANDS[0][1] });
   const [mobileCurrentIndex, setMobileCurrentIndex] = useState(0);
 
   // Render function for Desktop v2 scroll-linked reveal
@@ -227,9 +229,34 @@ export function FloorsSlider({
     const travel = mobileRef.current.offsetHeight - window.innerHeight;
     if (travel <= 0) return;
     const progress = Math.min(1, Math.max(0, -rect.top / travel));
-    const nextIndex = Math.min(slides.length - 1, Math.floor(progress * slides.length));
+    const rawT = progress * (slides.length - 1);
+    const t = clamp(rawT, 0, slides.length - 1);
+    const nextIndex = Math.min(slides.length - 1, Math.round(t));
     setMobileCurrentIndex(nextIndex);
+
+    // Update mobile facade highlight continuously while scrolling
+    if (mobileFacadeRef.current) {
+      const idx = Math.min(Math.floor(t), FACADE_BANDS.length - 2);
+      const frac = t - idx;
+      const a = FACADE_BANDS[idx];
+      const b = FACADE_BANDS[Math.min(idx + 1, FACADE_BANDS.length - 1)];
+      const targetT = a[0] + (b[0] - a[0]) * frac;
+      const targetB = a[1] + (b[1] - a[1]) * frac;
+
+      curMobileFacadeRef.current = { t: targetT, b: targetB };
+      mobileFacadeRef.current.style.setProperty("--hl-top", `${targetT.toFixed(3)}%`);
+      mobileFacadeRef.current.style.setProperty("--hl-bot", `${targetB.toFixed(3)}%`);
+    }
   }, [slides.length]);
+
+  // Sync mobile facade highlight whenever mobileCurrentIndex changes
+  useEffect(() => {
+    if (mobileFacadeRef.current) {
+      const band = FACADE_BANDS[mobileCurrentIndex] || FACADE_BANDS[0];
+      mobileFacadeRef.current.style.setProperty("--hl-top", `${band[0]}%`);
+      mobileFacadeRef.current.style.setProperty("--hl-bot", `${band[1]}%`);
+    }
+  }, [mobileCurrentIndex]);
 
   // Unified scroll & resize handler
   useEffect(() => {
@@ -589,6 +616,59 @@ export function FloorsSlider({
               >
                 <Icon name="arrow-right" size={18} className="rotate-90" />
               </button>
+            </div>
+
+            {/* Mobile Building Facade (centered below content) */}
+            <div
+              ref={mobileFacadeRef}
+              className="floors-mobile-facade"
+              role="group"
+              aria-label="Museum building floors"
+            >
+              <img
+                className="flx-facade__base"
+                src="/images/facade.webp"
+                alt=""
+                decoding="async"
+              />
+              <img
+                className="flx-facade__lit"
+                src="/images/facade.webp"
+                alt=""
+                decoding="async"
+              />
+
+              {/* Clickable floor hotspots to navigate to each floor on mobile */}
+              <div className="absolute inset-0 z-10 flex flex-col pointer-events-auto">
+                <button
+                  type="button"
+                  className="w-full focus:outline-none"
+                  style={{ height: "30.81%" }}
+                  onClick={() => goToMobile(3)}
+                  aria-label="Go to Level Four: Changing Exhibitions"
+                />
+                <button
+                  type="button"
+                  className="w-full focus:outline-none"
+                  style={{ height: "22.87%" }}
+                  onClick={() => goToMobile(2)}
+                  aria-label="Go to Level Three: Tibet"
+                />
+                <button
+                  type="button"
+                  className="w-full focus:outline-none"
+                  style={{ height: "20.82%" }}
+                  onClick={() => goToMobile(1)}
+                  aria-label="Go to Level Two: Central Asia"
+                />
+                <button
+                  type="button"
+                  className="w-full focus:outline-none"
+                  style={{ height: "25.50%" }}
+                  onClick={() => goToMobile(0)}
+                  aria-label="Go to Level One: Ladakh"
+                />
+              </div>
             </div>
           </div>
         </section>

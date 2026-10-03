@@ -32,7 +32,7 @@ export function Header({
       className={`z-50 w-full transition-colors duration-300 ${
         isSolid
           ? "sticky top-0 bg-surface-dark text-white shadow-md"
-          : "absolute inset-x-0 top-0 text-white"
+          : `${open ? "bg-surface-dark lg:bg-transparent shadow-md" : "bg-transparent"} absolute inset-x-0 top-0 text-white`
       }`}
     >
       <div className="mx-auto flex max-w-360 items-center justify-between gap-6 px-6 py-4 md:px-10 lg:px-14 lg:py-5">

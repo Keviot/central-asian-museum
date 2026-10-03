@@ -59,7 +59,6 @@ export function NewsSection({ initialPosts }: NewsSectionProps = {}) {
         <Container className="relative z-10">
           <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
             <SectionHeading
-              kicker={newsData.eyebrow}
               title={newsData.heading}
               description={newsData.lead}
             />

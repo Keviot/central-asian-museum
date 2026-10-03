@@ -19,13 +19,7 @@ export function CurrentExhibitionSection({
       aria-labelledby="exhibit-title"
     >
       <Container className="relative z-10">
-        <div className="exhibit__head">
-          <div className="mb-3.5 inline-flex items-center gap-2.5">
-            <span aria-hidden="true" className="h-px w-6 bg-primary" />
-            <p className="text-[12px] font-semibold uppercase tracking-[0.22em] text-primary">
-              {exhibition.eyebrow}
-            </p>
-          </div>
+        <div className="exhibit__head justify-end!">
           <span className="exhibit__status">
             <i aria-hidden="true" />
             {exhibition.status}
@@ -63,17 +57,31 @@ export function CurrentExhibitionSection({
                 {para}
               </p>
             ))}
-            <div className="mt-9 flex flex-wrap items-center gap-4">
-              {exhibition.buttons.map((b) => (
-                <Button
-                  key={b.href}
-                  href={b.href}
-                  variant={b.style}
-                  icon={b.style === "primary" ? "arrow-right" : undefined}
-                >
-                  {b.label}
-                </Button>
-              ))}
+            <div className="mt-9 flex flex-nowrap sm:flex-wrap items-center gap-3 sm:gap-4">
+              {exhibition.buttons.map((b) => {
+                const isAllExhibitions =
+                  b.label.toLowerCase().includes("all exhibition") ||
+                  b.href === "/exhibitions";
+
+                return (
+                  <Button
+                    key={b.href}
+                    href={b.href}
+                    variant={b.style}
+                    icon={b.style === "primary" ? "arrow-right" : undefined}
+                    className="max-sm:px-4 max-sm:py-2.5 max-sm:text-xs max-sm:gap-2 shrink-0 whitespace-nowrap"
+                  >
+                    {isAllExhibitions ? (
+                      <>
+                        <span className="sm:hidden">All</span>
+                        <span className="hidden sm:inline">{b.label}</span>
+                      </>
+                    ) : (
+                      b.label
+                    )}
+                  </Button>
+                );
+              })}
             </div>
           </div>
           <dl className="exhibit__details max-md:hidden">
