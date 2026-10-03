@@ -74,7 +74,7 @@ export function BlockContentRenderer({
             if (!videoId) return null;
 
             return (
-              <div key={block.id || idx} className="my-8 space-y-2">
+              <div key={block.id || idx} className="my-8">
                 <div className="relative aspect-video w-full overflow-hidden rounded-xs border border-palette-sand/70 bg-surface-dark shadow-md">
                   <iframe
                     src={`https://www.youtube-nocookie.com/embed/${videoId}?rel=0`}
@@ -84,11 +84,6 @@ export function BlockContentRenderer({
                     allowFullScreen
                   />
                 </div>
-                {block.title && (
-                  <p className="text-center font-mono text-[11.5px] uppercase tracking-wider text-palette-amber font-bold pt-1">
-                    🎥 Curatorial Video: {block.title}
-                  </p>
-                )}
               </div>
             );
           }

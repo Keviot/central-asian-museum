@@ -462,55 +462,6 @@ export default async function ExhibitionDetailPage({ params }: Props) {
                     label="Share with Others"
                   />
                 </div>
-
-                {/* 2. Visitor Guidelines & Entry */}
-                <div className="rounded-xs border border-border-subtle bg-bg-secondary p-6 shadow-xs">
-                  <h3 className="font-heading text-[20px] font-semibold text-heading mb-4 pb-3 border-b border-border-subtle">
-                    Visitor Information
-                  </h3>
-
-                  <div className="space-y-4 text-[13.5px]">
-                    <div>
-                      <span className="font-mono text-[11px] uppercase tracking-[0.16em] font-bold text-palette-amber block mb-1">
-                        Admission
-                      </span>
-                      <p className="text-body leading-relaxed">
-                        Access to all temporary exhibitions is included with standard museum admission.
-                      </p>
-                    </div>
-
-                    <div>
-                      <span className="font-mono text-[11px] uppercase tracking-[0.16em] font-bold text-palette-amber block mb-1">
-                        Museum Hours
-                      </span>
-                      <p className="text-body leading-relaxed">
-                        Summer (May – Oct): 10:00 am – 6:00 pm<br />
-                        Winter (Nov – Apr): 10:00 am – 5:00 pm
-                      </p>
-                    </div>
-
-                    <div>
-                      <span className="font-mono text-[11px] uppercase tracking-[0.16em] font-bold text-palette-amber block mb-1">
-                        Location & Campus
-                      </span>
-                      <p className="text-body leading-relaxed">
-                        Top-Floor Tower Gallery<br />
-                        Central Asian Museum, Tsas Soma Garden, Leh, Ladakh 194101
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-6 pt-4 border-t border-border-subtle">
-                    <Button
-                      href="/contact?intent=visits"
-                      variant="outline"
-                      size="sm"
-                      className="w-full"
-                    >
-                      Inquire with Curators
-                    </Button>
-                  </div>
-                </div>
               </div>
             </div>
 
