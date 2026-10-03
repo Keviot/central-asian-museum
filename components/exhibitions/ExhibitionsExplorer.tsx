@@ -178,7 +178,8 @@ export function ExhibitionsExplorer({
                           curator: it.curator,
                         }}
                         variant="icon"
-                        className="w-11 h-11"
+                        iconSize={19}
+                        className="exlist__share w-11.5 h-11.5 lg:w-13 lg:h-13"
                       />
                       <Link
                         href={href}

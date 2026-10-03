@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { cache } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -20,9 +21,9 @@ type Props = {
   }>;
 };
 
-async function getExhibition(slug: string) {
+const getExhibition = cache(async (slug: string) => {
   try {
-    const decodedSlug = decodeURIComponent(slug).trim();
+    const decodedSlug = decodeURIComponent(slug).trim().replace(/\/+$/, "");
 
     // 1. Search by exact slug or ID or lowercase slug
     const dbExhibition = await prisma.exhibition.findFirst({
@@ -46,7 +47,7 @@ async function getExhibition(slug: string) {
   }
 
   return null;
-}
+});
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
@@ -126,6 +127,26 @@ export default async function ExhibitionDetailPage({ params }: Props) {
     console.warn("Failed to fetch adjacent exhibitions:", e);
   }
 
+  let statusLabel = "Past Exhibition";
+  if (isFeatured) {
+    statusLabel = "Featured Exhibition";
+  } else if (exhibition.status === "Upcoming") {
+    statusLabel = "Upcoming Exhibition";
+  } else if (exhibition.status === "Special") {
+    statusLabel = "Special Exhibition";
+  } else if (exhibition.status === "Permanent") {
+    statusLabel = "Permanent Collection";
+  } else if (
+    exhibition.badgeLabel &&
+    !exhibition.badgeLabel.toLowerCase().includes("featured") &&
+    !exhibition.badgeLabel.toLowerCase().includes("now on") &&
+    !exhibition.badgeLabel.toLowerCase().includes("current")
+  ) {
+    statusLabel = exhibition.badgeLabel;
+  } else {
+    statusLabel = "Past Exhibition";
+  }
+
   // Schema.org JSON-LD structured data
   const jsonLd = {
     "@context": "https://schema.org",
@@ -182,124 +203,107 @@ export default async function ExhibitionDetailPage({ params }: Props) {
           />
 
           <Container className="relative z-10">
-            {/* Breadcrumb Navigation */}
-            <nav
-              className="mb-8 flex flex-wrap items-center gap-2 text-[12px] uppercase tracking-[0.16em] text-muted font-mono"
-              aria-label="Breadcrumb"
-            >
-              <Link href="/" className="hover:text-heading transition-colors">
-                Home
+            {/* Top Navigation Bar: Refined Back Navigation & Breadcrumb */}
+            <div className="mb-7 flex flex-wrap items-center justify-between gap-3">
+              <Link
+                href="/exhibitions"
+                className="group inline-flex items-center gap-2.5 font-mono text-[11.5px] font-semibold uppercase tracking-[0.18em] text-muted hover:text-palette-wine transition-all"
+                title="Return to all exhibitions"
+              >
+                <span className="flex h-8 w-8 items-center justify-center rounded-full border border-border-subtle bg-surface text-body transition-all duration-300 group-hover:border-palette-wine group-hover:bg-palette-wine group-hover:text-white group-hover:shadow-xs">
+                  <Icon
+                    name="arrow-left"
+                    size={14}
+                    className="transition-transform duration-200 group-hover:-translate-x-0.5"
+                  />
+                </span>
+                <span>Back to Exhibitions</span>
               </Link>
-              <Icon name="chevron-right" size={12} className="text-palette-sage" />
-              <Link href="/exhibitions" className="hover:text-heading transition-colors">
-                Exhibitions
-              </Link>
-              <Icon name="chevron-right" size={12} className="text-palette-sage" />
-              <span className="text-heading font-semibold truncate max-w-xs sm:max-w-md">
-                {exhibition.title}
-              </span>
-            </nav>
+
+              <nav
+                className="hidden sm:flex items-center gap-2 text-[11px] uppercase tracking-[0.16em] text-muted font-mono"
+                aria-label="Breadcrumb"
+              >
+                <Link href="/" className="hover:text-heading transition-colors">
+                  Home
+                </Link>
+                <Icon name="chevron-right" size={11} className="text-palette-sage" />
+                <Link href="/exhibitions" className="hover:text-heading transition-colors">
+                  Exhibitions
+                </Link>
+                <Icon name="chevron-right" size={11} className="text-palette-sage" />
+                <span className="text-heading font-medium truncate max-w-xs">
+                  {exhibition.title}
+                </span>
+              </nav>
+            </div>
 
             <div className="max-w-4xl">
               {/* Badge & Category Row */}
               <div className="flex flex-wrap items-center gap-3 mb-4">
                 {isFeatured ? (
-                  <div className="inline-flex items-center gap-2 rounded-xs border border-palette-wine/25 bg-palette-wine/10 px-3 py-1 text-[11px] font-mono font-bold uppercase tracking-[0.18em] text-palette-wine">
-                    <span className="h-1.5 w-1.5 rounded-full bg-palette-wine animate-pulse" />
+                  <span className="inline-flex items-center gap-2 rounded-full bg-surface-dark px-3.5 py-1.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-white shadow-xs">
+                    <i className="h-1.75 w-1.75 rounded-full bg-[#5fbf7f] inline-block animate-pulse not-italic" aria-hidden="true" />
                     <span>Featured Exhibition</span>
-                  </div>
+                  </span>
                 ) : (
-                  <div className="inline-flex items-center gap-2 rounded-xs border border-palette-amber/30 bg-palette-amber/10 px-3 py-1 text-[11px] font-mono font-bold uppercase tracking-[0.18em] text-palette-amber">
-                    <span>
-                      {exhibition.status === "Upcoming"
-                        ? "Upcoming Exhibition"
-                        : exhibition.status === "Special"
-                          ? "Special Exhibition"
-                          : exhibition.status === "Permanent"
-                            ? "Permanent Collection"
-                            : "Past Exhibition"}
-                    </span>
-                  </div>
+                  <span className="inline-flex items-center gap-2 rounded-full bg-surface-dark px-3.5 py-1.5 text-[12px] font-semibold uppercase tracking-[0.18em] text-palette-sand shadow-xs">
+                    <i className="h-1.75 w-1.75 rounded-full bg-palette-amber inline-block not-italic" aria-hidden="true" />
+                    <span>{statusLabel}</span>
+                  </span>
                 )}
 
                 {exhibition.category && (
-                  <span className="text-[11px] font-mono uppercase tracking-[0.18em] text-muted border-l border-border-subtle pl-3">
+                  <span className="text-[11px] font-mono font-medium uppercase tracking-[0.2em] text-palette-amber border-l border-border-subtle pl-3">
                     {exhibition.category}
                   </span>
                 )}
               </div>
 
               {/* Grand Title */}
-              <h1 className="font-heading text-[38px] sm:text-[48px] md:text-[56px] lg:text-[62px] font-medium leading-[1.1] tracking-[-0.01em] text-heading">
+              <h1 className="font-heading text-[40px] sm:text-[50px] md:text-[58px] lg:text-[64px] font-medium leading-[1.08] tracking-[-0.015em] text-heading">
                 {exhibition.title}
               </h1>
 
               {/* Subtitle / Poetic Kicker */}
               {exhibition.subtitle && (
-                <p className="mt-4 font-heading text-[20px] sm:text-[23px] font-normal leading-relaxed text-body italic">
+                <p className="mt-3.5 font-heading text-[20px] sm:text-[23px] font-normal leading-relaxed text-body/90 italic max-w-3xl">
                   {exhibition.subtitle}
                 </p>
               )}
 
-              {/* Action Bar: 1. Back Button, 2. Share Button, 3. Plan Your Visit */}
-              <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
-                <Button
-                  href="/exhibitions"
-                  variant="outline"
-                  size="sm"
-                  icon="arrow-left"
-                  iconPosition="left"
-                >
-                  Back to Exhibitions
-                </Button>
-
-                <ShareButton
-                  data={shareData}
-                  variant="hero"
-                  label="Share Exhibition"
-                />
-
-                <Button
-                  href="/contact?intent=visits"
-                  variant="primary"
-                  size="sm"
-                  icon="calendar"
-                  iconPosition="left"
-                >
-                  Plan Your Visit
-                </Button>
-              </div>
-
-              {/* Curatorial Metadata Specs Grid */}
-              <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 border-t border-border-subtle pt-8 text-[13.5px]">
+              {/* Curatorial Metadata Registry Bar */}
+              <div className="mt-9 rounded-sm border border-border-subtle bg-surface/80 backdrop-blur-md shadow-xs divide-y sm:divide-y-0 sm:divide-x divide-border-subtle grid grid-cols-1 sm:grid-cols-3">
                 {exhibition.dateRange && (
-                  <div className="flex items-start gap-3 rounded-xs border border-border-subtle bg-surface/60 p-3.5 shadow-2xs">
-                    <div className="h-8 w-8 rounded-full bg-palette-amber/15 text-palette-amber flex items-center justify-center shrink-0">
+                  <div className="p-4 sm:p-5 flex items-center gap-3.5 transition-colors hover:bg-surface/95">
+                    <div className="h-9 w-9 rounded-full bg-palette-sand/40 text-palette-wine flex items-center justify-center shrink-0 border border-palette-sand/60">
                       <Icon name="calendar" size={16} />
                     </div>
-                    <div>
-                      <p className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-muted">
+                    <div className="min-w-0 flex-1">
+                      <span className="text-[10.5px] font-mono font-bold uppercase tracking-[0.18em] text-palette-amber block">
                         Exhibition Dates
+                      </span>
+                      <p className="font-sans text-[13.5px] sm:text-[14px] font-semibold text-heading mt-0.5 truncate">
+                        {exhibition.dateRange}
                       </p>
-                      <p className="font-medium text-heading mt-0.5">{exhibition.dateRange}</p>
                     </div>
                   </div>
                 )}
 
                 {exhibition.location && (
-                  <div className="flex items-start gap-3 rounded-xs border border-border-subtle bg-surface/60 p-3.5 shadow-2xs">
-                    <div className="h-8 w-8 rounded-full bg-palette-amber/15 text-palette-amber flex items-center justify-center shrink-0">
+                  <div className="p-4 sm:p-5 flex items-center gap-3.5 transition-colors hover:bg-surface/95">
+                    <div className="h-9 w-9 rounded-full bg-palette-sand/40 text-palette-wine flex items-center justify-center shrink-0 border border-palette-sand/60">
                       <Icon name="pin" size={16} />
                     </div>
-                    <div>
-                      <p className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-muted">
+                    <div className="min-w-0 flex-1">
+                      <span className="text-[10.5px] font-mono font-bold uppercase tracking-[0.18em] text-palette-amber block">
                         Gallery Location
-                      </p>
+                      </span>
                       <a
                         href="https://maps.app.goo.gl/CHsSHHyECqD3nZUe7"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="font-medium text-heading mt-0.5 underline decoration-muted/40 underline-offset-2 hover:decoration-heading block"
+                        className="font-sans text-[13.5px] sm:text-[14px] font-semibold text-heading mt-0.5 truncate block hover:text-palette-wine hover:underline transition-colors"
                         title="Open on Google Maps"
                       >
                         {exhibition.location}
@@ -309,15 +313,17 @@ export default async function ExhibitionDetailPage({ params }: Props) {
                 )}
 
                 {exhibition.curator && (
-                  <div className="flex items-start gap-3 rounded-xs border border-border-subtle bg-surface/60 p-3.5 shadow-2xs sm:col-span-2 lg:col-span-1">
-                    <div className="h-8 w-8 rounded-full bg-palette-amber/15 text-palette-amber flex items-center justify-center shrink-0">
+                  <div className="p-4 sm:p-5 flex items-center gap-3.5 transition-colors hover:bg-surface/95 sm:col-span-1">
+                    <div className="h-9 w-9 rounded-full bg-palette-sand/40 text-palette-wine flex items-center justify-center shrink-0 border border-palette-sand/60">
                       <Icon name="users" size={16} />
                     </div>
-                    <div>
-                      <p className="text-[11px] font-mono font-bold uppercase tracking-[0.16em] text-muted">
+                    <div className="min-w-0 flex-1">
+                      <span className="text-[10.5px] font-mono font-bold uppercase tracking-[0.18em] text-palette-amber block">
                         Lead Curator
+                      </span>
+                      <p className="font-sans text-[13.5px] sm:text-[14px] font-semibold text-heading mt-0.5 truncate">
+                        {exhibition.curator}
                       </p>
-                      <p className="font-medium text-heading mt-0.5">{exhibition.curator}</p>
                     </div>
                   </div>
                 )}
@@ -361,58 +367,40 @@ export default async function ExhibitionDetailPage({ params }: Props) {
             {/* 3. Curatorial Story & Exhibition Details (Two-Column Layout) */}
             <div className="mt-14 sm:mt-18 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-14">
               {/* Main Column (8 Cols): Overview, Essay, Highlights */}
-              <div className="lg:col-span-8 space-y-12">
+              <div className="lg:col-span-8 space-y-12 sm:space-y-16">
                 {/* Section A: Description / Overview */}
                 {exhibition.description && (
-                  <div className="space-y-4">
-                    <div className="flex items-center gap-3">
-                      <span className="h-px w-8 bg-palette-amber" aria-hidden="true" />
-                      <p className="font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-palette-amber">
-                        {exhibition.descriptionHeading || "Exhibition Overview"}
-                      </p>
-                    </div>
-
-                    <h2 className="font-heading text-[28px] sm:text-[32px] font-medium text-heading leading-tight">
-                      {exhibition.descriptionHeading || "About the Exhibition"}
+                  <section className="space-y-5">
+                    <h2 className="font-heading text-[26px] sm:text-[30px] font-medium text-heading tracking-[-0.01em] pb-3 border-b border-border-subtle">
+                      {!exhibition.descriptionHeading ||
+                      exhibition.descriptionHeading.trim().toLowerCase() === "short description"
+                        ? "About the Exhibition"
+                        : exhibition.descriptionHeading}
                     </h2>
 
-                    <div className="text-[16px] sm:text-[17.5px] leading-relaxed text-body whitespace-pre-line border-l-2 border-palette-amber/40 pl-5 py-1">
+                    <div className="text-[16px] sm:text-[17.5px] leading-[1.8] text-body whitespace-pre-line pt-1">
                       {exhibition.description}
                     </div>
-                  </div>
+                  </section>
                 )}
 
                 {/* Section B: Curatorial Essay & Historical Context */}
                 {exhibition.curatorialEssay && (
-                  <div className="space-y-6 pt-4 border-t border-border-subtle">
-                    <div className="flex items-center gap-3">
-                      <span className="h-px w-8 bg-palette-amber" aria-hidden="true" />
-                      <p className="font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-palette-amber">
-                        Historical Context
-                      </p>
-                    </div>
-
-                    <h2 className="font-heading text-[28px] sm:text-[32px] font-medium text-heading leading-tight">
+                  <section className="space-y-6">
+                    <h2 className="font-heading text-[26px] sm:text-[30px] font-medium text-heading tracking-[-0.01em] pb-3 border-b border-border-subtle">
                       {exhibition.curatorialEssayHeading || "Curatorial Narrative & Historical Context"}
                     </h2>
 
                     <div className="prose prose-stone max-w-none text-[15.5px] sm:text-[16.5px] leading-relaxed text-body">
                       <BlockContentRenderer essay={exhibition.curatorialEssay} />
                     </div>
-                  </div>
+                  </section>
                 )}
 
                 {/* Section C: Artifact Highlights (if curated) */}
                 {exhibition.highlights && exhibition.highlights.length > 0 && (
-                  <div className="space-y-8 pt-6 border-t border-border-subtle">
-                    <div className="flex items-center gap-3">
-                      <span className="h-px w-8 bg-palette-amber" aria-hidden="true" />
-                      <p className="font-mono text-[11px] font-bold uppercase tracking-[0.24em] text-palette-amber">
-                        Curated Highlights
-                      </p>
-                    </div>
-
-                    <h2 className="font-heading text-[28px] sm:text-[32px] font-medium text-heading leading-tight">
+                  <section className="space-y-8">
+                    <h2 className="font-heading text-[26px] sm:text-[30px] font-medium text-heading tracking-[-0.01em] pb-3 border-b border-border-subtle">
                       Featured Collection Highlights
                     </h2>
 
@@ -450,7 +438,7 @@ export default async function ExhibitionDetailPage({ params }: Props) {
                         </div>
                       ))}
                     </div>
-                  </div>
+                  </section>
                 )}
               </div>
 
@@ -523,25 +511,6 @@ export default async function ExhibitionDetailPage({ params }: Props) {
                     </Button>
                   </div>
                 </div>
-
-                {/* 3. Research & Scholarly Inquiries */}
-                <div className="rounded-xs border border-border-subtle bg-bg-secondary p-6 shadow-xs">
-                  <div className="flex items-center gap-2.5 text-palette-amber mb-2">
-                    <Icon name="landmark" size={18} />
-                    <h3 className="font-heading text-[18px] font-semibold text-heading">
-                      Research & Press Inquiries
-                    </h3>
-                  </div>
-                  <p className="text-[13px] leading-relaxed text-body">
-                    For high-resolution press imagery, scholarly access to archival items, or academic citation inquiries, contact{" "}
-                    <a
-                      href="mailto:centralasianmuseum26@gmail.com"
-                      className="text-palette-wine underline font-medium hover:text-palette-amber transition-colors"
-                    >
-                      centralasianmuseum26@gmail.com
-                    </a>
-                  </p>
-                </div>
               </div>
             </div>
 
@@ -567,13 +536,15 @@ export default async function ExhibitionDetailPage({ params }: Props) {
                   <ShareButton
                     data={shareData}
                     variant="outline"
-                    className="border-white! text-white! hover:bg-white! hover:text-surface-dark!"
+                    size="md"
+                    className="border-white! text-white! hover:bg-white! hover:text-surface-dark! h-11 sm:h-12"
                     label="Open Sharing Options"
                   />
                   <Button
                     href="/exhibitions"
                     variant="secondary"
                     size="md"
+                    className="h-11 sm:h-12"
                   >
                     View All Exhibitions
                   </Button>

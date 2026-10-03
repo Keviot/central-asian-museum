@@ -7,7 +7,7 @@ import { Icon } from "@/components/ui/Icon";
 import { NewsExplorer } from "@/components/news/NewsExplorer";
 
 import { prisma } from "@/lib/prisma";
-import { newsData, type NewsPost } from "@/lib/newsData";
+import { newsData, parseEventDate, type NewsPost } from "@/lib/newsData";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -19,7 +19,9 @@ export const metadata: Metadata = {
 };
 
 export default async function NewsEventsPage() {
-  let posts: NewsPost[] = newsData.posts;
+  let posts: NewsPost[] = [...newsData.posts].sort(
+    (a, b) => parseEventDate(b.date) - parseEventDate(a.date)
+  );
 
   try {
     const dbItems = await prisma.newsEvent.findMany({
@@ -27,13 +29,21 @@ export default async function NewsEventsPage() {
     });
 
     if (dbItems.length > 0) {
-      posts = dbItems.map((item) => {
+      const sortedDbItems = [...dbItems].sort((a, b) => {
+        const timeA = parseEventDate(a.date) || new Date(a.createdAt).getTime();
+        const timeB = parseEventDate(b.date) || new Date(b.createdAt).getTime();
+        return timeB - timeA;
+      });
+
+      posts = sortedDbItems.map((item) => {
         const bodyParagraphs = item.content
           ? item.content.split("\n\n").map((p) => p.trim()).filter(Boolean)
           : [];
         return {
           id: item.slug || item.id,
+          slug: item.slug,
           title: item.title,
+          category: item.category,
           date: item.date,
           image: item.imageSrc,
           alt: item.imageAlt || item.title,

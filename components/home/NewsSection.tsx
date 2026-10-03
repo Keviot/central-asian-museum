@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/Button";
 import { Icon } from "@/components/ui/Icon";
 import { NewsCard } from "@/components/news/NewsCard";
 import { NewsModal } from "@/components/news/NewsModal";
-import { newsData, type NewsPost } from "@/lib/newsData";
+import { newsData, parseEventDate, type NewsPost } from "@/lib/newsData";
 
 interface NewsSectionProps {
   initialPosts?: NewsPost[];
@@ -18,11 +18,13 @@ export function NewsSection({ initialPosts }: NewsSectionProps = {}) {
   const [selectedPost, setSelectedPost] = useState<NewsPost | null>(null);
   const railRef = useRef<HTMLDivElement>(null);
 
-  // If initialPosts are provided from DB, show the lastly added posts first.
+  // Show posts in proper sequence: latest date first, oldest last.
   // If fewer than 3, fill remaining slots with archival posts so the grid remains balanced.
   let displayPosts: NewsPost[] = [];
   if (initialPosts && initialPosts.length > 0) {
-    displayPosts = [...initialPosts];
+    displayPosts = [...initialPosts].sort(
+      (a, b) => parseEventDate(b.date) - parseEventDate(a.date)
+    );
     if (displayPosts.length < 3) {
       const existingIds = new Set(displayPosts.map((p) => p.id));
       for (const p of newsData.posts) {
@@ -32,7 +34,9 @@ export function NewsSection({ initialPosts }: NewsSectionProps = {}) {
       }
     }
   } else {
-    displayPosts = newsData.posts.slice(0, 3);
+    displayPosts = [...newsData.posts]
+      .sort((a, b) => parseEventDate(b.date) - parseEventDate(a.date))
+      .slice(0, 3);
   }
 
   const latestPosts = displayPosts.slice(0, 3);

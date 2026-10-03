@@ -35,31 +35,18 @@ export function NewsCard({ post, onOpen, className = "" }: NewsCardProps) {
           <h3 className="font-heading text-[22px] font-medium leading-[1.2] text-heading sm:text-[24px] group-hover:text-palette-amber transition-colors">
             {post.title}
           </h3>
-          <div className="mt-2.5 flex flex-wrap items-center gap-x-4 gap-y-1 text-[12px] font-medium text-muted">
+          <div className="mt-2.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] font-medium text-muted">
             <div className="flex items-center gap-1.5">
               <Icon name="calendar" size={13} className="text-palette-sage" />
               <span>{post.date}</span>
             </div>
-            {post.time && (
-              <div className="flex items-center gap-1.5">
-                <Icon name="clock" size={13} className="text-palette-sage" />
-                <span>{post.time}</span>
-              </div>
-            )}
-            {post.location && (
-              <a
-                href="https://maps.app.goo.gl/CHsSHHyECqD3nZUe7"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="flex items-center gap-1.5 hover:text-heading transition-colors"
-                title="View location on Google Maps"
-              >
-                <Icon name="map-pin" size={13} className="text-palette-sage" />
-                <span className="underline decoration-muted/40 underline-offset-2 hover:decoration-heading">
-                  {post.location}
+            {post.category && (
+              <span className="inline-flex items-center gap-2">
+                <span className="h-3 w-px bg-border-subtle" aria-hidden="true" />
+                <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-palette-amber">
+                  {post.category}
                 </span>
-              </a>
+              </span>
             )}
           </div>
           <p className="mt-3 text-[14px] leading-relaxed text-body line-clamp-2">

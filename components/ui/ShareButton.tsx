@@ -7,15 +7,19 @@ import { ShareModal, type ShareData } from "./ShareModal";
 type ShareButtonProps = {
   data: ShareData;
   variant?: "icon" | "pill" | "hero" | "outline";
+  size?: "sm" | "md" | "lg";
   className?: string;
   label?: string;
+  iconSize?: number;
 };
 
 export function ShareButton({
   data,
   variant = "pill",
+  size = "md",
   className = "",
   label = "Share",
+  iconSize,
 }: ShareButtonProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -35,7 +39,7 @@ export function ShareButton({
           title="Share this exhibition"
           className={`inline-flex items-center justify-center rounded-full border border-border-subtle bg-surface text-body hover:border-palette-amber hover:text-palette-amber hover:bg-bg-secondary transition-all cursor-pointer select-none shrink-0 ${className}`}
         >
-          <Icon name="share" size={17} className="block m-auto" />
+          <Icon name="share" size={iconSize || 18} className="block m-auto" />
         </button>
       )}
 
@@ -54,9 +58,15 @@ export function ShareButton({
         <button
           type="button"
           onClick={handleClick}
-          className={`group inline-flex items-center justify-center gap-2 rounded-[3px] border border-border-strong bg-surface px-5 py-2.5 text-[12px] font-medium uppercase tracking-[0.06em] text-heading hover:border-palette-wine hover:text-palette-wine hover:bg-bg-secondary transition-all duration-300 cursor-pointer select-none ${className}`}
+          className={`group inline-flex items-center justify-center rounded-[3px] border border-border-strong bg-surface font-medium uppercase text-heading hover:border-palette-wine hover:text-palette-wine hover:bg-bg-secondary transition-all duration-300 cursor-pointer select-none ${
+            size === "sm"
+              ? "px-5 py-2.5 text-[12px] gap-2 tracking-[0.06em]"
+              : size === "lg"
+              ? "px-9 py-4 text-[14px] gap-3 tracking-[0.09em]"
+              : "px-7 py-3.5 text-[13px] gap-2.5 tracking-[0.08em]"
+          } ${className}`}
         >
-          <Icon name="share" size={14} className="shrink-0 transition-transform duration-300 group-hover:scale-110" />
+          <Icon name="share" size={size === "sm" ? 14 : 16} className="shrink-0 transition-transform duration-300 group-hover:scale-110" />
           <span>{label || "Share Exhibition"}</span>
         </button>
       )}
@@ -65,9 +75,15 @@ export function ShareButton({
         <button
           type="button"
           onClick={handleClick}
-          className={`inline-flex items-center justify-center gap-2 rounded-[3px] border border-palette-amber bg-transparent px-5 py-2.5 text-[12px] font-medium uppercase tracking-[0.14em] text-palette-amber hover:bg-palette-amber hover:text-white transition-all cursor-pointer select-none ${className}`}
+          className={`group inline-flex items-center justify-center rounded-[3px] border border-palette-amber bg-transparent font-medium uppercase text-palette-amber hover:bg-palette-amber hover:text-white transition-all duration-300 cursor-pointer select-none ${
+            size === "sm"
+              ? "px-5 py-2.5 text-[12px] gap-2 tracking-[0.06em]"
+              : size === "lg"
+              ? "px-9 py-4 text-[14px] gap-3 tracking-[0.09em]"
+              : "px-7 py-3.5 text-[13px] gap-2.5 tracking-[0.08em]"
+          } ${className}`}
         >
-          <Icon name="share" size={15} className="shrink-0" />
+          <Icon name="share" size={size === "sm" ? 14 : 16} className="shrink-0" />
           <span>{label || "Share Exhibition"}</span>
         </button>
       )}

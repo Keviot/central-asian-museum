@@ -7,6 +7,7 @@ import { Icon } from "@/components/ui/Icon";
 export type ModalSlide = {
   id: string;
   title: string;
+  category?: string | null;
   date: string;
   time?: string | null;
   location?: string | null;
@@ -202,34 +203,14 @@ export function NewsModal({
                   <Icon name="calendar" size={14} />
                   <span>{p.date}</span>
                 </span>
-                {p.time && (
+                {p.category && (
                   <>
                     <span aria-hidden="true" className="news-modal__dot">
                       •
                     </span>
-                    <span>
-                      <Icon name="clock" size={14} />
-                      <span>{p.time}</span>
+                    <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-palette-amber">
+                      {p.category}
                     </span>
-                  </>
-                )}
-                {p.location && (
-                  <>
-                    <span aria-hidden="true" className="news-modal__dot">
-                      •
-                    </span>
-                    <a
-                      href="https://maps.app.goo.gl/CHsSHHyECqD3nZUe7"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 hover:text-heading transition-colors"
-                      title="View location on Google Maps"
-                    >
-                      <Icon name="map-pin" size={14} />
-                      <span className="underline decoration-muted/40 underline-offset-2 hover:decoration-heading">
-                        {p.location}
-                      </span>
-                    </a>
                   </>
                 )}
               </div>

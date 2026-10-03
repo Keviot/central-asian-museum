@@ -9,7 +9,7 @@ import { SupportSection } from "@/components/home/SupportSection";
 import { Footer } from "@/components/layout/Footer";
 import { prisma } from "@/lib/prisma";
 import type { CurrentExhibition } from "@/lib/exhibitionData";
-import type { NewsPost } from "@/lib/newsData";
+import { parseEventDate, type NewsPost } from "@/lib/newsData";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -92,7 +92,14 @@ export default async function Home() {
     });
 
     if (dbNews.length > 0) {
-      latestNewsPosts = dbNews.map((item) => {
+      // Sort in proper sequence: latest date first (e.g. 2026-10-13, 2026-09-11, 2026-07-09)
+      const sortedDbNews = [...dbNews].sort((a, b) => {
+        const timeA = parseEventDate(a.date) || new Date(a.createdAt).getTime();
+        const timeB = parseEventDate(b.date) || new Date(b.createdAt).getTime();
+        return timeB - timeA;
+      });
+
+      latestNewsPosts = sortedDbNews.map((item) => {
         const bodyParagraphs = item.content
           ? item.content.split("\n\n").map((p) => p.trim()).filter(Boolean)
           : [];
